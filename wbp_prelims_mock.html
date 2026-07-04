@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bazar - WBP Constable 2019 Full Mock Test</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= COLOR SCHEME & VARIABLES ================= */
+        :root {
+            --primary: #1a7a4a;
+            --primary-hover: #2aad68;
+            --accent: #f9a825;
+            --bg-main: #f0faf4;
+            --bg-card: #ffffff;
+            --bg-correct: #e8f7ef;
+            --bg-wrong: #fdf0f0;
+            --text-main: #1c2e24;
+            --text-meta: #5a7a66;
+            --alert-danger: #dc3545;
+            --alert-warning: #ffc107;
+            --border-color: #c5dccb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Tiro Bangla', serif; background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; }
+        .en-font { font-family: 'Syne', sans-serif; }
+        .hidden { display: none !important; }
+
+        /* ================= TOP BAR ================= */
+        .top-bar { background-color: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(26,122,74,0.15); }
+        .logo { font-size: 1.5rem; font-weight: 800; cursor: pointer; }
+        .logo span { color: var(--accent); }
+        .timer-box { background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; letter-spacing: 1px; }
+        .timer-box.danger { background: var(--alert-danger); animation: pulse 1s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .main-container { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        /* ================= HUB VIEW ================= */
+        .hub-header { text-align: center; margin-bottom: 2.5rem; }
+        .hub-header h1 { font-size: 1.8rem; color: var(--primary); margin-bottom: 5px; }
+        .set-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .set-card { background: var(--bg-card); padding: 2rem 1.5rem; border-radius: 12px; border: 1.5px solid var(--border-color); cursor: pointer; text-align: center; transition: 0.3s; position: relative; overflow: hidden; }
+        .set-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 8px 25px rgba(26,122,74,0.1); }
+        .set-icon { font-size: 3rem; margin-bottom: 10px; }
+        .set-name { font-weight: bold; color: var(--accent); font-size: 1.3rem; font-family: 'Syne', sans-serif; }
+        .set-title { font-weight: 700; color: var(--primary); margin: 8px 0; font-size: 1.1rem; }
+        .set-meta { font-size: 0.9rem; color: var(--text-meta); display: flex; justify-content: space-around; margin-top: 15px; font-weight: bold; background: var(--bg-main); padding: 5px; border-radius: 8px;}
+        .locked-badge { position: absolute; top: 10px; right: 10px; background: var(--alert-danger); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-family: 'Syne', sans-serif; }
+
+        /* ================= QUIZ VIEW ================= */
+        .quiz-info { display: flex; justify-content: space-between; margin-bottom: 1rem; font-weight: bold; color: var(--primary); }
+        .progress-wrap { background: var(--border-color); height: 8px; border-radius: 4px; margin-bottom: 2rem; overflow: hidden; }
+        .progress-fill { background: var(--primary); height: 100%; width: 0%; transition: 0.3s; }
+        .q-card { background: var(--bg-card); padding: 2rem; border-radius: 14px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .q-num { color: var(--accent); font-weight: bold; margin-bottom: 10px; }
+        .q-text { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; line-height: 1.5; }
+        .opts { display: flex; flex-direction: column; gap: 10px; }
+        .opt { display: flex; align-items: center; gap: 12px; padding: 1rem; border: 1.5px solid var(--border-color); border-radius: 10px; cursor: pointer; background: white; font-size: 1.05rem; transition: 0.2s; text-align: left; font-family: inherit; }
+        .opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+        .opt-circle { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Syne', sans-serif; font-size: 13px; }
+        .opt.correct { border-color: var(--primary); background: var(--bg-correct); }
+        .opt.correct .opt-circle { background: var(--primary); color: white; border-color: var(--primary); }
+        .opt.wrong { border-color: var(--alert-danger); background: var(--bg-wrong); }
+        .opt.wrong .opt-circle { background: var(--alert-danger); color: white; border-color: var(--alert-danger); }
+        .opt.disabled { cursor: default; }
+        .explanation { background: var(--bg-main); border-left: 4px solid var(--primary); padding: 1rem; margin-top: 1rem; display: none; border-radius: 0 8px 8px 0; }
+        .explanation.show { display: block; }
+        .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+        
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-family: 'Tiro Bangla', serif; font-size: 1rem; }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+        .btn-primary:disabled { background: var(--border-color); cursor: default; }
+
+        /* ================= RESULT VIEW ================= */
+        .result-wrap { background: var(--bg-card); padding: 2rem; border-radius: 14px; text-align: center; border: 1px solid var(--border-color); display: none; }
+        .result-wrap.show { display: block; }
+        .result-score { font-size: 4rem; font-weight: 800; color: var(--primary); margin: 10px 0; font-family: 'Syne', sans-serif; }
+        .result-bars { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .result-bar { background: var(--bg-main); padding: 1rem; border-radius: 10px; border: 1.5px solid var(--border-color); font-weight: bold; }
+
+        /* ================= LOGIN MODAL ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 999; }
+        .modal-box { background: white; padding: 2.5rem; border-radius: 14px; width: 90%; max-width: 400px; text-align: center; }
+        .modal-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 1rem; font-family: 'Syne', sans-serif; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <header class="top-bar">
+        <div class="logo en-font" onclick="window.location.href='index.html'">Test<span>Bazar</span></div>
+        <div class="timer-box en-font hidden" id="timerBox"><span id="timerDisplay">30:00</span></div>
+        <div class="user-info en-font" id="userDisplay" style="font-weight: bold;">👤 Guest</div>
+    </header>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay hidden" id="loginModal">
+        <div class="modal-box">
+            <h2 style="color: var(--primary); margin-top:0;">লগইন করুন</h2>
+            <p style="color: var(--text-meta);">টেস্ট শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+            <div id="loginSetName" style="font-weight:bold; color:var(--accent); margin-bottom:10px; font-family: 'Syne', sans-serif;">Full Set</div>
+            
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
+            
+            <div id="loginError" class="hidden" style="color: var(--alert-danger); margin: 10px 0; font-weight:bold;"></div>
+            
+            <div style="display: flex; gap: 10px; margin-top:15px;">
+                <button class="btn-primary" style="width:100%;" onclick="doLogin()">লগইন করুন</button>
+                <button class="btn-primary" style="width:100%; background: var(--alert-danger);" onclick="closeLogin()">বাতিল</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- ===== HUB VIEW ===== -->
+        <div id="hubView">
+            <div class="hub-header">
+                <h1>WBP Constable 2019 (Prelims)</h1>
+                <p>২০১৯ সালের অরিজিনাল প্রশ্নপত্র থেকে সম্পূর্ণ ৫০ নম্বরের (General Knowledge, Science ও History) ফুল মক টেস্ট।</p>
+            </div>
+            <div class="set-grid" id="setGrid">
+                <!-- Set loaded via JS -->
+            </div>
+            
+            <div style="text-align:center; margin-top:30px;">
+                <button class="btn-primary" style="background:var(--text-meta);" onclick="window.location.href='index.html'">← Main Dashboard-এ ফিরুন</button>
+            </div>
+        </div>
+
+        <!-- ===== QUIZ VIEW ===== -->
+        <div id="quizView" class="hidden">
+            <div class="quiz-info">
+                <div class="info-item">WBP 2019 Prelims | <span id="testSetLabel">Full Mock Test</span></div>
+                <div class="info-item" id="testTopic">Topic</div>
+            </div>
+            
+            <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+            
+            <div class="q-card">
+                <div class="q-num" id="qNum">প্রশ্ন ১ / ৫০</div>
+                <div class="q-text" id="qText">Question?</div>
+                <div class="opts" id="qOpts"></div>
+                <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+                
+                <div class="nav-row">
+                    <div style="color: var(--text-meta); font-weight:bold;" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+                    <button class="btn-primary" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী প্রশ্ন →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== RESULT VIEW ===== -->
+        <div class="result-wrap" id="resultWrap">
+            <div style="font-size: 3rem; margin-bottom:10px;" id="resultIcon">🌟</div>
+            <h2 style="margin:0;">আপনার ফলাফল</h2>
+            <div class="result-score en-font" id="finalScore">100%</div>
+            <div id="resultGrade" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px;">অসাধারণ!</div>
+            
+            <div class="result-bars">
+                <div class="result-bar"><div style="font-size:1.5rem; color:var(--primary);" class="en-font" id="rbCorrect">0</div><div>সঠিক</div></div>
+                <div class="result-bar"><div style="font-size:1.5rem; color:var(--alert-danger);" class="en-font" id="rbWrong">0</div><div>ভুল</div></div>
+                <div class="result-bar"><div style="font-size:1.5rem; color:var(--accent);" class="en-font" id="rbPct">0%</div><div>স্কোর</div></div>
+            </div>
+            
+            <div id="attemptInfo" style="color:var(--text-meta); margin-bottom:20px; font-weight:bold;"></div>
+            
+            <div style="display:flex; justify-content:center; gap:10px;">
+                <button class="btn-primary" style="background: #17a2b8;" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+                <button class="btn-primary" style="background: #28a745;" onclick="showReview()">উত্তর দেখো</button>
+                <button class="btn-primary" style="background: var(--text-meta);" onclick="window.location.href='index.html'">হোমে ফিরুন</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ================== DATABASES & CONFIG ==================
+    const STORAGE_KEY_USERS = "testBazarFinalDB_v3"; 
+    const STORAGE_KEY_ATTEMPTS = "testBazarAttempts_WBP_Prelims_2019_Full";
+    const MAX_ATTEMPTS = 10;
+    const TIME_LIMIT = 30 * 60; // 30 Minutes
+
+    const ALL_SETS = {
+        1: {
+            name: 'WBP 2019 - Full Mock', icon: '👮‍♂️', topic: '50 Questions Comprehensive Set',
+            questions: [
+                { q: '১. ভারতীয় সংবিধানের কোন ধারাকে ডঃ বি আর আম্বেদকর সংবিধানের "হৃদয় ও আত্মা" (heart and soul) বলেছেন?', opts: ['19 ধারা', '14 ধারা', '32 ধারা', '356 ধারা'], ans: 2, exp: '<b>ব্যাখ্যা:</b> 32 নং ধারায় সাংবিধানিক প্রতিবিধানের অধিকার রয়েছে, যার মাধ্যমে মৌলিক অধিকার রক্ষার্থে সরাসরি সুপ্রিম কোর্টের দ্বারস্থ হওয়া যায়।' },
+                { q: '২. মহাকাশে (Space) কোন মহাকাশচারী (astronaut) আকাশের রং কী দেখবে?', opts: ['বেগুনী', 'কালো', 'নীল', 'লাল'], ans: 1, exp: '<b>ব্যাখ্যা:</b> মহাকাশে কোনো বায়ুমণ্ডল না থাকায় আলোর বিচ্ছুরণ (Scattering of light) হয় না, তাই আকাশ কালো দেখায়।' },
+                { q: '৩. খনিজ পদার্থ "ফ্লোরিন"-এর অভাবে মানবদেহের কী ক্ষতি হয়?', opts: ['দুর্বল দাঁত', 'অ্যানিমিয়া', 'গয়টার', 'ক্ষুধামান্দ্য'], ans: 0, exp: '<b>ব্যাখ্যা:</b> ফ্লোরিন দাঁতের এনামেল গঠনে সাহায্য করে। এর অভাবে দাঁত দুর্বল হয় এবং দাঁতের ক্ষয় বা ডেন্টাল কেরিজ দেখা দেয়।' },
+                { q: '৪. "নীল গ্রহ (Blue Planet)" কাকে বলে?', opts: ['পৃথিবী', 'প্লুটো', 'ইউরেনাস', 'শনি'], ans: 0, exp: '<b>ব্যাখ্যা:</b> জলের বিপুল উপস্থিতির কারণে পৃথিবীকে মহাকাশ থেকে নীল দেখায়, তাই একে নীলগ্রহ বলা হয়।' },
+                { q: '৫. ব্যারোমিটারের পাঠ (reading) হঠাৎ কমে গেলে, আবহাওয়ার কী পরিবর্তন হবে?', opts: ['খুব গরম হবে', 'অবিরাম বৃষ্টি হবে', 'ঠান্ডা হবে', 'খুব ঝড় হবে'], ans: 3, exp: '<b>ব্যাখ্যা:</b> ব্যারোমিটারের পাঠ হঠাৎ কমে যাওয়ার অর্থ হলো বায়ুর চাপ দ্রুত হ্রাস পাওয়া, যা প্রবল ঝড় বা নিম্নচাপের পূর্বাভাস দেয়।' },
+                { q: '৬. নীচের কোনটি যমজ শহর (twin city) নয়?', opts: ['হায়দ্রাবাদ-সেকেন্দ্রাবাদ', 'দিল্লী-নিউদিল্লী', 'কলকাতা-হাওড়া', 'দুর্গাপুর-আসানসোল'], ans: 1, exp: '<b>ব্যাখ্যা:</b> দিল্লী এবং নিউদিল্লী একই শহরের দুটি ভিন্ন অংশ, এদের যমজ শহর বলা হয় না। বাকিগুলো যমজ শহরের উদাহরণ।' },
+                { q: '৭. "কাইজার-ই-হিন্দ" কাকে বলা হত?', opts: ['মহাত্মা গান্ধী', 'দাদাভাই নৌরোজি', 'পণ্ডিত জওহরলাল নেহেরু', 'নেতাজী সুভাষ চন্দ্র বসু'], ans: 0, exp: '<b>ব্যাখ্যা:</b> ব্রিটিশ সরকার প্রথম বিশ্বযুদ্ধে অবদানের স্বীকৃতিস্বরূপ মহাত্মা গান্ধীকে "কাইজার-ই-হিন্দ" উপাধিতে ভূষিত করেছিল।' },
+                { q: '৮. 2020 র "Summer Olympic" কোথায় অনুষ্ঠিত হওয়ার কথা ছিল?', opts: ['বেজিং', 'টোকিও', 'লস অ্যাঞ্জেলেস', 'বার্লিন'], ans: 1, exp: '<b>ব্যাখ্যা:</b> ২০২০ সালের গ্রীষ্মকালীন অলিম্পিক জাপানের রাজধানী টোকিওতে অনুষ্ঠিত হয় (যদিও কোভিডের কারণে ২০২১ সালে হয়েছিল)।' },
+                { q: '৯. ভারতীয় সংবিধানের কোন সংশোধনীর মাধ্যমে ভারত ও বাংলাদেশের মধ্যে অঞ্চল (territory) বিনিময় হয়েছে?', opts: ['100 তম', '103 তম', '102 তম', '101 তম'], ans: 0, exp: '<b>ব্যাখ্যা:</b> 2015 সালে ভারতীয় সংবিধানের 100 তম সংশোধনীর মাধ্যমে ভারত ও বাংলাদেশের মধ্যে ছিটমহল বিনিময় সম্পন্ন হয়।' },
+                { q: '১০. "জ্যাব (Jab)" কথাটি কোন খেলার সাথে যুক্ত?', opts: ['লন টেনিস', 'বিলিয়ার্ডস', 'বক্সিং', 'গল্ফ'], ans: 2, exp: '<b>ব্যাখ্যা:</b> "জ্যাব" শব্দটি বক্সিং খেলার সাথে যুক্ত, যা একটি দ্রুত এবং সোজাসুজি ঘুষি মারাকে নির্দেশ করে।' },
+                { q: '১১. 1GB = ________ bytes.', opts: ['10^3', '10^12', '10^9', '10^6'], ans: 2, exp: '<b>ব্যাখ্যা:</b> 1 Gigabyte (GB) = 10^9 bytes (যা প্রায় 1,073,741,824 bytes এর সমান)।' },
+                { q: '১২. 2019 এর ভারতের প্রজাতন্ত্র দিবসে কোন দেশের রাষ্ট্রপতি প্রধান অতিথির স্থান অলঙ্কৃত করেছিলেন?', opts: ['সাউথ আফ্রিকা', 'ইজরায়েল', 'মালদ্বীপ', 'রাশিয়া'], ans: 0, exp: '<b>ব্যাখ্যা:</b> ২০১৯ সালের ভারতের প্রজাতন্ত্র দিবসে দক্ষিণ আফ্রিকার রাষ্ট্রপতি সিরিল রামাফোসা প্রধান অতিথি ছিলেন।' },
+                { q: '১৩. 1946 সালের ক্যাবিনেট মিশনের প্রধান পদাধিকারী কে ছিলেন?', opts: ['লর্ড পেথিক লরেন্স', 'লর্ড মাউন্টব্যাটেন', 'এ ভি আলেক্সান্ডার', 'স্যার স্টাফোর্ড ক্রিপস'], ans: 0, exp: '<b>ব্যাখ্যা:</b> 1946 সালের ক্যাবিনেট মিশনের প্রধান ছিলেন ভারত সচিব লর্ড পেথিক লরেন্স।' },
+                { q: '১৪. নেহেরু ট্রফি কোন খেলার সাথে যুক্ত?', opts: ['হকি', 'ব্যাডমিন্টন', 'ফুটবল', 'টেনিস'], ans: 2, exp: '<b>ব্যাখ্যা:</b> নেহেরু ট্রফি (Nehru Cup) আন্তর্জাতিক ফুটবল প্রতিযোগিতার সাথে যুক্ত।' },
+                { q: '১৫. "জালিয়ানওয়ালা বাগ"-এর ঘটনা কোন সালে হয়েছিল?', opts: ['1928', '1750', '1789', '1919'], ans: 3, exp: '<b>ব্যাখ্যা:</b> ১৯১৯ সালের ১৩ এপ্রিল পাঞ্জাবের অমৃতসরে জালিয়ানওয়ালা বাগ হত্যাকাণ্ড ঘটেছিল।' },
+                { q: '১৬. "ওডোমিটার" যন্ত্রের সাহায্যে কী পরিমাপ করা যায়?', opts: ['অতিক্রান্ত দূরত্ব', 'এরোপ্লেনের গতিবেগ', 'তেজস্ক্রিয়তা', 'বৈদ্যুতিক শক্তি'], ans: 0, exp: '<b>ব্যাখ্যা:</b> মোটরগাড়ি বা অন্যান্য যানবাহনের চাকা দ্বারা অতিক্রান্ত দূরত্ব পরিমাপ করার জন্য ওডোমিটার (Odometer) ব্যবহার করা হয়।' },
+                { q: '১৭. "VVPAT" কীসের সাথে সম্পর্কিত?', opts: ['সাধারণ নির্বাচন', 'উগ্রপন্থী কার্যকলাপ', 'মহাকাশ বিজ্ঞান', 'মোবাইল পরিষেবা'], ans: 0, exp: '<b>ব্যাখ্যা:</b> VVPAT (Voter Verified Paper Audit Trail) ভারতের সাধারণ নির্বাচনে ইভিএম (EVM)-এর সাথে ব্যবহৃত একটি যন্ত্র।' },
+                { q: '১৮. ভারতীয় মহিলাদের মধ্যে কে সর্বপ্রথম অলিম্পিক পদক জিতেছিলেন?', opts: ['পিটি উষা', 'ঊষা সচদেব', 'অশ্বিনী নাচাপ্পা', 'কর্ণাম মালেশ্বরী'], ans: 3, exp: '<b>ব্যাখ্যা:</b> 2000 সালের সিডনি অলিম্পিকে ভারোত্তোলনে ব্রোঞ্জ পদক জিতে কর্ণাম মালেশ্বরী প্রথম ভারতীয় মহিলা হিসেবে অলিম্পিক পদক জয় করেন।' },
+                { q: '১৯. কোন চলচ্চিত্র 64 তম "ফিল্ম ফেয়ার 2019"-এ শ্রেষ্ঠ চলচ্চিত্র হিসাবে বিবেচিত হয়েছে?', opts: ['রাজি (Raazi)', 'কেদারনাথ', 'বাধাই হো', 'সঞ্জু'], ans: 0, exp: '<b>ব্যাখ্যা:</b> মেঘনা গুলজার পরিচালিত "রাজি" সিনেমাটি 2019 সালের 64-তম ফিল্মফেয়ার অ্যাওয়ার্ডে শ্রেষ্ঠ চলচ্চিত্রের পুরস্কার জেতে।' },
+                { q: '২০. গিরীশ কারনাড কিসের সাথে যুক্ত ছিলেন?', opts: ['বিজ্ঞান', 'জাদুবিদ্যা', 'নাটক', 'খেলা'], ans: 2, exp: '<b>ব্যাখ্যা:</b> গিরীশ কারনাড ছিলেন একজন প্রখ্যাত ভারতীয় অভিনেতা, চলচ্চিত্র পরিচালক, এবং কন্নড় ভাষার নাট্যকার।' },
+                { q: '২১. "The future of India" কার লেখা?', opts: ['বিমল জালান', 'অমিতাভ ঘোষ', 'অনুরাগ মাথুর', 'দীপক চোপড়া'], ans: 0, exp: '<b>ব্যাখ্যা:</b> "The future of India" গ্রন্থটি রিজার্ভ ব্যাঙ্কের প্রাক্তন গভর্নর বিমল জালান রচনা করেছেন।' },
+                { q: '২২. "মনসবদারী প্রথা" কে প্রচলন করেছিলেন?', opts: ['শের শাহ', 'শাহজাহান', 'জাহাঙ্গীর', 'আকবর'], ans: 3, exp: '<b>ব্যাখ্যা:</b> মুঘল সম্রাট আকবর ১৫৭১ সালে তাঁর সাম্রাজ্যে সামরিক ও প্রশাসনিক ক্ষেত্রে "মনসবদারী প্রথা" চালু করেন।' },
+                { q: '২৩. ফল (fruit) সংক্রান্ত বিদ্যাকে কী বলে?', opts: ['স্পার্মোলজি', 'পোমোলজি', 'পেরোলজি', 'অ্যান্থোলজি'], ans: 1, exp: '<b>ব্যাখ্যা:</b> উদ্ভিদবিদ্যার যে শাখায় ফল ও ফলের চাষ নিয়ে আলোচনা করা হয়, তাকে পোমোলজি (Pomology) বলে।' },
+                { q: '২৪. ভারতবর্ষে কে প্রথম লোকপাল রূপে নিযুক্ত হলেন?', opts: ['পিনাকী চন্দ্র ঘোষ', 'বীরাপ্পা মইলি', 'আন্না হাজারে', 'এম. এন. ভেঙ্কট চিলিয়া'], ans: 0, exp: '<b>ব্যাখ্যা:</b> সুপ্রিম কোর্টের প্রাক্তন বিচারপতি পিনাকী চন্দ্র ঘোষ ভারতের প্রথম লোকপাল হিসেবে নিযুক্ত হয়েছিলেন।' },
+                { q: '২৫. নীচের কোন খাবারের মধ্যে সবচেয়ে বেশি প্রোটিন পাওয়া যায়?', opts: ['মাখন', 'দুধ', 'লেটুস', 'মাছ'], ans: 3, exp: '<b>ব্যাখ্যা:</b> মাখন ও দুধে ফ্যাট বেশি থাকে, লেটুসে ভিটামিন। অপশনগুলির মধ্যে মাছে সবচেয়ে বেশি প্রাণিজ প্রোটিন থাকে।' },
+                { q: '২৬. কে প্রথম ভারতের জাতীয় আয় (National Income) নির্ধারণ করেছিলেন?', opts: ['দাদাভাই নৌরোজি', 'প্রশান্ত চন্দ্র মহলানবীশ', 'সর্দার বল্লভভাই প্যাটেল', 'ভি কে আর ডি রাও'], ans: 0, exp: '<b>ব্যাখ্যা:</b> ভারতের "গ্র্যান্ড ওল্ড ম্যান" দাদাভাই নৌরোজি সর্বপ্রথম ১৮৬৭-৬৮ সালে ভারতের জাতীয় আয় পরিমাপের চেষ্টা করেন।' },
+                { q: '২৭. "স্মৃতি মন্ধানা" কোন খেলার সাথে যুক্ত?', opts: ['হকি', 'বক্সিং', 'ক্রিকেট', 'টেবিল টেনিস'], ans: 2, exp: '<b>ব্যাখ্যা:</b> স্মৃতি মন্ধানা ভারতীয় মহিলা ক্রিকেট দলের একজন অন্যতম সেরা বাঁ-হাতি ব্যাটার।' },
+                { q: '২৮. স্পঞ্জ কী?', opts: ['জীবাশ্ম', 'ছত্রাক', 'জীবদেহ (Animal)', 'উদ্ভিদ'], ans: 2, exp: '<b>ব্যাখ্যা:</b> স্পঞ্জ হলো পরিফেরা পর্বের অন্তর্গত এক প্রকার বহুকোষী জলজ প্রাণী বা জীবদেহ।' },
+                { q: '২৯. কীসের অভাবের জন্য দুধকে এখন সুষমখাদ্য (balanced diet) বলে না?', opts: ['ম্যাগনেশিয়াম ও ভিটামিন-ডি', 'লোহা ও ভিটামিন-এ', 'ক্যালসিয়াম ও ভিটামিন-সি', 'লোহা ও ভিটামিন-সি'], ans: 3, exp: '<b>ব্যাখ্যা:</b> দুধে ভিটামিন সি এবং লোহা (Iron)-এর যথেষ্ট অভাব থাকে, তাই আধুনিক বিজ্ঞানে দুধকে সম্পূর্ণ সুষমখাদ্য বলা হয় না।' },
+                { q: '৩০. "বন্দীপুর" অভয়ারণ্য (Sanctuary) কোথায় অবস্থিত?', opts: ['গুজরাট', 'রাজস্থান', 'উড়িষ্যা', 'কর্ণাটক'], ans: 3, exp: '<b>ব্যাখ্যা:</b> বন্দীপুর জাতীয় উদ্যান বা ব্যাঘ্র সংরক্ষণ কেন্দ্র দক্ষিণ ভারতের কর্ণাটক রাজ্যে অবস্থিত।' },
+                { q: '৩১. পশ্চিমবঙ্গের দিনেমার (Denmark) উপনিবেশ কোনটি ছিল?', opts: ['চুঁচুড়া, হুগলি', 'চন্দননগর, হুগলি', 'শ্রীরামপুর, হুগলি', 'ব্যারাকপুর, উত্তর ২৪ পরগনা'], ans: 2, exp: '<b>ব্যাখ্যা:</b> ডেনমার্কের অধিবাসীদের "দিনেমার" বলা হয়। ভারতে তাদের প্রধান বাণিজ্যকুঠি ও উপনিবেশ ছিল পশ্চিমবঙ্গের হুগলি জেলার শ্রীরামপুরে।' },
+                { q: '৩২. SVEEP Program কী?', opts: ['Senior Voters\' Education...', 'Systematic Voters\' Education and Electoral Participation Program', 'Senior Voters\' Encouragement...', 'Systematic Voters\' Encouragement...'], ans: 1, exp: '<b>ব্যাখ্যা:</b> এটি ভারতের নির্বাচন কমিশন দ্বারা পরিচালিত একটি প্রোগ্রাম, যার উদ্দেশ্য হলো ভোটারদের মধ্যে সচেতনতা বৃদ্ধি করা।' },
+                { q: '৩৩. বক্সা ব্যাঘ্র সংরক্ষণ প্রকল্প (Buxa Tiger Reserve) পশ্চিমবঙ্গের কোন জেলায় অবস্থিত?', opts: ['জলপাইগুড়ি', 'আলিপুরদুয়ার', 'দার্জিলিং', 'দক্ষিণ ২৪ পরগনা'], ans: 1, exp: '<b>ব্যাখ্যা:</b> বক্সা ব্যাঘ্র সংরক্ষণ প্রকল্প পশ্চিমবঙ্গের আলিপুরদুয়ার জেলায় অবস্থিত। (পূর্বে এটি জলপাইগুড়ি জেলার অংশ ছিল)।' },
+                { q: '৩৪. কলমকারি চিত্রশৈলী কোন রাজ্যে উৎপত্তি হয়েছিল?', opts: ['রাজস্থান', 'অন্ধ্রপ্রদেশ', 'গুজরাট', 'মধ্যপ্রদেশ'], ans: 1, exp: '<b>ব্যাখ্যা:</b> কলমকারি হলো সুতির কাপড়ের ওপর হস্তশিল্প বা ব্লক প্রিন্টিং চিত্রশৈলী, যার উৎপত্তি অন্ধ্রপ্রদেশে।' },
+                { q: '৩৫. অজাতশত্রু কোন মহাজনপদের অধিপতি ছিলেন?', opts: ['অঙ্গ', 'কোশল', 'মগধ', 'অবন্তী'], ans: 2, exp: '<b>ব্যাখ্যা:</b> অজাতশত্রু ছিলেন প্রাচীন ভারতের মগধ মহাজনপদের হর্যঙ্ক বংশের রাজা। তিনি পিতা বিম্বিসারকে হত্যা করে সিংহাসনে বসেন।' },
+                { q: '৩৬. বাংলার রেনেসাঁসের জনক কাকে বলা হয়?', opts: ['রাজা রামমোহন রায়', 'পণ্ডিত ঈশ্বরচন্দ্র বিদ্যাসাগর', 'মাইকেল মধুসূদন দত্ত', 'প্রিন্স দ্বারকানাথ ঠাকুর'], ans: 0, exp: '<b>ব্যাখ্যা:</b> সমাজ সংস্কারমূলক কাজ এবং আধুনিক চিন্তাধারার জন্য রাজা রামমোহন রায়কে "বাংলার রেনেসাঁসের জনক" বলা হয়।' },
+                { q: '৩৭. ক্লোরোফিলে কোন ধাতুটি বর্তমান?', opts: ['বেরিয়াম', 'বেরিলিয়াম', 'ম্যাগনেশিয়াম', 'ক্যালশিয়াম'], ans: 2, exp: '<b>ব্যাখ্যা:</b> উদ্ভিদের পাতায় থাকা সবুজ রঞ্জক পদার্থ ক্লোরোফিলের কেন্দ্রীয় ধাতব আয়নটি হলো ম্যাগনেশিয়াম (Mg)।' },
+                { q: '৩৮. কোন দিনটিতে সূর্য নিরক্ষরেখার উপর লম্বভাবে কিরণ দেয়?', opts: ['২১ শে মার্চ', '২১ শে নভেম্বর', '২১ শে ডিসেম্বর', '২১ শে জুন'], ans: 0, exp: '<b>ব্যাখ্যা:</b> ২১ শে মার্চ (মহাবিষুব) এবং ২৩ শে সেপ্টেম্বর (জলবিষুব) তারিখে সূর্য নিরক্ষরেখার ওপর লম্বভাবে কিরণ দেয়।' },
+                { q: '৩৯. কোন বছর পশ্চিমবঙ্গে "কন্যাশ্রী" প্রকল্প চালু হয়েছিল?', opts: ['2014', '2012', '2013', '2011'], ans: 2, exp: '<b>ব্যাখ্যা:</b> ছাত্রীদের বিদ্যালয় ছুট কমানো এবং বাল্যবিবাহ রোধের উদ্দেশ্যে পশ্চিমবঙ্গ সরকার ২০১৩ সালে কন্যাশ্রী প্রকল্প চালু করে।' },
+                { q: '৪০. কোন সভ্যতার অধিবাসীরা প্রথম নিকাশি ব্যবস্থার প্রচলন করেন?', opts: ['মেসোপটেমিয়া', 'মিশরীয়', 'সিন্ধু', 'চৈনিক'], ans: 2, exp: '<b>ব্যাখ্যা:</b> সিন্ধু সভ্যতার অধিবাসীরা নগর পরিকল্পনা এবং উন্নত ভূগর্ভস্থ নিকাশি ব্যবস্থার জন্য সমগ্র প্রাচীন বিশ্বে বিখ্যাত ছিল।' },
+                { q: '৪১. জাতীয় প্ল্যানিং কমিশন কোন সালে স্থাপিত হয়?', opts: ['1949', '1951', '1948', '1950'], ans: 3, exp: '<b>ব্যাখ্যা:</b> ভারতের অর্থনৈতিক উন্নয়নের রূপরেখা তৈরির জন্য ১৯৫০ সালের ১৫ মার্চ যোজনা কমিশন বা প্ল্যানিং কমিশন গঠিত হয়।' },
+                { q: '৪২. পশ্চিমবঙ্গের দীর্ঘতম সেতু কোনটি?', opts: ['রবীন্দ্র সেতু', 'ফরাক্কা সেতু', 'ভূতনি সেতু', 'জয়ী সেতু'], ans: 3, exp: '<b>ব্যাখ্যা:</b> কোচবিহার জেলার তিস্তা নদীর ওপর নির্মিত ২.৭ কিমি দীর্ঘ "জয়ী সেতু" হলো পশ্চিমবঙ্গের দীর্ঘতম সেতু।' },
+                { q: '৪৩. ভারতের সংবিধান কবে গৃহীত হয়েছিল?', opts: ['৩১ ডিসেম্বর 1950', '২৬ নভেম্বর 1949', '২৬ জানুয়ারি 1950', '১৫ আগস্ট 1947'], ans: 1, exp: '<b>ব্যাখ্যা:</b> ভারতের গণপরিষদ দ্বারা ১৯৪৯ সালের ২৬ নভেম্বর সংবিধান গৃহীত হয় এবং ১৯৫০ সালের ২৬ জানুয়ারি তা কার্যকর হয়।' },
+                { q: '৪৪. ভারতীয় জাতীয় কংগ্রেসের একমাত্র কোন অধিবেশনে মহাত্মা গান্ধী সভাপতিত্ব করেন?', opts: ['করাচি', 'অমরাবতী', 'নাগপুর', 'বেলগাঁও'], ans: 3, exp: '<b>ব্যাখ্যা:</b> ১৯২৪ সালে কর্ণাটকের বেলগাঁও-এ অনুষ্ঠিত জাতীয় কংগ্রেসের অধিবেশনে মহাত্মা গান্ধী একমাত্র ও প্রথমবার সভাপতিত্ব করেন।' },
+                { q: '৪৫. L.P.G. সিলিন্ডারে কোন গ্যাস থাকে?', opts: ['আইসোবিউটেন ও প্রোপেন', 'বিউটেন এবং আইসোবিউটেন', 'বিউটেন ও প্রোপেন', 'মিথেন ও ইথেন'], ans: 2, exp: '<b>ব্যাখ্যা:</b> রান্নার গ্যাস বা লিকুইফায়েড পেট্রোলিয়াম গ্যাস (LPG)-এ প্রধানত প্রোপেন এবং বিউটেন গ্যাস উচ্চচাপে তরল করে রাখা হয়।' },
+                { q: '৪৬. মোবাইল ফোনে ব্যবহৃত প্রযুক্তি "GSM"-এর পুরো কথাটি কী?', opts: ['Geo Satellite for Mobile', 'Global System for Mobility', 'Global System for Mobile', 'Geo Station for Mobility'], ans: 2, exp: '<b>ব্যাখ্যা:</b> মোবাইল যোগাযোগের ক্ষেত্রে সবচেয়ে জনপ্রিয় প্রযুক্তি হলো GSM (Global System for Mobile Communications)।' },
+                { q: '৪৭. "ভারী জল (Heavy water)" কী?', opts: ['ওজোন গ্যাস মিশ্রিত জল', 'ভারী ধাতুর খনিজ মিশ্রিত জল', 'খনিজ মিশ্রিত জল', 'হাইড্রোজেনের আইসোটোপ দ্বারা তৈরি জল'], ans: 3, exp: '<b>ব্যাখ্যা:</b> হাইড্রোজেনের আইসোটোপ ডয়টেরিয়াম (D) অক্সিজেনের সাথে যুক্ত হয়ে ভারী জল বা D2O গঠন করে।' },
+                { q: '৪৮. "বাদামী কয়লা (brown coal)" কাকে বলে?', opts: ['বিটুমিনাস', 'কোক', 'অ্যানথ্রাসাইট', 'লিগনাইট'], ans: 3, exp: '<b>ব্যাখ্যা:</b> লিগনাইট কয়লায় কার্বনের পরিমাণ কম থাকে এবং এর রং বাদামী হওয়ায় একে বাদামী কয়লা বা Brown Coal বলা হয়।' },
+                { q: '৪৯. "ফটোগ্রাফিক ফিল্ম"-এর আলোক চিত্র পরিস্ফুট করার জন্য কোন রাসায়নিক দ্রব্য ব্যবহার করা হয়?', opts: ['সোডিয়াম কার্বোনেট', 'সোডিয়াম সালফেট', 'সিলভার ব্রোমাইড', 'হাইড্রোকুইনন'], ans: 2, exp: '<b>ব্যাখ্যা:</b> ফটোগ্রাফিক ফিল্মে ছবি পরিস্ফুট (develop) করার জন্য আলোক-সংবেদী সিলভার ব্রোমাইড (AgBr) ব্যবহৃত হয়।' },
+                { q: '৫০. কিলোওয়াট-ঘন্টা (KWh) কীসের একক?', opts: ['ক্ষমতা', 'বল', 'শক্তি', 'ভরবেগ'], ans: 2, exp: '<b>ব্যাখ্যা:</b> কিলোওয়াট-ঘণ্টা বা Board of Trade (BOT) unit হলো বৈদ্যুতিক শক্তি বা এনার্জি (Energy) পরিমাপের একটি ব্যবহারিক একক।' }
+            ]
+        }
+    };
+
+    const LABELS = ['A', 'B', 'C', 'D'];
+    let loggedInUser = null;
+    let activeTest = [];
+    let currentQIdx = 0;
+    let score = 0;
+    let timerInterval;
+    let timeLeft = TIME_LIMIT;
+    let answered = false;
+    let isReviewMode = false;
+    let userAnswers = [];
+
+    window.onload = () => { buildHub(); };
+
+    function buildHub() {
+        const grid = document.getElementById('setGrid');
+        grid.innerHTML = '';
+        Object.keys(ALL_SETS).forEach(id => {
+            const set = ALL_SETS[id];
+            const card = document.createElement('div');
+            card.className = 'set-card';
+            
+            let lockedHtml = '';
+            if(loggedInUser && getAttempts(loggedInUser, id) >= MAX_ATTEMPTS) {
+                lockedHtml = `<div class="locked-badge">Completed</div>`;
+            }
+
+            card.innerHTML = `
+                ${lockedHtml}
+                <div class="set-icon">${set.icon}</div>
+                <div class="set-name">${set.name}</div>
+                <div class="set-title">${set.topic}</div>
+                <div class="set-meta"><span>${set.questions.length} Questions</span><span>30 Mins</span></div>
+            `;
+            card.onclick = () => selectSet(id);
+            grid.appendChild(card);
+        });
+    }
+
+    function selectSet(id) {
+        if(loggedInUser) {
+            if(getAttempts(loggedInUser, id) >= MAX_ATTEMPTS) {
+                alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+                return;
+            }
+            startQuiz(id);
+        } else {
+            document.getElementById('loginSetName').innerText = ALL_SETS[id].name;
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').classList.add('hidden');
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+    }
+
+    function closeLogin() { document.getElementById('loginModal').classList.add('hidden'); }
+
+    function doLogin() {
+        const u = document.getElementById('loginUsername').value.trim();
+        const p = document.getElementById('loginPassword').value.trim();
+        const err = document.getElementById('loginError');
+
+        let users = JSON.parse(localStorage.getItem(STORAGE_KEY_USERS)) || {};
+
+        if(!u || !p) { err.innerText = "ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.classList.remove('hidden'); return; }
+
+        if(!users[u] || users[u].pass !== p) {
+            err.innerText = "ইউজারনেম বা পাসওয়ার্ড ভুল!";
+            err.classList.remove('hidden');
+            return;
+        }
+
+        loggedInUser = u;
+        document.getElementById('userDisplay').innerText = `👤 ${u}`;
+        closeLogin();
+        buildHub(); 
+        startQuiz(1); // Set ID is 1
+    }
+
+    function getAttempts(user, setId) {
+        let data = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+        if (!data[user]) data[user] = {};
+        return data[user][setId] || 0;
+    }
+
+    function incrementAttempt(user, setId) {
+        let data = JSON.parse(localStorage.getItem(STORAGE_KEY_ATTEMPTS)) || {};
+        if (!data[user]) data[user] = {};
+        data[user][setId] = (data[user][setId] || 0) + 1;
+        localStorage.setItem(STORAGE_KEY_ATTEMPTS, JSON.stringify(data));
+    }
+
+    function startQuiz(setId) {
+        incrementAttempt(loggedInUser, setId);
+        
+        currentQIdx = 0; score = 0; answered = false;
+        timeLeft = TIME_LIMIT; userAnswers = [];
+        isReviewMode = false;
+        activeTest = ALL_SETS[setId].questions;
+
+        document.getElementById('hubView').classList.add('hidden');
+        document.getElementById('resultWrap').classList.remove('show');
+        document.getElementById('quizView').classList.remove('hidden');
+        document.getElementById('timerBox').classList.remove('hidden');
+        document.getElementById('timerBox').classList.remove('danger');
+
+        document.getElementById('testSetLabel').textContent = ALL_SETS[setId].name;
+        document.getElementById('testTopic').textContent = ALL_SETS[setId].topic;
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(tick, 1000);
+        loadQ();
+    }
+
+    function tick() {
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        document.getElementById('timerDisplay').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+        if (timeLeft <= 60) document.getElementById('timerBox').classList.add('danger');
+        if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+    }
+
+    function loadQ() {
+        answered = false;
+        const q = activeTest[currentQIdx];
+
+        document.getElementById('qNum').textContent = `প্রশ্ন ${currentQIdx + 1} / ${activeTest.length}`;
+        document.getElementById('qText').innerHTML = q.q;
+        document.getElementById('progressFill').style.width = ((currentQIdx) / activeTest.length * 100) + '%';
+        
+        document.getElementById('nextBtn').disabled = true;
+        document.getElementById('nextBtn').textContent = currentQIdx === activeTest.length - 1 ? 'ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+        document.getElementById('explanation').classList.remove('show');
+
+        const optsBox = document.getElementById('qOpts');
+        optsBox.innerHTML = '';
+        
+        q.opts.forEach((o, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'opt';
+            btn.innerHTML = `<div class="opt-circle">${LABELS[i]}</div><div class="opt-text">${o}</div>`;
+            
+            if(isReviewMode) {
+                btn.classList.add('disabled');
+                if(i === q.ans) btn.classList.add('correct');
+                else if(userAnswers[currentQIdx] === i) btn.classList.add('wrong');
+            } else {
+                btn.onclick = () => answer(i, btn);
+            }
+            optsBox.appendChild(btn);
+        });
+
+        if(isReviewMode) {
+            document.getElementById('explanationText').innerHTML = q.exp;
+            document.getElementById('explanation').classList.add('show');
+            document.getElementById('nextBtn').disabled = false;
+        }
+    }
+
+    function answer(i, selectedBtn) {
+        if (answered) return;
+        answered = true;
+        const q = activeTest[currentQIdx];
+        userAnswers[currentQIdx] = i;
+
+        const allBtns = document.getElementById('qOpts').children;
+        Array.from(allBtns).forEach(b => b.classList.add('disabled'));
+
+        allBtns[q.ans].classList.add('correct');
+        
+        if (i !== q.ans) { selectedBtn.classList.add('wrong'); }
+        else { score++; }
+
+        document.getElementById('scoreShow').textContent = `সঠিক: ${score} | ভুল: ${currentQIdx + 1 - score}`;
+        document.getElementById('explanationText').innerHTML = q.exp;
+        document.getElementById('explanation').classList.add('show');
+        document.getElementById('nextBtn').disabled = false;
+    }
+
+    function nextQ() {
+        currentQIdx++;
+        if (currentQIdx >= activeTest.length) { 
+            if(isReviewMode) {
+                document.getElementById('quizView').classList.add('hidden');
+                document.getElementById('resultWrap').classList.add('show');
+            } else {
+                clearInterval(timerInterval); showResult(); 
+            }
+            return; 
+        }
+        loadQ();
+    }
+
+    function showResult() {
+        document.getElementById('quizView').classList.add('hidden');
+        document.getElementById('timerBox').classList.add('hidden');
+        document.getElementById('resultWrap').classList.add('show');
+
+        const pct = Math.round((score / activeTest.length) * 100);
+
+        document.getElementById('finalScore').textContent = pct + '%';
+        document.getElementById('rbCorrect').textContent = score;
+        document.getElementById('rbWrong').textContent = activeTest.length - score;
+        document.getElementById('rbPct').textContent = pct + "%";
+
+        let icon = '💪', grade = 'চেষ্টা চালিয়ে যাও!';
+        if(pct >= 90) { icon = '🌟'; grade = 'অসাধারণ!'; }
+        else if(pct >= 70) { icon = '👍'; grade = 'খুব ভালো!'; }
+        else if(pct >= 50) { icon = '📚'; grade = 'ভালো চেষ্টা!'; }
+
+        document.getElementById('resultIcon').textContent = icon;
+        document.getElementById('resultGrade').textContent = grade;
+
+        const remaining = MAX_ATTEMPTS - getAttempts(loggedInUser, 1);
+        document.getElementById('attemptInfo').innerHTML = `👤 ${loggedInUser} - বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ (সর্বোচ্চ ${MAX_ATTEMPTS} বার)`;
+    }
+
+    function restartQuiz() {
+        if(getAttempts(loggedInUser, 1) >= MAX_ATTEMPTS) {
+            alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`); return;
+        }
+        startQuiz(1);
+    }
+
+    function showReview() {
+        document.getElementById('resultWrap').classList.remove('show');
+        document.getElementById('quizView').classList.remove('hidden');
+        isReviewMode = true;
+        currentQIdx = 0;
+        loadQ();
+    }
+</script>
+
+</body>
+</html>

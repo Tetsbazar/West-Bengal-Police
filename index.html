@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bazar - WBP Mock Test Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a7a4a;
+            --primary-hover: #2aad68;
+            --accent: #f9a825;
+            --bg-main: #f0faf4;
+            --bg-card: #ffffff;
+            --text-main: #1c2e24;
+            --text-meta: #5a7a66;
+            --alert-danger: #dc3545;
+            --border-color: #c5dccb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Tiro Bangla', serif; background-color: var(--bg-main); color: var(--text-main); }
+        .en-font { font-family: 'Syne', sans-serif; }
+        .hidden { display: none !important; }
+
+        /* ================= TOP BAR ================= */
+        .top-bar { background-color: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(26,122,74,0.15); }
+        .logo { font-size: 1.6rem; font-weight: 800; cursor: pointer; }
+        .logo span { color: var(--accent); }
+        .top-stats { display: flex; gap: 15px; align-items: center; font-family: 'Syne', sans-serif; font-weight: bold; }
+        .btn-admin { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-admin:hover { background: white; color: var(--primary); }
+
+        /* ================= NAVIGATION TABS ================= */
+        .nav-tabs { display: flex; justify-content: center; background: white; border-bottom: 1px solid var(--border-color); }
+        .tab { padding: 12px 25px; cursor: pointer; font-weight: bold; color: var(--text-meta); border-bottom: 3px solid transparent; transition: 0.3s; }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab:hover { background: var(--bg-main); }
+
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+
+        /* ================= HOME VIEW (WBP EXAMS) ================= */
+        .section-title { text-align: center; margin-bottom: 2rem; }
+        .section-title h1 { color: var(--primary); font-size: 2rem; margin-bottom: 10px; }
+        .section-title p { color: var(--text-meta); font-size: 1.1rem; }
+        
+        .exam-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .exam-card { background: white; border: 1.5px solid var(--border-color); border-radius: 12px; padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .exam-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 8px 20px rgba(26,122,74,0.1); }
+        .exam-icon { font-size: 3rem; margin-bottom: 15px; }
+        .exam-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 8px; font-family: 'Syne', sans-serif; }
+        .exam-subtitle { font-size: 1rem; color: var(--text-meta); font-weight: bold; }
+        .badge-new { background: var(--accent); color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-family: 'Syne', sans-serif; display: inline-block; margin-bottom: 10px; }
+
+        /* ================= ADMIN VIEW ================= */
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } }
+        
+        .admin-box { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; }
+        .admin-box h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid var(--bg-main); padding-bottom: 10px; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group input, .input-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-family: 'Syne', sans-serif; font-size: 1rem; }
+        .input-group textarea { resize: vertical; height: 100px; }
+        
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.05rem; font-family: 'Tiro Bangla', serif; transition: 0.3s; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-danger { background: var(--alert-danger); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; transition: 0.3s; margin-top: 10px; }
+        
+        .student-list { max-height: 400px; overflow-y: auto; }
+        .student-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border-color); }
+        .student-item:last-child { border-bottom: none; }
+        .del-btn { background: var(--alert-danger); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+
+        /* ================= MODAL ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-box { background: white; padding: 2rem; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; }
+        .modal-box input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1.1rem; text-align: center; font-family: 'Syne', sans-serif; }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <header class="top-bar">
+        <div class="logo en-font">Test<span>Bazar</span></div>
+        <div class="top-stats">
+            <span id="totalStudentsDisplay">👤 0 Students</span>
+            <button class="btn-admin" id="adminToggleBtn" onclick="toggleAdminModal()">Admin Panel</button>
+        </div>
+    </header>
+
+    <!-- ADMIN PASSWORD MODAL -->
+    <div class="modal-overlay hidden" id="adminModal">
+        <div class="modal-box">
+            <h2 style="color: var(--primary);">Admin Access</h2>
+            <p style="color: var(--text-meta); margin-top: 5px;">Admin Panel-এ প্রবেশ করতে পাসওয়ার্ড দিন</p>
+            <input type="password" id="adminPass" placeholder="Admin Password" onkeypress="if(event.key === 'Enter') checkAdminPass()">
+            <div id="adminError" class="hidden" style="color: var(--alert-danger); margin-bottom: 10px; font-weight: bold;">ভুল পাসওয়ার্ড!</div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" onclick="checkAdminPass()">প্রবেশ করুন</button>
+                <button class="btn-primary" style="background: var(--text-meta);" onclick="toggleAdminModal()">বাতিল</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="nav-tabs">
+        <div class="tab active" id="tabHome" onclick="switchTab('Home')">🏠 WBP Exams</div>
+        <div class="tab hidden" id="tabAdmin" onclick="switchTab('Admin')">⚙️ Admin Panel</div>
+    </div>
+
+    <div class="container">
+        
+        <!-- ================= HOME VIEW (WBP EXAMS) ================= -->
+        <div id="viewHome">
+            <div class="section-title">
+                <h1>West Bengal Police (WBP) Mock Tests</h1>
+                <p>আপনার লক্ষ্য পূরণের সেরা প্রস্তুতি নিন Test Bazar-এর সাথে। নিচে থেকে পরীক্ষা নির্বাচন করুন।</p>
+            </div>
+
+            <div class="exam-grid">
+                <!-- WBP Prelims Card -->
+                <div class="exam-card" onclick="window.location.href='WBP_Prelims_Mock.html'">
+                    <div class="badge-new">NEW TEST</div>
+                    <div class="exam-icon">👮‍♂️</div>
+                    <div class="exam-title">WBP Constable Prelims</div>
+                    <div class="exam-subtitle">50 Marks Comprehensive Mock</div>
+                </div>
+
+                <!-- WBP Mains Card -->
+                <div class="exam-card" onclick="alert('WBP Mains-এর প্রশ্নপত্র খুব শীঘ্রই আপলোড করা হবে!')">
+                    <div class="exam-icon">📝</div>
+                    <div class="exam-title">WBP Constable Mains</div>
+                    <div class="exam-subtitle">Coming Soon</div>
+                </div>
+
+                <!-- KP Prelims Card -->
+                <div class="exam-card" onclick="alert('Kolkata Police (KP)-এর প্রশ্নপত্র খুব শীঘ্রই আপলোড করা হবে!')">
+                    <div class="exam-icon">🚔</div>
+                    <div class="exam-title">Kolkata Police (KP) Prelims</div>
+                    <div class="exam-subtitle">Coming Soon</div>
+                </div>
+                
+                <!-- WBP SI Card -->
+                <div class="exam-card" onclick="alert('WBP Sub Inspector-এর প্রশ্নপত্র খুব শীঘ্রই আপলোড করা হবে!')">
+                    <div class="exam-icon">⭐</div>
+                    <div class="exam-title">WBP SI Prelims</div>
+                    <div class="exam-subtitle">Coming Soon</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ADMIN VIEW ================= -->
+        <div id="viewAdmin" class="hidden">
+            <div class="section-title">
+                <h1>Admin Control Panel</h1>
+                <p>এখান থেকে স্টুডেন্টদের ইউজারনেম ও পাসওয়ার্ড নিয়ন্ত্রণ করুন।</p>
+            </div>
+
+            <div class="admin-grid">
+                <!-- Left Column: Add Students -->
+                <div>
+                    <div class="admin-box" style="margin-bottom: 1.5rem;">
+                        <h3>➕ নতুন Student যোগ করুন</h3>
+                        <div class="input-group">
+                            <input type="text" id="singleUser" placeholder="Username (যেমন: sagun)">
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="singlePass" placeholder="Password (যেমন: sagun123)">
+                        </div>
+                        <button class="btn-primary" onclick="addSingleStudent()">Add Student</button>
+                    </div>
+
+                    <div class="admin-box">
+                        <h3>👥 একসাথে অনেক Student যোগ করুন (Bulk Add)</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-meta); margin-bottom: 10px;">
+                            Format: প্রতি লাইনে <code>username, password</code> লিখুন।<br>
+                            উদাহরণ:<br>sagun, sagun123<br>samir, samir456
+                        </p>
+                        <div class="input-group">
+                            <textarea id="bulkData" placeholder="sagun, sagun123&#10;samir, samir456"></textarea>
+                        </div>
+                        <button class="btn-primary" onclick="addBulkStudents()">সবাইকে Add করুন</button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Student List & Controls -->
+                <div class="admin-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid var(--bg-main); padding-bottom: 10px;">
+                        <h3 style="border:none; margin:0; padding:0;">📋 Student List (<span id="listCount">0</span>)</h3>
+                        <button class="btn-danger" style="width: auto; margin:0; padding: 5px 10px;" onclick="deleteAllStudents()">সবাইকে মুছুন</button>
+                    </div>
+                    
+                    <div class="student-list" id="studentList">
+                        <!-- Students injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // ================== CONFIGURATION ==================
+    const ADMIN_PASS = "1234";
+    const DB_KEY = "testBazarFinalDB_v3"; // Keeping the same DB key to maintain connections
+    let usersDB = {};
+    let isAdmin = false;
+
+    // Initialize
+    window.onload = () => {
+        loadDB();
+        updateCounts();
+    };
+
+    // Database Functions
+    function loadDB() {
+        usersDB = JSON.parse(localStorage.getItem(DB_KEY)) || {};
+    }
+    function saveDB() {
+        localStorage.setItem(DB_KEY, JSON.stringify(usersDB));
+        updateCounts();
+        renderStudentList();
+    }
+
+    function updateCounts() {
+        const count = Object.keys(usersDB).length;
+        document.getElementById('totalStudentsDisplay').innerText = `👤 ${count} Students`;
+        document.getElementById('listCount').innerText = count;
+    }
+
+    // ================== TAB & MODAL LOGIC ==================
+    function toggleAdminModal() {
+        if(isAdmin) {
+            // Logout Admin
+            isAdmin = false;
+            document.getElementById('adminToggleBtn').innerText = "Admin Panel";
+            document.getElementById('tabAdmin').classList.add('hidden');
+            switchTab('Home');
+        } else {
+            document.getElementById('adminPass').value = '';
+            document.getElementById('adminError').classList.add('hidden');
+            document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('adminPass').focus();
+        }
+    }
+
+    function checkAdminPass() {
+        const pass = document.getElementById('adminPass').value;
+        if(pass === ADMIN_PASS) {
+            isAdmin = true;
+            document.getElementById('adminModal').classList.add('hidden');
+            document.getElementById('adminToggleBtn').innerText = "Logout Admin";
+            document.getElementById('tabAdmin').classList.remove('hidden');
+            switchTab('Admin');
+            renderStudentList();
+        } else {
+            document.getElementById('adminError').classList.remove('hidden');
+        }
+    }
+
+    function switchTab(tab) {
+        document.getElementById('tabHome').classList.remove('active');
+        document.getElementById('tabAdmin').classList.remove('active');
+        document.getElementById('viewHome').classList.add('hidden');
+        document.getElementById('viewAdmin').classList.add('hidden');
+
+        document.getElementById('tab' + tab).classList.add('active');
+        document.getElementById('view' + tab).classList.remove('hidden');
+    }
+
+    // ================== STUDENT MANAGEMENT LOGIC ==================
+    function addSingleStudent() {
+        const u = document.getElementById('singleUser').value.trim();
+        const p = document.getElementById('singlePass').value.trim();
+        
+        if(!u || !p) { alert("Username এবং Password দুটিই দিতে হবে!"); return; }
+        if(usersDB[u]) { alert("এই Username আগেই আছে!"); return; }
+
+        usersDB[u] = { pass: p, addedOn: new Date().toISOString() };
+        saveDB();
+        document.getElementById('singleUser').value = '';
+        document.getElementById('singlePass').value = '';
+        alert("Student সফলভাবে যোগ করা হয়েছে!");
+    }
+
+    function addBulkStudents() {
+        const data = document.getElementById('bulkData').value.trim();
+        if(!data) return;
+
+        const lines = data.split('\n');
+        let added = 0;
+
+        lines.forEach(line => {
+            const parts = line.split(',');
+            if(parts.length >= 2) {
+                const u = parts.trim();
+                const p = parts.trim();
+                if(u && p && !usersDB[u]) {
+                    usersDB[u] = { pass: p, addedOn: new Date().toISOString() };
+                    added++;
+                }
+            }
+        });
+
+        if(added > 0) {
+            saveDB();
+            document.getElementById('bulkData').value = '';
+            alert(`সফলভাবে ${added} জন Student যোগ করা হয়েছে!`);
+        } else {
+            alert("সঠিক ফরম্যাটে ডেটা দেওয়া হয়নি বা ইউজার আগেই আছে!");
+        }
+    }
+
+    function deleteStudent(user) {
+        if(confirm(`আপনি কি নিশ্চিত যে '${user}' কে মুছে ফেলতে চান?`)) {
+            delete usersDB[user];
+            saveDB();
+        }
+    }
+
+    function deleteAllStudents() {
+        if(confirm("সতর্কতা: আপনি কি ডাটাবেসের সমস্ত Student মুছে ফেলতে চান? এটি আর ফেরানো যাবে না!")) {
+            usersDB = {};
+            saveDB();
+        }
+    }
+
+    function renderStudentList() {
+        const list = document.getElementById('studentList');
+        list.innerHTML = '';
+        const users = Object.keys(usersDB);
+
+        if(users.length === 0) {
+            list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-meta);">কোনো Student নেই। বামদিক থেকে Add করুন।</div>`;
+            return;
+        }
+
+        users.forEach(u => {
+            const p = usersDB[u].pass;
+            const item = document.createElement('div');
+            item.className = 'student-item';
+            item.innerHTML = `
+                <div>
+                    <strong class="en-font" style="color:var(--primary);">${u}</strong><br>
+                    <span class="en-font" style="font-size:0.85rem; color:var(--text-meta);">Pass: ${p}</span>
+                </div>
+                <button class="del-btn" onclick="deleteStudent('${u}')">Delete</button>
+            `;
+            list.appendChild(item);
+        });
+    }
+</script>
+
+</body>
+</html>

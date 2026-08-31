@@ -1,408 +1,661 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Bazar – Practice Zone</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #1a7a4a;
-      --primary-hover: #2aad68;
-      --accent: #f9a825;
-      --bg-main: #f0faf4;
-      --bg-card: #ffffff;
-      --text-main: #1c2e24;
-      --text-meta: #5a7a66;
-      --border-color: #c5dccb;
-      --shadow: 0 8px 24px rgba(0, 40, 20, 0.08);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bazar – Practice Zone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a7a4a;
+            --primary-hover: #2aad68;
+            --accent: #f9a825;
+            --bg-main: #f0faf4;
+            --bg-card: #ffffff;
+            --text-main: #1c2e24;
+            --text-meta: #5a7a66;
+            --border-color: #c5dccb;
+            --shadow: 0 8px 24px rgba(0, 40, 20, 0.08);
+            --correct: #28a745;
+        }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Tiro Bangla', serif;
-      background: var(--bg-main);
-      color: var(--text-main);
-      line-height: 1.5;
-    }
-    .en-font { font-family: 'Syne', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Tiro Bangla', serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+        .en-font {
+            font-family: 'Syne', sans-serif;
+        }
 
-    /* top bar */
-    .top-bar {
-      background: var(--primary);
-      padding: 14px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      flex-wrap: wrap;
-    }
-    .logo { font-size: 1.6rem; font-weight: 800; cursor: default; }
-    .logo span { color: var(--accent); }
-    .admin-btn {
-      background: rgba(255,255,255,0.15);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: 0.2s;
-      font-family: 'Syne', sans-serif;
-    }
-    .admin-btn:hover { background: rgba(255,255,255,0.3); }
+        .top-bar {
+            background: var(--primary);
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            cursor: default;
+        }
+        .logo span {
+            color: var(--accent);
+        }
+        .admin-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            font-family: 'Syne', sans-serif;
+        }
+        .admin-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 28px 20px 50px;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 20px 50px;
+        }
 
-    .hero {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .hero h1 {
-      font-size: 2.2rem;
-      color: var(--primary);
-      margin-bottom: 6px;
-      font-weight: 800;
-    }
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--text-meta);
-      font-weight: 500;
-    }
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 6px;
+            font-weight: 800;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-meta);
+            font-weight: 500;
+        }
 
-    /* ===== PRACTICE ZONE CARDS (top 4) ===== */
-    .practice-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 22px;
-      margin-bottom: 44px;
-    }
-    .practice-card {
-      background: var(--bg-card);
-      border-radius: 20px;
-      padding: 22px 16px 18px;
-      box-shadow: var(--shadow);
-      border: 1px solid #e6f0ea;
-      transition: 0.25s;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-    }
-    .practice-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--primary);
-      box-shadow: 0 14px 32px rgba(26, 122, 74, 0.12);
-    }
-    .practice-card .icon { font-size: 2.4rem; margin-bottom: 2px; }
-    .practice-card .title { font-weight: 700; font-size: 1.2rem; font-family: 'Syne', sans-serif; }
-    .practice-card .sub {
-      font-size: 0.85rem;
-      color: var(--text-meta);
-      margin: 6px 0 8px;
-    }
-    .practice-card .badge-chip {
-      display: inline-block;
-      background: #f0f7f2;
-      padding: 2px 14px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-    .practice-card .btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 0;
-      border-radius: 60px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      font-family: 'Syne', sans-serif;
-      cursor: pointer;
-      transition: 0.2s;
-      margin-top: 6px;
-      width: 100%;
-    }
-    .practice-card .btn:hover { background: var(--primary-hover); }
-    .practice-card .btn.outline {
-      background: transparent;
-      color: var(--primary);
-      border: 2px solid var(--primary);
-    }
-    .practice-card .btn.outline:hover { background: var(--primary); color: white; }
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+            margin-bottom: 44px;
+        }
+        .practice-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 22px 16px 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e6f0ea;
+            transition: 0.25s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+        .practice-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 14px 32px rgba(26, 122, 74, 0.12);
+        }
+        .practice-card .icon {
+            font-size: 2.4rem;
+            margin-bottom: 2px;
+        }
+        .practice-card .title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            font-family: 'Syne', sans-serif;
+        }
+        .practice-card .sub {
+            font-size: 0.85rem;
+            color: var(--text-meta);
+            margin: 6px 0 8px;
+        }
+        .practice-card .badge-chip {
+            display: inline-block;
+            background: #f0f7f2;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .practice-card .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 0;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+            width: 100%;
+        }
+        .practice-card .btn:hover {
+            background: var(--primary-hover);
+        }
+        .practice-card .btn.outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .practice-card .btn.outline:hover {
+            background: var(--primary);
+            color: white;
+        }
 
-    /* ===== SUBJECT GRID (11 subjects) ===== */
-    .section-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin: 36px 0 18px 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 8px;
-    }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 36px 0 18px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
 
-    .subject-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 18px;
-    }
-    .subject-card {
-      background: var(--bg-card);
-      border-radius: 18px;
-      padding: 18px 14px 16px;
-      box-shadow: var(--shadow);
-      border: 1px solid #e6f0ea;
-      transition: 0.2s;
-      text-align: center;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .subject-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary);
-      box-shadow: 0 12px 28px rgba(26, 122, 74, 0.12);
-    }
-    .subject-card .icon { font-size: 2.2rem; margin-bottom: 2px; }
-    .subject-card .name {
-      font-weight: 700;
-      font-size: 1rem;
-      font-family: 'Syne', sans-serif;
-      color: var(--text-main);
-    }
-    .subject-card .name-bn {
-      font-size: 0.9rem;
-      color: var(--text-meta);
-      margin-top: 1px;
-    }
-    .subject-card .meta {
-      font-size: 0.75rem;
-      color: var(--text-meta);
-      background: #f0f7f2;
-      padding: 2px 14px;
-      border-radius: 40px;
-      font-weight: 600;
-      margin-top: 6px;
-    }
-    .subject-card .test-btn {
-      margin-top: 10px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 6px 18px;
-      border-radius: 60px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      font-family: 'Syne', sans-serif;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .subject-card .test-btn:hover { background: var(--primary-hover); }
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 18px;
+        }
+        .subject-card {
+            background: var(--bg-card);
+            border-radius: 18px;
+            padding: 18px 14px 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e6f0ea;
+            transition: 0.2s;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .subject-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 28px rgba(26, 122, 74, 0.12);
+        }
+        .subject-card .icon {
+            font-size: 2.2rem;
+            margin-bottom: 2px;
+        }
+        .subject-card .name {
+            font-weight: 700;
+            font-size: 1rem;
+            font-family: 'Syne', sans-serif;
+            color: var(--text-main);
+        }
+        .subject-card .name-bn {
+            font-size: 0.9rem;
+            color: var(--text-meta);
+            margin-top: 1px;
+        }
+        .subject-card .meta {
+            font-size: 0.75rem;
+            color: var(--text-meta);
+            background: #f0f7f2;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+        .subject-card .test-btn {
+            margin-top: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .subject-card .test-btn:hover {
+            background: var(--primary-hover);
+        }
 
-    /* Admin Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      backdrop-filter: blur(4px);
-    }
-    .modal-box {
-      background: white;
-      padding: 2.2rem 2rem;
-      border-radius: 24px;
-      width: 90%;
-      max-width: 380px;
-      text-align: center;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-    }
-    .modal-box h2 { color: var(--primary); }
-    .stat-box {
-      background: #e8f4ec;
-      border: 1px solid var(--primary);
-      padding: 14px;
-      border-radius: 12px;
-      margin: 18px 0;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .btn-cancel {
-      background: transparent;
-      color: var(--text-meta);
-      border: 2px solid var(--border-color);
-      padding: 10px;
-      border-radius: 60px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 6px;
-    }
-    .hidden { display: none !important; }
+        .subject-details {
+            margin-top: 30px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 24px 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+        .subject-details .back-btn {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            padding: 8px 22px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-meta);
+            transition: 0.2s;
+            margin-bottom: 16px;
+            font-family: 'Syne', sans-serif;
+        }
+        .subject-details .back-btn:hover {
+            background: #e8f4ec;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .subject-details .sub-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .subject-details .sub-desc {
+            color: var(--text-meta);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
 
-    @media (max-width: 640px) {
-      .hero h1 { font-size: 1.8rem; }
-      .practice-grid { grid-template-columns: 1fr; }
-      .subject-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-    }
-  </style>
+        .sets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+        .set-item {
+            background: #f8fbf9;
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .set-item:hover:not(.locked) {
+            border-color: var(--primary);
+            background: #e8f5ee;
+            transform: translateY(-2px);
+        }
+        .set-item .set-icon {
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .set-item .set-label {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .set-item .set-status {
+            font-size: 0.65rem;
+            color: var(--text-meta);
+            display: block;
+            margin-top: 2px;
+        }
+        .set-item.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .set-item.locked:hover {
+            transform: none;
+            border-color: var(--border-color);
+            background: #f8fbf9;
+        }
+        .set-item.free {
+            border-color: var(--correct);
+        }
+        .set-item.free .set-status {
+            color: var(--correct);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-box {
+            background: white;
+            padding: 2.2rem 2rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-box h2 {
+            color: var(--primary);
+        }
+        .stat-box {
+            background: #e8f4ec;
+            border: 1px solid var(--primary);
+            padding: 14px;
+            border-radius: 12px;
+            margin: 18px 0;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .btn-cancel {
+            background: transparent;
+            color: var(--text-meta);
+            border: 2px solid var(--border-color);
+            padding: 10px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 6px;
+        }
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+            .subject-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            .sets-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ===== TOP BAR ===== -->
-<header class="top-bar">
-  <div class="logo en-font">Test<span>Bazar</span></div>
-  <div class="user-status">
-    <button class="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
-  </div>
-</header>
+    <header class="top-bar">
+        <div class="logo en-font">Test<span>Bazar</span></div>
+        <div class="user-status">
+            <button class="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
+        </div>
+    </header>
 
-<!-- ===== ADMIN MODAL ===== -->
-<div class="modal-overlay hidden" id="adminModal">
-  <div class="modal-box">
-    <h2>📊 Admin Panel</h2>
-    <p style="color: gray; font-size: 0.9rem; margin-bottom: 4px;">(live dashboard)</p>
-    <div class="stat-box">
-      ✅ আজকের জমা: <span id="submitCount" style="color:#d32f2f; font-size:1.6rem;">124</span>
+    <div class="modal-overlay hidden" id="adminModal">
+        <div class="modal-box">
+            <h2>📊 Admin Panel</h2>
+            <p style="color: gray; font-size: 0.9rem; margin-bottom: 4px;">(live dashboard)</p>
+            <div class="stat-box">
+                ✅ আজকের জমা: <span id="submitCount" style="color:#d32f2f; font-size:1.6rem;">124</span>
+            </div>
+            <button class="btn-cancel" onclick="closeAdmin()">বন্ধ করুন</button>
+        </div>
     </div>
-    <button class="btn-cancel" onclick="closeAdmin()">বন্ধ করুন</button>
-  </div>
-</div>
 
-<!-- ===== MAIN ===== -->
-<div class="container">
+    <div class="container">
 
-  <!-- HERO -->
-  <div class="hero">
-    <h1>📚 Practice Zone</h1>
-    <p>আপনার পছন্দের সেকশন নির্বাচন করে অনলাইন টেস্ট দিন এবং আপনার প্রস্তুতি যাচাই করুন</p>
-  </div>
+        <div class="hero">
+            <h1>📚 Practice Zone</h1>
+            <p>আপনার পছন্দের সেকশন নির্বাচন করে অনলাইন টেস্ট দিন এবং আপনার প্রস্তুতি যাচাই করুন</p>
+        </div>
 
-  <!-- ===== 4 PRACTICE ZONE CARDS ===== -->
-  <div class="practice-grid">
-    <div class="practice-card">
-      <div class="icon">📚</div>
-      <div class="title">Practice Zone</div>
-      <div class="sub">Subject & Chapter Wise Test</div>
-      <span class="badge-chip">📖 সকল বিষয় · 📝 মাসে ৩ বার</span>
-      <button class="btn" onclick="document.getElementById('subjectSection').scrollIntoView({behavior:'smooth'})">প্রবেশ করুন →</button>
+        <div class="practice-grid">
+            <div class="practice-card">
+                <div class="icon">📚</div>
+                <div class="title">Practice Zone</div>
+                <div class="sub">Subject & Chapter Wise Test</div>
+                <span class="badge-chip">📖 সকল বিষয় · 📝 মাসে ৩ বার</span>
+                <button class="btn" onclick="document.getElementById('subjectSection').scrollIntoView({behavior:'smooth'})">প্রবেশ করুন →</button>
+            </div>
+            <div class="practice-card">
+                <div class="icon">🏆</div>
+                <div class="title">Mock Test</div>
+                <div class="sub">Full Length Exams</div>
+                <span class="badge-chip">📖 SSC, Rail, Police · 📝 রবিবার (১ বার)</span>
+                <button class="btn outline" onclick="alert('🏁 Mock Test – রবিবার সকাল ১০টায় শুরু হবে।')">প্রবেশ করুন →</button>
+            </div>
+            <div class="practice-card">
+                <div class="icon">📜</div>
+                <div class="title">Previous Year Q.</div>
+                <div class="sub">বিগত বছরের প্রশ্ন</div>
+                <span class="badge-chip">📅 2018–2023 · 📝 আনলিমিটেড</span>
+                <button class="btn" onclick="alert('📜 বিগত বছরের প্রশ্ন সংরক্ষিত আছে।')">প্রবেশ করুন →</button>
+            </div>
+            <div class="practice-card">
+                <div class="icon">🔥</div>
+                <div class="title">Daily Challenge</div>
+                <div class="sub">আজকের বিশেষ কুইজ</div>
+                <span class="badge-chip">⏱️ দৈনিক · 📝 ১ বার / দিন</span>
+                <button class="btn outline" onclick="alert('🔥 আজকের চ্যালেঞ্জ – রাত ৮টায় শুরু।')">প্রবেশ করুন →</button>
+            </div>
+        </div>
+
+        <div id="subjectSection">
+            <h2 class="section-title">📖 বিষয় নির্বাচন করুন</h2>
+            <div class="subject-grid" id="subjectGrid"></div>
+        </div>
+
+        <div class="subject-details" id="subjectDetails">
+            <button class="back-btn" onclick="closeSubjectDetails()">⬅ সব বিষয়ে ফিরুন</button>
+            <div class="sub-title" id="detailTitle">🌍 ভূগোল</div>
+            <div class="sub-desc" id="detailDesc">📝 মোট ৩০টি টেস্ট সেট · সেট ১-২ ফ্রি · সেট ৩-৩০ লকড</div>
+            <div class="sets-grid" id="setsGrid"></div>
+        </div>
+
     </div>
-    <div class="practice-card">
-      <div class="icon">🏆</div>
-      <div class="title">Mock Test</div>
-      <div class="sub">Full Length Exams</div>
-      <span class="badge-chip">📖 SSC, Rail, Police · 📝 রবিবার (১ বার)</span>
-      <button class="btn outline" onclick="alert('🏁 Mock Test – রবিবার সকাল ১০টায় শুরু হবে।')">প্রবেশ করুন →</button>
-    </div>
-    <div class="practice-card">
-      <div class="icon">📜</div>
-      <div class="title">Previous Year Q.</div>
-      <div class="sub">বিগত বছরের প্রশ্ন</div>
-      <span class="badge-chip">📅 2018–2023 · 📝 আনলিমিটেড</span>
-      <button class="btn" onclick="alert('📜 বিগত বছরের প্রশ্ন সংরক্ষিত আছে।')">প্রবেশ করুন →</button>
-    </div>
-    <div class="practice-card">
-      <div class="icon">🔥</div>
-      <div class="title">Daily Challenge</div>
-      <div class="sub">আজকের বিশেষ কুইজ</div>
-      <span class="badge-chip">⏱️ দৈনিক · 📝 ১ বার / দিন</span>
-      <button class="btn outline" onclick="alert('🔥 আজকের চ্যালেঞ্জ – রাত ৮টায় শুরু।')">প্রবেশ করুন →</button>
-    </div>
-  </div>
 
-  <!-- ===== SUBJECT SECTION (11 subjects) ===== -->
-  <div id="subjectSection">
-    <h2 class="section-title">📖 বিষয় নির্বাচন করুন</h2>
-    <div class="subject-grid" id="subjectGrid"></div>
-  </div>
+    <script>
+        // ============================================================
+        // 📚 SUBJECT LIST – General Knowledge প্রথমে
+        // প্রতিটি বিষয়ে: সেট ১-২ ফ্রি, সেট ৩-৩০ লকড
+        // ============================================================
+        const subjects = [{
+            id: 'gk',
+            name: 'সাধারণ জ্ঞান',
+            nameEn: 'General Knowledge',
+            icon: '💡',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'gktest'
+        }, {
+            id: 'geography',
+            name: 'ভূগোল',
+            nameEn: 'Geography',
+            icon: '🌍',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'geographytest'
+        }, {
+            id: 'history',
+            name: 'ইতিহাস',
+            nameEn: 'History',
+            icon: '🏛️',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'historytest'
+        }, {
+            id: 'polity',
+            name: 'ভারতের রাজনীতি',
+            nameEn: 'Indian Polity',
+            icon: '⚖️',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'politytest'
+        }, {
+            id: 'economy',
+            name: 'অর্থনীতি',
+            nameEn: 'Economy',
+            icon: '📊',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'economytest'
+        }, {
+            id: 'physics',
+            name: 'পদার্থবিজ্ঞান',
+            nameEn: 'Physics',
+            icon: '⚛️',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'physicstest'
+        }, {
+            id: 'chemistry',
+            name: 'রসায়ন',
+            nameEn: 'Chemistry',
+            icon: '🧪',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'chemistrytest'
+        }, {
+            id: 'life-science',
+            name: 'জীবন বিজ্ঞান',
+            nameEn: 'Life Science',
+            icon: '🧬',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'lifetest'
+        }, {
+            id: 'art-culture',
+            name: 'শিল্প, সংস্কৃতি ও সাহিত্য',
+            nameEn: 'Art, Culture & Literature',
+            icon: '🎭',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'arttest'
+        }, {
+            id: 'sports',
+            name: 'খেলাধুলা',
+            nameEn: 'Game & Sports',
+            icon: '⚽',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'sportstest'
+        }, {
+            id: 'environment',
+            name: 'পরিবেশ ও বিজ্ঞান',
+            nameEn: 'Environment & Science',
+            icon: '🌿',
+            totalSets: 30,
+            freeSets: 2,
+            baseFile: 'envtest'
+        }];
 
-</div>
+        // ============================================================
+        // RENDER
+        // ============================================================
+        const grid = document.getElementById('subjectGrid');
+        const detailsDiv = document.getElementById('subjectDetails');
+        const setsGrid = document.getElementById('setsGrid');
+        const detailTitle = document.getElementById('detailTitle');
+        const detailDesc = document.getElementById('detailDesc');
 
-<script>
-  // ============================================================
-  // 📚 SUBJECT LIST (11 subjects + monthly test count = 5)
-  // ============================================================
-  const subjects = [
-    { id: 'gk', name: 'সাধারণ জ্ঞান', nameEn: 'General Knowledge (GK)', icon: '💡', tests: 5 },
-    { id: 'history', name: 'ইতিহাস', nameEn: 'History', icon: '🏛️', tests: 5 },
-    { id: 'geography', name: 'ভূগোল', nameEn: 'Geography', icon: '🌍', tests: 5 },
-    { id: 'physics', name: 'পদার্থবিজ্ঞান', nameEn: 'Physics', icon: '⚛️', tests: 5 },
-    { id: 'chemistry', name: 'রসায়ন', nameEn: 'Chemistry', icon: '🧪', tests: 5 },
-    { id: 'life-science', name: 'জীবন বিজ্ঞান', nameEn: 'Life Science', icon: '🧬', tests: 5 },
-    { id: 'polity', name: 'ভারতের রাজনীতি', nameEn: 'Indian Polity', icon: '🏛️', tests: 5 },
-    { id: 'economy', name: 'অর্থনীতি', nameEn: 'Economy', icon: '📊', tests: 5 },
-    { id: 'art-culture', name: 'শিল্প, সংস্কৃতি ও সাহিত্য', nameEn: 'Art, Culture & Literature', icon: '🎭', tests: 5 },
-    { id: 'sports', name: 'খেলাধুলা', nameEn: 'Game & Sports', icon: '⚽', tests: 5 },
-    { id: 'environment', name: 'পরিবেশ ও বিজ্ঞান', nameEn: 'Environment & Science', icon: '🌿', tests: 5 }
-  ];
+        subjects.forEach(sub => {
+            const card = document.createElement('div');
+            card.className = 'subject-card';
 
-  // ============================================================
-  // RENDER SUBJECT CARDS
-  // ============================================================
-  const grid = document.getElementById('subjectGrid');
+            card.innerHTML = `
+                <div class="icon">${sub.icon}</div>
+                <div class="name">${sub.name}</div>
+                <div class="name-bn">${sub.nameEn}</div>
+                <div class="meta">📝 ${sub.totalSets}টি টেস্ট · ${sub.freeSets}টি ফ্রি</div>
+                <button class="test-btn" data-id="${sub.id}">টেস্ট দেখুন →</button>
+            `;
 
-  subjects.forEach(sub => {
-    const card = document.createElement('div');
-    card.className = 'subject-card';
+            card.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'BUTTON') {
+                    openSubject(sub);
+                }
+            });
 
-    card.innerHTML = `
-      <div class="icon">${sub.icon}</div>
-      <div class="name">${sub.name}</div>
-      <div class="name-bn">${sub.nameEn}</div>
-      <div class="meta">📝 মাসে ${sub.tests} বার টেস্ট</div>
-      <button class="test-btn" data-id="${sub.id}">টেস্ট দেখুন →</button>
-    `;
+            const btn = card.querySelector('.test-btn');
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openSubject(sub);
+            });
 
-    // click on card also triggers test
-    card.addEventListener('click', (e) => {
-      if (e.target.tagName !== 'BUTTON') {
-        handleTest(sub);
-      }
-    });
+            grid.appendChild(card);
+        });
 
-    const btn = card.querySelector('.test-btn');
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      handleTest(sub);
-    });
+        // ============================================================
+        // OPEN SUBJECT
+        // ============================================================
+        function openSubject(sub) {
+            document.getElementById('subjectSection').style.display = 'none';
+            detailsDiv.style.display = 'block';
 
-    grid.appendChild(card);
-  });
+            detailTitle.textContent = `${sub.icon} ${sub.name} (${sub.nameEn})`;
+            detailDesc.textContent = `📝 মোট ${sub.totalSets}টি টেস্ট সেট · সেট ১-${sub.freeSets} ফ্রি · সেট ${sub.freeSets+1}-${sub.totalSets} লকড`;
 
-  // ===== HANDLE TEST =====
-  function handleTest(sub) {
-    // GitHub-style path – replace with your actual repo
-    const base = 'https://github.com/your-repo/mock-tests/';
-    const file = `subjects/${sub.id}.html`;
-    alert(`📘 ${sub.name} (${sub.nameEn})\n📝 মাসে ${sub.tests} বার টেস্ট\n\n🔗 ${base}${file}\n\n(সংযুক্ত ফাইল থেকে মক টেস্ট শুরু হবে।)`);
-    // window.location.href = base + file;  // uncomment when ready
-  }
+            setsGrid.innerHTML = '';
+            for (let i = 1; i <= sub.totalSets; i++) {
+                const isFree = i <= sub.freeSets;
+                const setItem = document.createElement('div');
+                setItem.className = `set-item ${isFree ? 'free' : 'locked'}`;
 
-  // ===== ADMIN =====
-  function openAdmin() {
-    document.getElementById('submitCount').innerText = Math.floor(Math.random() * (180 - 40 + 1)) + 40;
-    document.getElementById('adminModal').classList.remove('hidden');
-  }
-  function closeAdmin() {
-    document.getElementById('adminModal').classList.add('hidden');
-  }
-</script>
+                setItem.innerHTML = `
+                    <span class="set-icon">${isFree ? '📝' : '🔒'}</span>
+                    <span class="set-label">সেট ${i}</span>
+                    <span class="set-status">${isFree ? '✅ ফ্রি' : '🔐 লকড'}</span>
+                `;
+
+                setItem.onclick = () => {
+                    if (!isFree) {
+                        alert(`🔒 সেট ${i} লকড। আনলক করতে অ্যাডমিনের সাথে যোগাযোগ করুন।`);
+                        return;
+                    }
+                    const fileName = `${sub.baseFile}${i}.html`;
+                    alert(`📘 ${sub.name} – সেট ${i}\n📁 ফাইল: ${fileName}\n\n(পরীক্ষা শুরু হবে)`);
+                    // window.location.href = fileName;
+                };
+
+                setsGrid.appendChild(setItem);
+            }
+        }
+
+        function closeSubjectDetails() {
+            detailsDiv.style.display = 'none';
+            document.getElementById('subjectSection').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        // ADMIN
+        // ============================================================
+        function openAdmin() {
+            document.getElementById('submitCount').innerText = Math.floor(Math.random() * (180 - 40 + 1)) + 40;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+    </script>
 
 </body>
 </html>

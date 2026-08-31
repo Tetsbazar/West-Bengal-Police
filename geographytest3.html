@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Geography | 1st Sem | Set 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ================== MATCHED CSS STYLES (GREEN THEME) ================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+/* QUIZ AREA */
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+/* RESULT AREA */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid #c5dccb; display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1; }
+.result-score { font-size: 3.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 5px; }
+.result-total { font-size: 1rem; color: #5a7a66; margin-bottom: 0.5rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
+.result-grade { font-size: 1.2rem; font-weight: 700; color: #1c2e24; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e8730a; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: #f0faf4; border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid #c5dccb; }
+.rb-num { font-size: 1.8rem; font-weight: 800; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin-top: 0.2rem; font-weight: bold;}
+.attempt-info { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #1a7a4a; font-weight: bold; margin-bottom: 1.5rem; background: #e8f7ef; padding: 10px; border-radius: 8px; }
+
+/* ACTION BUTTONS */
+.result-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.result-actions button { width: 100%; padding: 14px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-retry:hover { background: #138496; }
+.btn-review { background: #28a745; color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: #5a7a66; border: 2px solid #c5dccb !important; }
+.btn-home:hover { background: #f0faf4; }
+
+/* LOGIN MODAL */
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+<div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+<div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="login-overlay" id="loginOverlay">
+<div class="login-modal">
+<h2>🔐 লগইন করুন</h2>
+<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div class="set-name-display" id="loginSetName">🌍 Geography Set 1</div>
+<div class="input-group">
+<label>ইউজারনেম</label>
+<input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+</div>
+<div class="input-group">
+<label>পাসওয়ার্ড</label>
+<input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+</div>
+<button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+<button class="cancel-btn" onclick="goToHub()">বাতিল</button>
+<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+</div>
+</div>
+
+<!-- ===== TEST AREA ===== -->
+<div id="testArea" class="hidden">
+<div class="quiz-info">
+<div class="info-item">🎓 <strong>ভূগোল</strong> — 1st Sem | Set 1</div>
+<div class="info-item">📝 <span id="testTopic">সৌরজগৎ ও পৃথিবীর গতিপ্রকৃতি</span></div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="q-card" id="qCard">
+<div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+<div class="q-text" id="qText"></div>
+<div class="opts" id="qOpts"></div>
+<div class="explanation" id="explanation"><p id="explanationText"></p></div>
+<div class="nav-row">
+<div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+<button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+</div>
+</div>
+</div>
+
+<!-- ===== RESULT AREA ===== -->
+<div class="result-wrap" id="resultWrap">
+<div class="result-icon" id="resultIcon">🏆</div>
+<div class="result-score en-font" id="finalScore">100%</div>
+<div class="result-total">স্কোর</div>
+<div class="result-grade" id="resultGrade">অসাধারণ!</div>
+<div class="result-bars">
+<div class="result-bar">
+<div class="rb-num en-font" id="rbCorrect" style="color:#1a7a4a">0</div>
+<div class="rb-label">সঠিক</div>
+</div>
+<div class="result-bar">
+<div class="rb-num en-font" id="rbWrong" style="color:#dc3545">0</div>
+<div class="rb-label">ভুল/স্কিপ</div>
+</div>
+</div>
+<div class="attempt-info" id="attemptInfo">👤 user — Set 1: বাকি আছে 9 বার Test দেওয়ার সুযোগ</div>
+<div class="result-actions">
+<button class="btn-retry" onclick="restartQuiz()">🔄 আবার চেষ্টা করো</button>
+<button class="btn-review" onclick="showReview()">👀 উত্তর দেখো</button>
+<button class="btn-home" onclick="goToHub()">🏠 ← Hub এ ফিরে যাও</button>
+</div>
+</div>
+
+</div>
+
+<script>
+// ============================================================
+// গ্লোবাল ভেরিয়েবল ও ডেটাবেস
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TIME_LIMIT = 10 * 60; // 10 Minutes
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+const STORAGE_KEY = "testBazarAttempts_Geography_1stSem_Set1";
+
+const GLOBAL_USERS = {
+"demo1": "1234", "demo2": "1234", "demo3": "1234", "demo4": "1234", "mali": "1234", "sagun": "1234", "dhiren": "1234",
+"ajay": "7251", "anita": "1234", "jaba": "1234", "student100": "pass001", "rohit2027": "abc456"
+};
+
+let currentUser = sessionStorage.getItem("currentStudent") || "";
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+
+// ১৫টি ভূগোল প্রশ্নাবলি (Groundes in "সৌরজগৎ ও পৃথিবীর গতিপ্রকৃতি")
+const questions = [
+{
+q: "১. আমাদের সৌরজগতের সবচেয়ে নিকটতম নক্ষত্র কোনটি?",
+opts: ["আলফা সেন্টাউরি", "প্রক্সিমা সেন্টাউরি", "সিরিয়াস", "বার্নার্ডস স্টার"],
+ans: 1,
+exp: "আমাদের সৌরজগতের সবচেয়ে কাছে অবস্থিত নক্ষত্র বা তারাটি হলো প্রক্সিমা সেন্টাউরি।"
+},
+{
+q: "২. সৌরজগতের বাইরে রাতের আকাশে উজ্জ্বলতম নক্ষত্র কোনটি?",
+opts: ["প্রক্সিমা সেন্টাউরি", "সিরিয়াস", "স্পাইকা", "ভেগা"],
+ans: 1,
+exp: "সৌরজগতের বাইরে সবচেয়ে উজ্জ্বল নক্ষত্রটির নাম হলো সিরিয়াস, যাকে 'ডগ স্টার' (Dog Star) নামেও ডাকা হয়।"
+},
+{
+q: "৩. নিচের কোন গ্রহটিকে \"পৃথিবীর যমজ গ্রহ\" বলা হয়?",
+opts: ["বুধ", "মঙ্গল", "শুক্র", "ইউরেনাস"],
+ans: 2,
+exp: "আকার, ভর ও ঘনত্বের দিক দিয়ে পৃথিবীর সাথে অনেক মিল থাকায় শুক্র গ্রহকে পৃথিবীর যমজ বা বোন গ্রহ বলা হয়।"
+},
+{
+q: "৪. সৌরজগতের কোন গ্রহে বিখ্যাত 'গ্রেট রেড স্পট' (Great Red Spot) বা বিশাল লাল বিন্দুটি দেখা যায়?",
+opts: ["শনি", "বৃহস্পতি", "ইউরেনাস", "নেপচুন"],
+ans: 1,
+exp: "সৌরজগতের বৃহত্তম গ্রহ বৃহস্পতিতে একটি অতি শক্তিশালী ঝড় লক্ষ্য করা যায়, যা দূর থেকে দেখতে লাল বিন্দুর মতো লাগে। এটিই হলো 'গ্রেট রেড স্পট'।"
+},
+{
+q: "৫. সৌরজগতের কোন কোন গ্রহের চারপাশে গ্যাসীয় ও ধূলিকণার বলয় (Ring) দেখা যায়?",
+opts: ["শুধুমাত্র শনি", "শনি এবং ইউরেনাস", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "বুধ, শুক্র ও মঙ্গল"],
+ans: 2,
+exp: "সাধারণত শনির বলয়টি সবচেয়ে স্পষ্ট ও সুন্দর হলেও সৌরজগতের চারটি বহিঃস্থ গ্রহেরই (বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন) নিজস্ব বলয় ব্যবস্থা রয়েছে।"
+},
+{
+q: "৬. পৃথিবীর একমাত্র প্রাকৃতিক উপগ্রহ কোনটি?",
+opts: ["টাইটান", "চাঁদ", "ফোবোস", "ডিমোস"],
+ans: 1,
+exp: "পৃথিবীর একমাত্র নিজস্ব প্রাকৃতিক উপগ্রহ হলো চাঁদ।"
+},
+{
+q: "৭. মঙ্গল গ্রহের প্রধান দুটি উপগ্রহের নাম কী কী?",
+opts: ["ফোবোস ও ডিমোস", "টাইটান ও ডিমোস", "গ্যানিমিড ও ফোবোস", "লো ও ইউরোপা"],
+ans: 0,
+exp: "লাল গ্রহ মঙ্গলের দুটি প্রধান প্রাকৃতিক উপগ্রহ হলো ফোবোস ও ডিমোস।"
+},
+{
+q: "৮. সৌরজগতের কোন গ্রহের নিজের অক্ষে আবর্তনকাল এবং সূর্যের চারপাশে পরিক্রমণকাল প্রায় সমান?",
+opts: ["বুধ", "শুক্র", "পৃথিবী", "নেপচুন"],
+ans: 1,
+exp: "শুক্র গ্রহের নিজের অক্ষে আবর্তন করতে সময় লাগে ২৪৩ দিন এবং সূর্যকে পরিক্রমণ করতে সময় লাগে ২২৫ দিন, যা প্রায় কাছাকাছি।"
+},
+{
+q: "৯. সৌরজগতের কোন গ্রহের একদিনের দৈর্ঘ্য বা দিনের দৈর্ঘ্য পৃথিবীর দিনের দৈর্ঘ্যের প্রায় সমান?",
+opts: ["বুধ", "শুক্র", "মঙ্গল", "শনি"],
+ans: 2,
+exp: "মঙ্গল গ্রহের নিজের অক্ষে আবর্তন করতে সময় লাগে ২৪.৬ ঘণ্টা, যা পৃথিবীর একদিনের বা আবর্তনকালের (২৪ ঘণ্টা) প্রায় সমান।"
+},
+{
+q: "১০. নিচের কোন কোন গ্রহকে 'অন্তঃস্থ গ্রহ' (Terrestrial planet) বলা হয়?",
+opts: ["বুধ, শুক্র, পৃথিবী ও মঙ্গল", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "ইউরেনাস ও নেপচুন", "শুধুমাত্র বুধ ও শুক্র"],
+ans: 0,
+exp: "সূর্যের কাছাকাছি অবস্থিত এবং প্রধানত শিলা বা লোহা দিয়ে গঠিত প্রথম চারটি গ্রহকে অন্তঃস্থ গ্রহ বা পার্থিব গ্রহ বলা হয়।"
+},
+{
+q: "১১. কোন কোন গ্রহকে 'বহিঃস্থ গ্রহ' (Jovian planet) বা গ্যাসীয় দৈত্য বলা হয়?",
+opts: ["বুধ, শুক্র, পৃথিবী ও মঙ্গল", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "ইউরেনাস এবং নেপচুন", "শনি, ইউরেনাস ও প্লুটো"],
+ans: 1,
+exp: "সৌরজগতের শেষ চারটি বৃহৎ গ্যাসীয় বা বরফ দৈত্যাকার গ্রহকে বহিঃস্থ গ্রহ বলা হয়।"
+},
+{
+q: "১২. সৌরজগতের কোন দুটি গ্রহকে একত্রে 'বহিঃস্থ যমজ' (Jovian twins) বলা হয়?",
+opts: ["বৃহস্পতি ও শনি", "ইউরেনাস ও নেপচুন", "পৃথিবী ও শুক্র", "মঙ্গল ও বৃহস্পতি"],
+ans: 1,
+exp: "আকার ও গঠনের গভীর মিলের জন্য ইউরেনাস ও নেপচুনকে একত্রে 'বহিঃস্থ যমজ' বলা হয়।"
+},
+{
+q: "১৩. কোন দুটি গ্রহের কক্ষপথের মধ্যবর্তী স্থানে 'গ্রহাণুপুঞ্জ' (Asteroids) বা গ্রহাণু বলয়টি অবস্থিত?",
+opts: ["পৃথিবী এবং মঙ্গল", "মঙ্গল এবং বৃহস্পতি", "বৃহস্পতি এবং শনি", "শনি এবং ইউরেনাস"],
+ans: 1,
+exp: "মঙ্গল এবং বৃহস্পতি গ্রহের মধ্যবর্তী বিশাল ফাঁকা অঞ্চলের কক্ষপথেই সৌরজগতের প্রধান গ্রহাণুপুঞ্জগুলি অবস্থান করে।"
+},
+{
+q: "১৪. সমগ্র সৌরজগতের সবচেয়ে বড় উপগ্রহ কোনটি এবং এটি কোন গ্রহের উপগ্রহ?",
+opts: ["টাইটান (শনির উপগ্রহ)", "গ্যানিমিড (বৃহস্পতির উপগ্রহ)", "ট্রাইটন (নেপচুনের উপগ্রহ)", "ফোবোস (মঙ্গলের উপগ্রহ)"],
+ans: 1,
+exp: "বৃহস্পতি গ্রহের উপগ্রহ 'গ্যানিমিড' হলো সমগ্র সৌরজগতের বৃহত্তম প্রাকৃতিক উপগ্রহ।"
+},
+{
+q: "১৫. পৃথিবী ছাড়া সৌরজগতের আর কোন গ্রহে মেরু অঞ্চলে বরফের আচ্ছাদন (Ice cap) দেখতে পাওয়া যায়?",
+opts: ["বুধ", "শুক্র", "মঙ্গল", "নেপচুন"],
+ans: 2,
+exp: "পৃথিবী ছাড়া একমাত্র মঙ্গল গ্রহের দুই মেরু অঞ্চলেই বরফের সাদা আচ্ছাদন বা আইস ক্যাপ দেখতে পাওয়া যায়।"
+}
+];
+
+const TOTAL_QS = questions.length;
+
+// ============================================================
+// ইনিশিয়েশন ও কন্ট্রোল লজিক
+// ============================================================
+function initPage() {
+    // সেশন থেকে ইউজার চেক করা
+    const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
+
+    if (isLoggedIn && currentUser) {
+        // লগইন করা থাকলে সরাসরি টেস্টে প্রবেশ
+        checkAttemptAndStart();
+    } else {
+        // লগইন না থাকলে পাসওয়ার্ড পপ-আপ ওপেন হবে
+        document.getElementById('loginOverlay').classList.add('active');
+    }
+}
+
+function doLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value.trim();
+    const err = document.getElementById('loginError');
+
+    if (!u || !p) {
+        err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!";
+        err.style.display = 'block';
+        return;
+    }
+
+    if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+        currentUser = u;
+        sessionStorage.setItem("testBazarUserLoggedIn", "true");
+        sessionStorage.setItem("currentStudent", u);
+        document.getElementById('loginOverlay').classList.remove('active');
+        checkAttemptAndStart();
+    } else {
+        err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+        err.style.display = 'block';
+    }
+}
+
+function checkAttemptAndStart() {
+    let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    let attemptCount = (data[currentUser]) || 0;
+
+    if (attemptCount >= MAX_ATTEMPTS) {
+        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        goToHub();
+        return;
+    }
+
+    // নতুন অ্যাটেম্পট কাউন্ট বৃদ্ধি
+    data[currentUser] = attemptCount + 1;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    // কুইজ শুরু করা
+    startQuiz();
+}
+
+function startQuiz() {
+    cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+    timeLeft = TIME_LIMIT;
+    isReviewMode = false;
+
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('danger');
+
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showResult();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[cur];
+
+    document.getElementById('qNum').innerText = isReviewMode ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}` : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+    const optsContainer = document.getElementById('qOpts');
+    optsContainer.innerHTML = '';
+
+    q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+
+        if (isReviewMode) {
+            btn.classList.add('disabled');
+            if (idx === q.ans) btn.classList.add('correct');
+            else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+        } else {
+            btn.onclick = () => selectAnswer(idx, btn);
+        }
+        optsContainer.appendChild(btn);
+    });
+
+    const nextBtn = document.getElementById('nextBtn');
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('scoreShow').innerText = isReviewMode ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর" : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+    if (isReviewMode) {
+        document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+        document.getElementById('explanation').classList.add('show');
+        nextBtn.disabled = false;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+    } else {
+        nextBtn.disabled = true;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+    }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+    if (answered) return;
+    answered = true;
+    const q = questions[cur];
+    userAnswers[cur] = selectedIdx;
+
+    const allBtns = document.getElementById('qOpts').children;
+    for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.add('disabled');
+        if (i === q.ans) allBtns[i].classList.add('correct');
+    }
+
+    if (selectedIdx === q.ans) {
+        score++;
+    } else {
+        btnElement.classList.add('wrong');
+        wrong++;
+    }
+
+    document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+    document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+    if (cur < TOTAL_QS - 1) {
+        cur++;
+        loadQuestion();
+    } else {
+        if (isReviewMode) {
+            document.getElementById('testArea').classList.add('hidden');
+            document.getElementById('resultWrap').classList.add('show');
+        } else {
+            clearInterval(timerInterval);
+            showResult();
+        }
+    }
+}
+
+function showResult() {
+    document.getElementById('testArea').classList.add('hidden');
+    document.getElementById('timerBox').classList.add('hidden');
+    document.getElementById('resultWrap').classList.add('show');
+
+    const pct = Math.round((score / TOTAL_QS) * 100);
+    document.getElementById('finalScore').innerText = `${pct}%`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = TOTAL_QS - score;
+
+    let msg = "অসাধারণ!"; let icon = "🏆";
+    if (pct < 50) { msg = "আরও অনুশীলন প্রয়োজন!"; icon = "📚"; }
+    else if (pct < 80) { msg = "খুব ভালো চেষ্টা!"; icon = "👍"; }
+
+    document.getElementById('resultGrade').innerText = msg;
+    document.getElementById('resultIcon').innerText = icon;
+
+    let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    let count = data[currentUser] || 0;
+    let remaining = MAX_ATTEMPTS - count;
+
+    document.getElementById('attemptInfo').innerText = `👤 ${currentUser} — Set 1: বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ`;
+}
+
+function showReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    isReviewMode = true;
+    cur = 0;
+    loadQuestion();
+}
+
+function restartQuiz() {
+    let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    let count = data[currentUser] || 0;
+
+    if (count >= MAX_ATTEMPTS) {
+        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        return;
+    }
+
+    // অ্যাটেম্পট সংখ্যা বাড়ানো
+    data[currentUser] = count + 1;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    document.getElementById('resultWrap').classList.remove('show');
+    startQuiz();
+}
+
+function goToHub() {
+    window.location.href = "index.html";
+}
+
+window.onload = initPage;
+</script>
+</body>
+</html>

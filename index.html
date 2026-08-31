@@ -1,19 +1,3 @@
-পশ্চিমবঙ্গ পুলিশ (West Bengal Police) এবং অন্যান্য প্রতিযোগিতামূলক পরীক্ষার প্রস্তুতির জন্য আপনার চাহিদা অনুযায়ী একদম নতুন স্টাইলে একটি আকর্ষণীয় এবং আধুনিক ড্যাশবোর্ড তৈরি করা হয়েছে। 
-
-এই ড্যাশবোর্ডে আপনার দেওয়া প্রতিটি শর্ত পূরণ করা হয়েছে:
-১. **৪টি মূল বাটন (Practice Zone, Mock Test, Previous Year Q, Daily Challenge):** একদম উপরে চমৎকার গ্রিড লেআউটে সাজানো।
-২. **১১টি বিষয় (Subject Selection):** "📖 বিষয় নির্বাচন করুন" সেকশনের নিচে সবগুলো বিষয় সুন্দর আইকন ও মেটা-তথ্যসহ রাখা হয়েছে।
-৩. **৩০টি করে সেট (Set 1 - 30):** কোনো বিষয়ে ক্লিক করলে একটি আধুনিক ও পপ-আপ উইন্ডো (Modal) খুলবে, যেখানে ১ থেকে ৩০ নম্বর সেটের তালিকা দেখাবে।
-৪. **ফ্রি ও পেইড লক সিস্টেম (2 Free, 28 Locked):** আপনার নির্দেশনা অনুযায়ী প্রতিটি বিষয়ের **Set 1 এবং Set 2 সম্পূর্ণ ফ্রি** রাখা হয়েছে (পাসওয়ার্ড ছাড়া ওপেন হবে)। **Set 3 থেকে Set 30** পর্যন্ত লক করা থাকবে এবং ক্লিক করলে ইউজারনেম ও পাসওয়ার্ডের পপ-আপ আসবে।
-৫. **পরবর্তী ফাইল সহজে যুক্ত করার কোড স্ট্রাকচার:** ফাইলগুলোর নাম সহজভাবে সেট করা আছে যাতে আপনি পরবর্তীতে ফাইল তৈরি করে দিলেই লিঙ্কগুলো স্বয়ংক্রিয়ভাবে কাজ করে। যেমন:
-   * সাধারণ জ্ঞান: `gktest1.html` থেকে `gktest30.html`
-   * ভূগোল: `geographytest1.html` থেকে `geographytest30.html`
-   * ইতিহাস: `historytest1.html` থেকে `historytest30.html`
-   * ভারতের রাজনীতি: `politytest1.html` থেকে `politytest30.html` ...ইত্যাদি।
-
-নিচে সম্পূর্ণ HTML, CSS এবং JavaScript কোডটি দেওয়া হলো। আপনি সরাসরি এটি কপি করে নিতে পারেন:
-
-```html
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -22,17 +6,17 @@
 <title>Test Bazar - WB Police Practice Zone</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
 <style>
-/* ================= COLOR PALETTE (PREMIUM DARK INDIGO & GOLD) ================= */
+/* ================= COLOR SCHEME & VARIABLES (MATCHED TO CLASS 11 INDEX) ================= */
 :root {
---primary: #1e1b4b; /* Deep Indigo */
---accent: #f59e0b; /* Golden Amber */
---accent-hover: #d97706;
---bg-main: #f5f7fa;
---bg-card: #ffffff;
---text-main: #0f172a;
---text-meta: #64748b;
---border-color: #e2e8f0;
---success: #10b981;
+--primary: #1a7a4a;        /* Forest Green */
+--primary-hover: #2aad68;  /* Lighter Green */
+--accent: #f9a825;         /* Warm Yellow/Amber */
+--bg-main: #f0faf4;        /* Light Mint */
+--bg-card: #ffffff;        /* White */
+--text-main: #1c2e24;      /* Dark Greenish Slate */
+--text-meta: #5a7a66;      /* Muted Greenish Gray */
+--border-color: #c5dccb;   /* Light Mint Border */
+--success: #1a7a4a;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +25,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(-
 a { text-decoration: none; }
 
 /* Navigation Bar */
-.navbar { background: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(30, 27, 75, 0.15); position: sticky; top: 0; z-index: 100; }
+.navbar { background: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
 .logo { font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; }
 .logo span { color: var(--accent); }
 .admin-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 8px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; }
@@ -58,42 +42,44 @@ a { text-decoration: none; }
 /* 4 Main Action Buttons Grid */
 .main-actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 3rem; }
 .action-card { background: var(--bg-card); border-radius: 16px; padding: 22px; border: 2px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
-.action-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 12px 24px rgba(245, 158, 11, 0.12); }
+.action-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 12px 24px rgba(26, 122, 74, 0.12); }
 .action-icon { font-size: 2.2rem; margin-bottom: 12px; }
 .action-title { font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
 .action-subtitle { font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: bold; color: var(--text-main); margin-bottom: 12px; }
-.action-meta { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); background: #f1f5f9; padding: 6px 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px; }
-.action-btn { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; color: var(--accent-hover); display: flex; align-items: center; gap: 5px; margin-top: auto; }
+.action-meta { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); background: var(--bg-main); padding: 6px 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px; }
+.action-btn { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 5px; margin-top: auto; }
+.action-card:hover .action-btn { color: var(--primary-hover); }
 
 /* Subject Section Heading */
 .section-title { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; color: var(--primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; border-bottom: 3px solid var(--accent); width: fit-content; padding-bottom: 5px; }
 
 /* Subjects Grid */
 .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-.subject-card { background: var(--bg-card); border-radius: 14px; padding: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
-.subject-card:hover { border-color: var(--primary); box-shadow: 0 8px 16px rgba(30, 27, 75, 0.06); }
+.subject-card { background: var(--bg-card); border-radius: 14px; padding: 20px; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
+.subject-card:hover { border-color: var(--primary); box-shadow: 0 8px 16px rgba(26, 122, 74, 0.08); }
 .subject-info { display: flex; align-items: center; gap: 15px; }
-.subject-icon-box { font-size: 2rem; background: #e0e7ff; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+.subject-icon-box { font-size: 2rem; background: var(--bg-main); width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--border-color); }
 .subject-name-bn { font-family: 'Tiro Bangla', serif; font-size: 1.25rem; font-weight: bold; color: var(--primary); }
 .subject-name-en { font-size: 0.9rem; color: var(--text-meta); font-weight: 600; margin-top: 2px; }
-.subject-meta-tag { font-family: 'Tiro Bangla', serif; font-size: 0.8rem; background: #fef3c7; color: #b45309; padding: 4px 8px; border-radius: 6px; font-weight: bold; margin-top: 5px; display: inline-block; }
+.subject-meta-tag { font-family: 'Tiro Bangla', serif; font-size: 0.8rem; background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: bold; margin-top: 5px; display: inline-block; }
+.subject-card:nth-child(odd) .subject-meta-tag { background: #d1fae5; color: #065f46; } /* চমৎকার কালার বৈচিত্র্য */
 .subject-action-btn { font-family: 'Tiro Bangla', serif; background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
 .subject-action-btn:hover { background: var(--accent); color: var(--primary); }
 
 /* ================= MODAL WINDOW STYLES ================= */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 200; padding: 15px; }
-.modal-box { background: var(--bg-card); width: 100%; max-width: 700px; border-radius: 18px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); border: 2px solid var(--primary); position: relative; animation: slideUp 0.3s ease-out; max-height: 90vh; overflow-y: auto; }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(28, 46, 36, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 200; padding: 15px; }
+.modal-box { background: var(--bg-card); width: 100%; max-width: 700px; border-radius: 18px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 2px solid var(--primary); position: relative; animation: slideUp 0.3s ease-out; max-height: 90vh; overflow-y: auto; }
 @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.modal-close { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; background: #f1f5f9; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--text-main); }
+.modal-close { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; background: var(--bg-main); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--text-main); }
 .modal-close:hover { background: #e2e8f0; color: red; }
 .modal-header { margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; }
 .modal-header h3 { font-family: 'Tiro Bangla', serif; font-size: 1.6rem; color: var(--primary); display: flex; align-items: center; gap: 10px; }
 
 /* Set Items Grid */
 .sets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-.set-btn { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.set-btn:hover { background: #e0e7ff; border-color: var(--primary); transform: scale(1.03); }
-.set-btn.free { border-left: 4px solid var(--success); }
+.set-btn { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.set-btn:hover { background: var(--bg-card); border-color: var(--primary); transform: scale(1.03); }
+.set-btn.free { border-left: 4px solid #10b981; }
 .set-badge { font-family: 'Tiro Bangla', serif; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
 .set-badge.free-tag { background: #d1fae5; color: #065f46; }
 .set-badge.locked-tag { background: #fee2e2; color: #991b1b; }
@@ -102,9 +88,9 @@ a { text-decoration: none; }
 .login-box { max-width: 400px; text-align: center; }
 .login-icon { font-size: 3rem; margin-bottom: 15px; color: var(--accent); }
 .login-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; }
-.login-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30, 27, 75, 0.1); }
+.login-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 122, 74, 0.15); }
 .login-submit { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; font-family: 'Tiro Bangla', serif; }
-.login-submit:hover { background: #2e2a74; }
+.login-submit:hover { background: var(--primary-hover); }
 .login-error { color: #dc2626; font-size: 0.9rem; margin-top: 5px; font-family: 'Tiro Bangla', serif; font-weight: bold; display: none; }
 
 @media (max-width: 768px) {
@@ -233,11 +219,13 @@ a { text-decoration: none; }
 <!-- 5. Economy -->
 <div class="subject-card">
 <div class="subject-info">
+<div class="subject-info">
 <div class="subject-icon-box">📊</div>
 <div>
 <div class="subject-name-bn">অর্থনীতি</div>
 <div class="subject-name-en">Economy</div>
 <span class="subject-meta-tag">30টি টেস্ট · 2টি ফ্রি</span>
+</div>
 </div>
 </div>
 <button class="subject-action-btn" onclick="openSets('economy', 'অর্থনীতি')">টেস্ট দেখুন →</button>
@@ -464,10 +452,3 @@ loginModal.style.display = 'none';
 </script>
 </body>
 </html>
-```
-
-### কেন এই কোডটি আপনার কাজের জন্য সবচেয়ে উপযোগী?
-* **সম্পূর্ণ সুবিন্যস্ত কোড:** ব্যাকএন্ড লগইন সিকিউরিটি ও ৩০টি ডায়নামিক সেটের চমৎকার সমন্বয় করা হয়েছে।
-* **ভবিষ্যতের কাজ সহজ করার ব্যবস্থা:** আপনি যদি ভূগোলের ৭ নম্বর সেট যোগ করতে চান, তবে আপনাকে শুধু `geographytest7.html` ফাইলটি একই ফোল্ডারে রাখলেই হবে, এই মেইন ড্যাশবোর্ডের কোডটি আর পুনরায় এডিট করা লাগবে না।
-
-💡 **পরবর্তী পদক্ষেপ:** আপনার কি এই প্রতিটি বিষয়ের আলাদা আলাদা টেস্ট পেজ তৈরির জন্য কোনো সাহায্যকারী জেনেরিক স্ক্রিপ্ট বা কুইজ টেমপ্লেট কোডের প্রয়োজন আছে?

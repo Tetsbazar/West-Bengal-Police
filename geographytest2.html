@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ভূগোল টেস্ট – সেট ২</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a7a4a;
+            --primary-hover: #2aad68;
+            --accent: #f9a825;
+            --bg-main: #f0faf4;
+            --bg-card: #ffffff;
+            --text-main: #1c2e24;
+            --text-meta: #5a7a66;
+            --border-color: #c5dccb;
+            --shadow: 0 8px 24px rgba(0, 40, 20, 0.08);
+            --correct: #28a745;
+            --wrong: #dc3545;
+            --primary-light: #e8f5ee;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Tiro Bangla', serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        .en-font { font-family: 'Syne', sans-serif; }
+
+        .top-bar {
+            background: var(--primary);
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+        .logo { font-size: 1.6rem; font-weight: 800; cursor: default; }
+        .logo span { color: var(--accent); }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            font-family: 'Syne', sans-serif;
+            text-decoration: none;
+        }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 24px 16px 50px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 18px 16px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        .hero h1 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+        .hero .sub {
+            color: var(--text-meta);
+            font-size: 0.95rem;
+            margin-top: 2px;
+        }
+        .hero .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #333;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-top: 6px;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .progress-bar {
+            background: #e8f0eb;
+            border-radius: 40px;
+            height: 8px;
+            margin: 16px 0 20px;
+            overflow: hidden;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 40px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 28px 24px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+        .question-card .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .question-card .q-number {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-family: 'Syne', sans-serif;
+        }
+        .question-card .q-status {
+            font-size: 0.8rem;
+            color: var(--text-meta);
+            font-family: 'Syne', sans-serif;
+            background: #f0f7f2;
+            padding: 2px 14px;
+            border-radius: 40px;
+        }
+        .question-card .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: #f8fbf9;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 1rem;
+        }
+        .option:hover:not(.disabled) {
+            background: var(--primary-light);
+            border-color: var(--border-color);
+        }
+        .option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+        .option .letter {
+            font-weight: 700;
+            color: var(--text-meta);
+            font-family: 'Syne', sans-serif;
+            min-width: 24px;
+        }
+        .option.correct { background: #d4edda; border-color: var(--correct); }
+        .option.wrong { background: #f8d7da; border-color: var(--wrong); }
+        .option.disabled { opacity: 0.85; pointer-events: none; }
+
+        .explanation-box {
+            margin-top: 16px;
+            padding: 14px 18px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            display: none;
+            font-size: 0.95rem;
+        }
+        .explanation-box .ans-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            font-family: 'Syne', sans-serif;
+            margin-bottom: 6px;
+        }
+        .explanation-box .source {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: var(--text-meta);
+            border-top: 1px dashed var(--border-color);
+            padding-top: 6px;
+            font-family: 'Syne', sans-serif;
+        }
+        .explanation-box.show { display: block; }
+
+        .nav-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-family: 'Syne', sans-serif;
+            transition: 0.2s;
+            color: var(--text-main);
+        }
+        .nav-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .nav-btn.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .nav-btn.primary:hover:not(:disabled) { background: var(--primary-hover); }
+
+        .question-dots {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            transition: 0.15s;
+            color: var(--text-meta);
+        }
+        .dot.active { border-color: var(--primary); background: var(--primary); color: white; }
+        .dot.answered { background: #d4edda; border-color: var(--correct); color: var(--correct); }
+        .dot.answered-wrong { background: #f8d7da; border-color: var(--wrong); color: var(--wrong); }
+        .dot:hover:not(.active) { border-color: var(--primary); }
+
+        .submit-area {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .submit-area .nav-btn {
+            padding: 12px 44px;
+            font-size: 1.05rem;
+        }
+
+        .result-box {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            margin-top: 20px;
+            display: none;
+            box-shadow: var(--shadow);
+        }
+        .result-box .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 6px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 2.4rem;
+            font-weight: 800;
+            font-family: 'Syne', sans-serif;
+            color: var(--primary);
+        }
+        .result-box .grade {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 6px 0;
+        }
+        .result-box .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 16px 0;
+        }
+        .result-box .stat-item { text-align: center; }
+        .result-box .stat-item .num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            font-family: 'Syne', sans-serif;
+        }
+        .result-box .stat-item .num.green { color: var(--correct); }
+        .result-box .stat-item .num.red { color: var(--wrong); }
+        .result-box .stat-item .num.gold { color: var(--accent); }
+        .result-box .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--text-meta);
+        }
+        .result-box .demo-note {
+            font-size: 0.85rem;
+            color: var(--text-meta);
+            background: #f0f7f4;
+            padding: 8px 16px;
+            border-radius: 40px;
+            display: inline-block;
+            margin: 8px 0 16px;
+        }
+        .result-box .action-btns {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .result-box .action-btns button {
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            border: none;
+        }
+        .btn-show-ans {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color) !important;
+            color: var(--text-main);
+        }
+        .btn-show-ans:hover { background: var(--primary-light); border-color: var(--primary) !important; }
+        .btn-retry {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-retry:hover { background: var(--primary-hover); }
+        .btn-home {
+            background: transparent;
+            border: 2px solid var(--border-color) !important;
+            color: var(--text-meta);
+        }
+        .btn-home:hover { background: var(--primary-light); border-color: var(--primary) !important; color: var(--primary); }
+
+        @media (max-width: 640px) {
+            .question-card { padding: 18px 16px; }
+            .hero h1 { font-size: 1.3rem; }
+            .option { font-size: 0.92rem; padding: 8px 12px; }
+            .stats { gap: 20px; }
+            .result-box .score-circle { width: 90px; height: 90px; font-size: 1.8rem; }
+            .nav-btn { padding: 8px 16px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-bar">
+        <div class="logo en-font">Test<span>Bazar</span></div>
+        <a href="index.html" class="back-btn">⬅ ফিরুন</a>
+    </header>
+
+    <div class="container">
+
+        <div class="hero">
+            <h1>🌍 ভূগোল টেস্ট – সেট ২</h1>
+            <div class="sub">📖 সৌরজগৎ ও পৃথিবীর গতিপ্রকৃতি (প্রশ্ন ১৬–৩০)</div>
+            <div class="badge">📝 ১৫টি প্রশ্ন · ১৫ মিনিট</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="fill" id="progressFill"></div>
+        </div>
+
+        <div id="questionContainer"></div>
+
+        <div class="nav-area">
+            <button class="nav-btn" id="prevBtn" onclick="changeQuestion(-1)" disabled>⬅ পূর্ববর্তী</button>
+            <div class="question-dots" id="dotsContainer"></div>
+            <button class="nav-btn" id="nextBtn" onclick="changeQuestion(1)">পরবর্তী ➡</button>
+        </div>
+
+        <div class="submit-area">
+            <button class="nav-btn primary" id="submitBtn" onclick="submitTest()" style="display:none;">✅ জমা দিন ও ফলাফল দেখুন</button>
+        </div>
+
+        <div id="resultBox" class="result-box">
+            <div class="score-circle" id="scoreCircle">0%</div>
+            <div class="grade" id="gradeText">গ্রেড: চেষ্টা চালিয়ে যাও!</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="num green" id="correctCount">0</div>
+                    <div class="label">সঠিক</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num red" id="wrongCount">0</div>
+                    <div class="label">ভুল</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num gold" id="scoreCount">0</div>
+                    <div class="label">প্রাপ্ত নম্বর</div>
+                </div>
+            </div>
+            <div class="demo-note">📌 এটি একটি ফ্রি ডেমো টেস্ট। আপনি যতবার খুশি চেষ্টা করতে পারেন।</div>
+            <div class="action-btns">
+                <button class="btn-show-ans" onclick="toggleExplanations()">📖 উত্তর ও ব্যাখ্যা দেখুন</button>
+                <button class="btn-retry" onclick="resetTest()">🔄 আবার চেষ্টা করো</button>
+                <button class="btn-home" onclick="window.location.href='index.html'">🏠 Hub-এ ফিরুন</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // 📝 QUESTION DATA – সেট ২ (প্রশ্ন ১৬-৩০)
+        // ============================================================
+        const questions = [{
+            q: 'শনি গ্রহের সবচেয়ে বড় উপগ্রহ কোনটি?',
+            options: ['গ্যানিমিড', 'ইউরোপা', 'টাইটান', 'ক্যালিস্টো'],
+            correct: 2,
+            explanation: 'শনির বৃহত্তম উপগ্রহ হলো "টাইটান"। এটি সৌরজগতের দ্বিতীয় বৃহত্তম উপগ্রহ এবং এর নিজস্ব ঘন বায়ুমণ্ডল রয়েছে।'
+        }, {
+            q: 'কোন গ্রহের বায়ুমণ্ডলের প্রায় ৯৬.৫% অংশই কার্বন ডাইঅক্সাইড (CO₂)?',
+            options: ['বুধ', 'শুক্র', 'পৃথিবী', 'নেপচুন'],
+            correct: 1,
+            explanation: 'শুক্র গ্রহের ঘন বায়ুমণ্ডলের অধিকাংশ অংশই (প্রায় ৯৬.৫%) কার্বন ডাইঅক্সাইড গ্যাস দ্বারা গঠিত, যার ফলে এখানে তীব্র গ্রিনহাউস প্রভাব দেখা যায়।'
+        }, {
+            q: 'লো (Io), ইউরোপা (Europa), গ্যানিমিড (Ganymede) এবং ক্যালিস্টো (Callisto)-কে একত্রে কী বলা হয়?',
+            options: ['শনির উপগ্রহ', 'গ্যালিলিয়ান উপগ্রহ', 'বহিঃস্থ উপগ্রহ', 'কৃত্রিম উপগ্রহ'],
+            correct: 1,
+            explanation: '১৬১০ সালে বিজ্ঞানী গ্যালিলিও গ্যালিলি বৃহস্পতির এই ৪টি বিশাল উপগ্রহ আবিষ্কার করেছিলেন বলে এদের একত্রে "গ্যালিলিয়ান উপগ্রহ" বলা হয়।'
+        }, {
+            q: 'সৌরজগতের কোন উপগ্রহের বায়ুমণ্ডল অনেকটা পৃথিবীর বায়ুমণ্ডলের মতোই ঘন এবং নাইট্রোজেন সমৃদ্ধ?',
+            options: ['ইউরোপা', 'টাইটান', 'গ্যানিমিড', 'চাঁদ'],
+            correct: 1,
+            explanation: 'শনির উপগ্রহ টাইটানের বায়ুমণ্ডল অত্যন্ত ঘন এবং এটি মূলত নাইট্রোজেন গ্যাস দিয়ে গঠিত, যা পৃথিবীর বায়ুমণ্ডলের গ্যাসের উপাদানের সাথে সাদৃশ্যপূর্ণ।'
+        }, {
+            q: 'সৌরজগতের ক্ষুদ্রতম গ্রহ কোনটি?',
+            options: ['বুধ', 'শুক্র', 'মঙ্গল', 'প্লুটো'],
+            correct: 0,
+            explanation: 'প্লুটোকে গ্রহের তালিকা থেকে বাদ দেওয়ার পর বর্তমানে বুধ গ্রহটি আমাদের সৌরজগতের সবচেয়ে ছোট গ্রহ।'
+        }, {
+            q: 'সৌরজগতের কোন গ্রহের সর্বাধিক উপগ্রহ রয়েছে?',
+            options: ['শনি (৬২টি)', 'বৃহস্পতি (৬৯টি)', 'ইউরেনাস (২৭টি)', 'নেপচুন (১৪টি)'],
+            correct: 1,
+            explanation: 'পাঠ্যবই অনুসারে, বৃহস্পতি গ্রহের সর্বাধিক ৬৯টি উপগ্রহ রয়েছে এবং শনি গ্রহের উপগ্রহ সংখ্যা ৬২টি।'
+        }, {
+            q: 'সূর্যের চারপাশে সবচেয়ে দ্রুত পরিক্রমণ সম্পন্ন করে কোন গ্রহ?',
+            options: ['বুধ', 'শুক্র', 'পৃথিবী', 'মঙ্গল'],
+            correct: 0,
+            explanation: 'বুধ গ্রহ সূর্যের সবচেয়ে কাছে থাকায় এটি সবচেয়ে দ্রুত গতিতে মাত্র ৮৮ দিনে সূর্যকে একবার পরিক্রমণ করে।'
+        }, {
+            q: 'সৌরজগতের দ্রুততম আবর্তনকারী (Fastest rotating) গ্রহ কোনটি?',
+            options: ['বুধ', 'পৃথিবী', 'বৃহস্পতি', 'শনি'],
+            correct: 2,
+            explanation: 'বৃহস্পতি গ্রহ তার নিজের অক্ষে সবচেয়ে দ্রুত আবর্তন সম্পন্ন করে। এর আবর্তনের সময় মাত্র ৯ ঘণ্টা ৫৫ মিনিট ৩০ সেকেন্ড।'
+        }, {
+            q: 'সৌরজগতের কোন গ্রহটি নিজের অক্ষে পূর্ব থেকে পশ্চিমে (Clockwise) আবর্তন করে?',
+            options: ['বুধ', 'শুক্র', 'পৃথিবী', 'নেপচুন'],
+            correct: 1,
+            explanation: 'অধিকাংশ গ্রহ পশ্চিম থেকে পূর্বে ঘুরলেও শুক্র গ্রহটি ব্যতিক্রম। এটি পূর্ব থেকে পশ্চিমে ঘড়ির কাঁটার দিকে (Clockwise) ঘোরে।'
+        }, {
+            q: 'সৌরজগতের কোন গ্রহে "গ্রেট ব্ল্যাক স্পট" (Great Black Spot) বা বিশাল অন্ধকার দাগ দেখা যায়?',
+            options: ['ইউরেনাস', 'নেপচুন', 'শনি', 'বৃহস্পতি'],
+            correct: 1,
+            explanation: 'নেপচুন গ্রহে একটি অন্ধকার ঘূর্ণাবর্ত বা ঝড় লক্ষ্য করা যায়, যা "গ্রেট ব্ল্যাক স্পট" নামে পরিচিত।'
+        }, {
+            q: 'সূর্যের চারপাশে পরিক্রমণের ক্ষেত্রে সবচেয়ে ধীরতম গ্রহ কোনটি?',
+            options: ['শনি', 'ইউরেনাস', 'নেপচুন', 'বুধ'],
+            correct: 2,
+            explanation: 'সূর্য থেকে সবচেয়ে দূরে অবস্থিত হওয়ায় নেপচুন গ্রহটি সূর্যকে পরিক্রমণ করতে সবচেয়ে বেশি সময় নেয়, যা প্রায় ১৬৪.৭৯ বছর।'
+        }, {
+            q: 'নিজের অক্ষে আবর্তনের দিক থেকে সবচেয়ে ধীরতম বা মন্থর গতিসম্পন্ন গ্রহ কোনটি?',
+            options: ['বুধ', 'শুক্র', 'শনি', 'পৃথিবী'],
+            correct: 1,
+            explanation: 'শুক্র গ্রহ তার নিজের অক্ষে একবার ঘুরতে পৃথিবীর হিসেবে প্রায় ২৪৩ দিন সময় নেয়, যা সৌরজগতে দীর্ঘতম।'
+        }, {
+            q: 'চাঁদের মতো অসংখ্য গহ্বরময় পৃষ্ঠ (Cratered surface) সৌরজগতের কোন গ্রহে দেখা যায়?',
+            options: ['বুধ', 'শুক্র', 'মঙ্গল', 'নেপচুন'],
+            correct: 0,
+            explanation: 'বায়ুমণ্ডলহীন বুধ গ্রহের উপরিভাগটি চাঁদের মতোই অসংখ্য উল্কাপাতের চিহ্ন বা গহ্বরে ঢাকা।'
+        }, {
+            q: 'মঙ্গল গ্রহের সর্বোচ্চ আগ্নেয়গিরি বা শৃঙ্গের নাম কী, যা মাউন্ট এভারেস্টের চেয়েও প্রায় ৩ গুণ উঁচু?',
+            options: ['অলিম্পাস মনস্', 'ভিনসন ম্যাসিফ', 'মাউন্ট কিলিমাঞ্জারো', 'মাউন্ট এলব্রুস'],
+            correct: 0,
+            explanation: 'মঙ্গল গ্রহের তথা সৌরজগতের উচ্চতম শৃঙ্গ হলো অলিম্পাস মনস্ (Olympus Mons), যা এভারেস্টের উচ্চতার প্রায় ৩ গুণ।'
+        }, {
+            q: 'সূর্যের চেয়ে বহুগুণ বড় আকারের নক্ষত্র ধ্বংসের শেষ পর্যায়ে কোনটিতে পরিণত হয়?',
+            options: ['লাল বামন নক্ষত্র', 'নিউট্রন স্টার অথবা গালসার', 'ছায়াপথ নক্ষত্র', 'প্রোটোস্টার'],
+            correct: 1,
+            explanation: 'সূর্যের চেয়ে বিশাল আকৃতির নক্ষত্রগুলি তাদের ধ্বংসের শেষ পর্যায়ে সংকুচিত হয়ে অত্যন্ত ঘন নিউট্রন স্টার অথবা গালসার বা পালসারে পরিণত হয়।'
+        }];
+
+        const totalQ = questions.length;
+        let currentIndex = 0;
+        let selectedAnswers = new Array(totalQ).fill(null);
+        let isSubmitted = false;
+
+        const container = document.getElementById('questionContainer');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const progressFill = document.getElementById('progressFill');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            const letters = ['ক', 'খ', 'গ', 'ঘ'];
+            const selected = selectedAnswers[index];
+            const isAnswered = selected !== null;
+            const isCorrect = isAnswered && (selected === q.correct);
+
+            let optionsHTML = '';
+            q.options.forEach((opt, optIdx) => {
+                let extraClass = '';
+                let isChecked = (selected === optIdx) ? 'checked' : '';
+
+                if (isAnswered && !isSubmitted) {
+                    if (optIdx === q.correct) extraClass = 'correct';
+                    else if (optIdx === selected && optIdx !== q.correct) extraClass = 'wrong';
+                }
+
+                optionsHTML += `
+                    <div class="option ${extraClass} ${isAnswered ? 'disabled' : ''}" onclick="selectOption(${index}, ${optIdx})">
+                        <input type="radio" name="q" value="${optIdx}" ${isChecked} ${isAnswered ? 'disabled' : ''}>
+                        <span class="letter">${letters[optIdx]}.</span>
+                        <label>${opt}</label>
+                    </div>
+                `;
+            });
+
+            let explanationHTML = '';
+            if (isAnswered) {
+                const correctLetter = letters[q.correct];
+                const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+                explanationHTML = `
+                    <div class="explanation-box show">
+                        <div class="ans-badge">✔ সঠিক উত্তর: ${correctLetter} ${statusText}</div>
+                        <div style="margin-top:4px;">${q.explanation}</div>
+                        <span class="source">📖 Geography · সৌরজগৎ ও পৃথিবী</span>
+                    </div>
+                `;
+            } else {
+                explanationHTML = `
+                    <div class="explanation-box">
+                        <div class="ans-badge">✔ সঠিক উত্তর: ${letters[q.correct]}</div>
+                        <div style="margin-top:4px;">${q.explanation}</div>
+                        <span class="source">📖 Geography · সৌরজগৎ ও পৃথিবী</span>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="q-header">
+                        <span class="q-number">প্রশ্ন ${index+1} / ${totalQ}</span>
+                        <span class="q-status">${isAnswered ? '✅ উত্তর দেওয়া হয়েছে' : '⏳ উত্তর দিন'}</span>
+                    </div>
+                    <div class="q-text">${index+1}. ${q.q}</div>
+                    <div class="options">${optionsHTML}</div>
+                    ${explanationHTML}
+                </div>
+            `;
+
+            updateDots();
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function selectOption(qIdx, optIdx) {
+            if (isSubmitted) return;
+            selectedAnswers[qIdx] = optIdx;
+            renderQuestion(currentIndex);
+            updateSubmitButton();
+        }
+
+        function changeQuestion(delta) {
+            const newIdx = currentIndex + delta;
+            if (newIdx < 0 || newIdx >= totalQ) return;
+            currentIndex = newIdx;
+            renderQuestion(currentIndex);
+        }
+
+        function goToQuestion(index) {
+            if (index < 0 || index >= totalQ) return;
+            currentIndex = index;
+            renderQuestion(currentIndex);
+        }
+
+        function updateDots() {
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < totalQ; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === currentIndex) dot.classList.add('active');
+                if (selectedAnswers[i] !== null) {
+                    if (isSubmitted) {
+                        if (selectedAnswers[i] === questions[i].correct) dot.classList.add('answered');
+                        else dot.classList.add('answered-wrong');
+                    } else {
+                        dot.classList.add('answered');
+                    }
+                }
+                dot.textContent = i + 1;
+                dot.onclick = () => goToQuestion(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateProgress() {
+            const answered = selectedAnswers.filter(a => a !== null).length;
+            const pct = Math.round((answered / totalQ) * 100);
+            progressFill.style.width = pct + '%';
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = (currentIndex === 0);
+            document.getElementById('nextBtn').disabled = (currentIndex === totalQ - 1);
+        }
+
+        function updateSubmitButton() {
+            const allAnswered = selectedAnswers.every(ans => ans !== null);
+            if (allAnswered && !isSubmitted) {
+                submitBtn.style.display = 'inline-block';
+                submitBtn.textContent = '✅ জমা দিন ও ফলাফল দেখুন';
+                submitBtn.style.opacity = '1';
+            } else if (!isSubmitted) {
+                const answered = selectedAnswers.filter(a => a !== null).length;
+                submitBtn.style.display = 'inline-block';
+                submitBtn.textContent = `⏳ ${answered}/${totalQ} উত্তর দেওয়া হয়েছে`;
+                submitBtn.style.opacity = '0.7';
+            } else {
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function submitTest() {
+            const unanswered = selectedAnswers.some(ans => ans === null);
+            if (unanswered) {
+                alert('⚠️ দয়া করে সব প্রশ্নের উত্তর দিন।');
+                return;
+            }
+            isSubmitted = true;
+            let correct = 0;
+            questions.forEach((q, idx) => {
+                if (selectedAnswers[idx] === q.correct) correct++;
+            });
+            const wrong = totalQ - correct;
+            const score = correct;
+            const pct = Math.round((correct / totalQ) * 100);
+
+            const resultBox = document.getElementById('resultBox');
+            resultBox.style.display = 'block';
+            document.getElementById('scoreCircle').textContent = pct + '%';
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('wrongCount').textContent = wrong;
+            document.getElementById('scoreCount').textContent = score;
+
+            let grade = '';
+            if (pct >= 80) grade = '🌟 অসাধারণ!';
+            else if (pct >= 60) grade = '👍 ভালো! আরও অনুশীলন করুন।';
+            else if (pct >= 40) grade = '📚 চেষ্টা চালিয়ে যাও!';
+            else grade = '💪 আরও পড়াশোনা প্রয়োজন।';
+            document.getElementById('gradeText').textContent = 'গ্রেড: ' + grade;
+
+            submitBtn.style.display = 'none';
+
+            renderQuestion(currentIndex);
+            document.querySelectorAll('.explanation-box').forEach(el => el.classList.add('show'));
+            document.querySelectorAll('.option').forEach(el => el.classList.add('disabled'));
+
+            updateDots();
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function toggleExplanations() {
+            if (!isSubmitted) return;
+            const exps = document.querySelectorAll('.explanation-box');
+            const anyVisible = Array.from(exps).some(el => el.classList.contains('show'));
+            exps.forEach(el => {
+                if (anyVisible) el.classList.remove('show');
+                else el.classList.add('show');
+            });
+        }
+
+        function resetTest() {
+            isSubmitted = false;
+            selectedAnswers = new Array(totalQ).fill(null);
+            document.getElementById('resultBox').style.display = 'none';
+            submitBtn.style.display = 'none';
+            submitBtn.textContent = '✅ জমা দিন ও ফলাফল দেখুন';
+            submitBtn.style.opacity = '1';
+            currentIndex = 0;
+            renderQuestion(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        renderQuestion(0);
+        updateSubmitButton();
+    </script>
+
+</body>
+</html>

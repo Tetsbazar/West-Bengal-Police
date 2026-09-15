@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Test 3 - World GK & India's Symbols</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+/* ★★★ Mobile Responsive ★★★ */
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১৫</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">GK</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GK TEST 3 — অন্যান্য গুরুত্বপূর্ণ বিশ্ব GK ও ভারতের প্রতীকসমূহ
+// Source: বিভাগ-৩ (প্রশ্ন ৩৬ - ৫০)
+// প্রশ্ন নম্বর বাদ দেওয়া হয়েছে — শুধু প্রশ্ন
+// ============================================================
+const questions = [
+    {
+        q: "অস্ট্রেলিয়ার জাতীয় প্রতীক ও অফিশিয়াল মুদ্রা যথাক্রমে কোনটি?",
+        opts: ["ক্যাঙারু ও অস্ট্রেলিয়ান ডলার", "কিউই ও ডলার", "সিংহ ও পাউন্ড", "ইগল ও রিয়াল"],
+        ans: 0,
+        tag: "GK - অস্ট্রেলিয়া",
+        exp: "ওশেনিয়া মহাদেশের দ্বীপ মহাদেশ অস্ট্রেলিয়ার জাতীয় প্রতীক হলো 'ক্যাঙারু' এবং এদের মুদ্রা হলো 'অস্ট্রেলিয়ান ডলার'।",
+        special: "💡 অস্ট্রেলিয়ার জাতীয় ফুল হলো 'গোল্ডেন ওয়াটেল' এবং এদের জাতীয় রাজধানী হলো ক্যানবেরা।"
+    },
+    {
+        q: "কানাডার রাজধানী কোনটি?",
+        opts: ["টরন্টো", "মন্ট্রিল", "ওটাওয়া", "ভ্যাঙ্কুভার"],
+        ans: 2,
+        tag: "GK - কানাডা",
+        exp: "উত্তর আমেরিকার বৃহৎ রাষ্ট্র কানাডার জাতীয় রাজধানী হলো 'ওটাওয়া'।",
+        special: "💡 কানাডার জাতীয় প্রতীক হলো ম্যাপল পাতা বা লিলি এবং প্রচলিত মুদ্রা হলো কানাডিয়ান ডলার।"
+    },
+    {
+        q: "ইউরোপের মনোরম পর্বত ঘেরা দেশ সুইজারল্যান্ডের রাজধানী ও প্রধান মুদ্রা কোনটি?",
+        opts: ["বার্ন ও সুইস ফ্রাঁ (Swiss Franc)", "জেনিভা ও ইউরো", "ভিয়েনা ও ক্রোনা", "অসলো ও ক্রোন"],
+        ans: 0,
+        tag: "GK - সুইজারল্যান্ড",
+        exp: "সুইজারল্যান্ডের রাজধানী হলো 'বার্ন' এবং এদের অফিশিয়াল মুদ্রা হলো 'সুইস ফ্রাঁ'।",
+        special: "💡 জেনিভা সুইজারল্যান্ডের একটি বড় শহর হলেও তা রাজধানী নয়। তবে জেনিভায় বহু আন্তর্জাতিক সংস্থার সদর দফতর রয়েছে।"
+    },
+    {
+        q: "আইসল্যান্ডের অতি সুপরিচিত ঐতিহাসিক পার্লামেন্ট বা আইনসভার নাম কী, যা বিশ্বের প্রাচীনতম সক্রিয় সংসদ হিসেবে পরিচিত?",
+        opts: ["আলথিং (Althing)", "ফকেটিং", "নেসেট", "সিনেট"],
+        ans: 0,
+        tag: "GK - আইসল্যান্ড",
+        exp: "আইসল্যান্ডের পার্লামেন্ট বা আইনসভার নাম 'আলথিং'। এটি বিশ্বের প্রাচীনতম সচল আইনসভা হিসেবে বিবেচিত হয়।",
+        special: "💡 আইসল্যান্ডের রাজধানী হলো রেইকজাভিক এবং প্রচলিত মুদ্রা হলো আইসল্যান্ডিক ক্রোনা।"
+    },
+    {
+        q: "আয়ারল্যান্ড বা রিপাবলিক অব আয়ারল্যান্ডের জাতীয় প্রতীক নিচের কোনটি?",
+        opts: ["লবঙ্গ", "শ্যামরক (Shamrock - তিন পাতার ঘাস)", "শ্বেত গোলাপ", "ডালিম ফুল"],
+        ans: 1,
+        tag: "GK - আয়ারল্যান্ড",
+        exp: "আয়ারল্যান্ডের অতি সুপরিচিত জাতীয় ফুল বা প্রতীক হলো তিন পাতার ঘাস তথা 'শ্যামরক'।",
+        special: "💡 আয়ারল্যান্ডের রাজধানী হলো ডাবলিন এবং এদের প্রধান অফিশিয়াল মুদ্রা হলো 'ইউরো'।"
+    },
+    {
+        q: "আর্জেন্টিনার জাতীয় খেলা কোনটি, যা তাদের প্রাচীন গ্রামীণ সংস্কৃতির অংশ?",
+        opts: ["ফুটবল", "পোলো", "প্যাটো (Pato)", "রাগবি"],
+        ans: 2,
+        tag: "GK - আর্জেন্টিনা",
+        exp: "আর্জেন্টিনার অফিশিয়াল জাতীয় খেলা হলো 'প্যাটো', যা ঘোড়ায় চড়ে বল নিয়ে খেলার একটি ঐতিহ্যবাহী পদ্ধতি।",
+        special: "💡 আর্জেন্টিনার রাজধানী হলো বুয়েনোস অ্যারিজ এবং এদের জাতীয় মুদ্রা হলো 'আর্জেন্টাইন পেসো'।"
+    },
+    {
+        q: "ফিলিপাইন বা ফিলিপিনস রাষ্ট্রের জাতীয় রাজধানী কোনটি?",
+        opts: ["ম্যানিলা", "জাকার্তা", "হ্যানয়", "ব্যাংকক"],
+        ans: 0,
+        tag: "GK - ফিলিপাইন",
+        exp: "দক্ষিণ-পূর্ব এশিয়ার দেশ ফিলিপিনসের রাজধানী হলো 'ম্যানিলা'। এই ম্যানিলাতেই আন্তর্জাতিক ধান গবেষণা সংস্থার সদর দফতর অবস্থিত।",
+        special: "💡 ফিলিপাইনের প্রধান আইনসভাকে সিনেট ও হাউস অব রিপ্রেজেন্টিভ বলা হয় এবং এদের মুদ্রা হলো ফিলিপাইন পেসো।"
+    },
+    {
+        q: "নিউজিল্যান্ডের সুপরিচিত জাতীয় পাখি ও জাতীয় প্রতীক কোনটি?",
+        opts: ["কিউই পাখি ও ফার্ন (Fern)", "ক্যাঙারু ও গোল্ডেন ওয়াটেল", "ইগল ও গোলাপ", "ময়ূর ও পদ্ম"],
+        ans: 0,
+        tag: "GK - নিউজিল্যান্ড",
+        exp: "ওশেনিয়ার দ্বীপরাষ্ট্র নিউজিল্যান্ডের বিখ্যাত জাতীয় পাখি হলো ডানাহীন 'কিউই' এবং এদের জাতীয় উদ্ভিদ প্রতীক হলো 'সিলভার ফার্ন'।",
+        special: "💡 নিউজিল্যান্ডের রাজধানী হলো ওয়েলিংটন এবং প্রচলিত মুদ্রা হলো নিউজিল্যান্ড ডলার।"
+    },
+    {
+        q: "ভিয়েতনামের জাতীয় রাজধানী ও প্রধান মুদ্রাটি যথাক্রমে কী কী?",
+        opts: ["হ্যানয় ও ভিয়েতনামিজ ডং", "সায়গন ও পেসো", "নম পেন ও রিয়েল", "কুয়ালালামপুর ও রিঙ্গিত"],
+        ans: 0,
+        tag: "GK - ভিয়েতনাম",
+        exp: "দক্ষিণ-পূর্ব এশিয়ার কমিউনিস্ট রাষ্ট্র ভিয়েতনামের রাজধানী হলো 'হ্যানয়' এবং প্রধান কাগজি কারেন্সি বা মুদ্রা হলো 'ডং'।",
+        special: "💡 ভিয়েতনামের প্রাচীনতম বড় বাণিজ্যিক শহর সায়গনের বর্তমান নাম হলো হো চি মিন সিটি।"
+    },
+    {
+        q: "স্পেনের দ্বিকক্ষবিশিষ্ট বিখ্যাত আইনসভার নাম কী?",
+        opts: ["জেনারেল কোর্টস বা কর্টেস জেনারেলেস (Cortes Generales)", "ডুমী", "ডাট", "রিকসডাগ"],
+        ans: 0,
+        tag: "GK - স্পেন",
+        exp: "ইউরোপের দেশ স্পেনের দ্বিকক্ষবিশিষ্ট আইনসভাকে 'কর্টেস জেনারেলেস' বা জেনারেল কোর্টস বলা হয়ে থাকে।",
+        special: "💡 স্পেনের রাজধানী হলো মাদ্রিদ, জাতীয় প্রতীক হলো ষাঁড় বা ডালিম ফুল এবং প্রচলিত মুদ্রা হলো 'ইউরো'।"
+    },
+    {
+        q: "ভারতের বাইরে আর কোন দেশে প্রতি বছর ১৫ই আগস্ট তারিখে তাদের জাতীয় 'স্বাধীনতা দিবস' সাড়ম্বরে পালিত হয়?",
+        opts: ["দক্ষিণ কোরিয়া", "উত্তর কোরিয়া", "কঙ্গো", "ওপরের সবকটি দেশেই"],
+        ans: 3,
+        tag: "GK - স্বাধীনতা দিবস",
+        exp: "ভারত ছাড়া ১৫ই আগস্ট দিনটিতে দক্ষিণ কোরিয়া, উত্তর কোরিয়া, কঙ্গো এবং বাহরাইন তাদের নিজ নিজ স্বাধীনতা দিবস বা জাতীয় দিবস পালন করে থাকে।",
+        special: "💡 দক্ষিণ কোরিয়া ১৯৪৫ সালের ১৫ই আগস্ট জাপানি শাসন থেকে মুক্ত হয়েছিল।"
+    },
+    {
+        q: "আফ্রিকার কফি ও কৃষিসমৃদ্ধ দেশ কেনিয়ার জাতীয় রাজধানী কোনটি?",
+        opts: ["নাইরোবি", "কায়রো", "প্রিটোরিয়া", "ডাকার"],
+        ans: 0,
+        tag: "GK - কেনিয়া",
+        exp: "পূর্ব আফ্রিকার অন্যতম প্রধান দেশ কেনিয়ার রাজধানী হলো 'নাইরোবি'। এই নাইরোবি শহরেই সম্মিলিত জাতিপুঞ্জের পরিবেশ কর্মসূচী (UNEP)-এর সদর দফতর অবস্থিত।",
+        special: "💡 কেনিয়ার প্রধান অফিশিয়াল মুদ্রা হলো 'কেনিয়ান শিলিং' এবং এদের আইনসভাকে পার্লামেন্ট বলা হয়।"
+    },
+    {
+        q: "কুয়েতের বিখ্যাত জাতীয় আইনসভার নাম নিচের কোনটি?",
+        opts: ["মজলিস আল-উম্মা (National Assembly of Kuwait)", "মজলিস-আস-শুরা", "নেসেট", "ডুমী"],
+        ans: 0,
+        tag: "GK - কুয়েত",
+        exp: "খনিজ তেল সমৃদ্ধ আরব রাষ্ট্র কুয়েতের এককক্ষবিশিষ্ট আইনসভার নাম হলো 'মজলিস আল-উম্মা'।",
+        special: "💡 কুয়েতের রাজধানী হলো কুয়েত সিটি এবং এদের প্রধান মুদ্রা হলো 'কুয়েতি দিনার' (যা বিশ্বের অন্যতম মূল্যবান কারেন্সি)।"
+    },
+    {
+        q: "জিম্বাবোয়ের জাতীয় রাজধানী ও এদের প্রাচীন ভৌগোলিক নাম যথাক্রমে কী ছিল?",
+        opts: ["হারারে ও দক্ষিণ রোডেশিয়া", "মালে ও রোডেশিয়া", "ডাকার ও ফ্রেঞ্চ সুদান", "লিসবন ও পারস্য"],
+        ans: 0,
+        tag: "GK - জিম্বাবোয়ে",
+        exp: "আফ্রিকার ক্রিকেটপ্রেমী দেশ জিম্বাবোয়ের রাজধানী হলো 'হারারে' এবং এদের প্রাচীনতম ঐতিহাসিক অফিশিয়াল নাম ছিল 'দক্ষিণ রোডেশিয়া'।",
+        special: "💡 জিম্বাবোয়ের বর্তমান প্রধান লেনদেনের অফিশিয়াল কারেন্সি বা মুদ্রা হলো ইউ এস ডলার।"
+    },
+    {
+        q: "বিশ্বের সবচেয়ে ছোট স্বাধীন রাষ্ট্র ভ্যাটিকান সিটির অফিশিয়াল ভাষা ও মুদ্রা কোনটি?",
+        opts: ["ল্যাটিন/ইতালিয়ান ও ইউরো", "ফরাসি ও ফ্রাঁ", "স্প্যানিশ ও পেসো", "ইংরেজি ও পাউন্ড"],
+        ans: 0,
+        tag: "GK - ভ্যাটিকান সিটি",
+        exp: "ইউরোপের ইতালির রোম শহরের অভ্যন্তরে অবস্থিত বিশ্বের ক্ষুদ্রতম স্বাধীন রাষ্ট্র ভ্যাটিকান সিটির প্রধান অফিশিয়াল ভাষা ল্যাটিন ও ইতালিয়ান এবং প্রচলিত মুদ্রা হলো 'ইউরো'।",
+        special: "💡 ভ্যাটিকান সিটির শাসনকর্তা হলেন ক্যাথলিক খ্রিস্টানদের প্রধান ধর্মগুরু পোপ এবং এখানকার বিখ্যাত শাসন কেন্দ্র বা বাসভবনকে অ্যাপোস্টলিক প্যালেস বলা হয়।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 15 * 60;
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

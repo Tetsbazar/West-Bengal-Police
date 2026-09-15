@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Test 11 - বিশ্বের বিখ্যাত ভবন ও স্থাপত্য</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ২০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">GK</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GK TEST 11 — বিশ্বের বিখ্যাত ভবন, স্থাপত্য ও সপ্তম আশ্চর্য
+// Source: বিভাগ-১ (প্রশ্ন ১ - ২০)
+// ============================================================
+const questions = [
+    {
+        q: "মার্কিন যুক্তরাষ্ট্রের রাষ্ট্রপতির সরকারি বাসভবনের অফিশিয়াল নাম কী?",
+        opts: ["ক্রেমলিন", "হোয়াইট হাউস", "এলিসি প্যালেস", "ব্লু হাউস"],
+        ans: 1,
+        tag: "GK - হোয়াইট হাউস",
+        exp: "মার্কিন রাষ্ট্রপতির সরকারি বাসভবন ও কার্যালয়কে হোয়াইট হাউস বলা হয়।",
+        special: "💡 এই বিশ্ববিখ্যাত ঐতিহাসিক ভবনটির নকশাকার বা স্থপতি ছিলেন জেমস হোবান।"
+    },
+    {
+        q: "ব্রিটেনের প্রধানমন্ত্রীর সরকারি বাসভবনটি লন্ডনের কোন রাস্তায় অবস্থিত?",
+        opts: ["১০ নং ডাউনিং স্ট্রিট", "৭ নং রেস কোর্স রোড", "ফ্লিট স্ট্রিট", "ওয়াল স্ট্রিট"],
+        ans: 0,
+        tag: "GK - ১০ নং ডাউনিং স্ট্রিট",
+        exp: "লন্ডনে অবস্থিত '১০ নং ডাউনিং স্ট্রিট' হলো ব্রিটিশ প্রধানমন্ত্রীর সরকারি বাসভবন।",
+        special: "💡 অন্যদিকে, লন্ডনের 'ফ্লিট স্ট্রিট' সেখানে অবস্থিত প্রধান প্রধান সংবাদপত্রের কার্যালয়গুলির জন্য বিখ্যাত।"
+    },
+    {
+        q: "মস্কোয় অবস্থিত রাশিয়ার জার (সম্রাট)-এর প্রাচীন প্রাসাদটি বর্তমানে কী নামে পরিচিত এবং এটি এখন রুশ সরকারের প্রধান কার্যালয়?",
+        opts: ["পেন্টাগন", "রেড স্কোয়ার", "ক্রেমলিন", "হোয়াইট হল"],
+        ans: 2,
+        tag: "GK - ক্রেমলিন",
+        exp: "মস্কোর বিখ্যাত ক্রেমলিন ছিল রাশিয়ার জার বা সম্রাটদের প্রধান প্রাসাদ, যা বর্তমানে রুশ সরকারের মূল কার্যালয় হিসেবে ব্যবহৃত হয়।",
+        special: "💡 ক্রেমলিনের পাশেই রয়েছে মস্কোর বিখ্যাত চত্বর 'রেড স্কোয়ার', যেখানে রাশিয়ার বড়ো বড়ো রাজনৈতিক জনসভা ও প্যারেড অনুষ্ঠিত হয়ে থাকে।"
+    },
+    {
+        q: "ব্রিটেনের রাজপরিবারের সদস্যদের অফিশিয়াল বাসভবনের নাম কী?",
+        opts: ["১০ নং ডাউনিং স্ট্রিট", "বাকিংহাম প্যালেস", "উইন্ডসর প্যালেস", "এলিসি প্যালেস"],
+        ans: 1,
+        tag: "GK - বাকিংহাম প্যালেস",
+        exp: "লন্ডনে অবস্থিত বাকিংহাম প্যালেস হলো ব্রিটেনের রাজপরিবারের অফিশিয়াল বাসস্থান।",
+        special: "💡 বাকিংহাম প্যালেসে প্রতিদিন সকালে বিখ্যাত 'গার্ড চেঞ্জিং' বা প্রহরী পরিবর্তন অনুষ্ঠান অনুষ্ঠিত হয়, যা পর্যটকদের কাছে অত্যন্ত জনপ্রিয়।"
+    },
+    {
+        q: "ইতালির রোম শহরের অভ্যন্তরে অবস্থিত খ্রিস্টান ধর্মগুরু পোপের সরকারি বাসভবনকে কী বলা হয়?",
+        opts: ["এলিসি প্যালেস", "ভ্যাটিকান", "ব্লু হাউস", "বাকিংহাম প্যালেস"],
+        ans: 1,
+        tag: "GK - ভ্যাটিকান",
+        exp: "ইতালির রোম শহরের অভ্যন্তরে অবস্থিত ক্ষুদ্রতম রাষ্ট্র ভ্যাটিকান সিটির বিখ্যাত প্রাসাদেই খ্রিস্টানদের সর্বোচ্চ ধর্মগুরু পোপ বসবাস করেন।",
+        special: "💡 ভ্যাটিকান সিটি আয়তনে বিশ্বের ক্ষুদ্রতম স্বাধীন রাষ্ট্র, যার আয়তন মাত্র ০.৪৪ বর্গ কিমি।"
+    },
+    {
+        q: "আমাদের প্রতিবেশী দেশ বাংলাদেশের রাষ্ট্রপতির সরকারি বাসভবনের নাম কী?",
+        opts: ["গণভবন", "বঙ্গভবন", "সংসদ ভবন", "লালবাগ কেল্লা"],
+        ans: 1,
+        tag: "GK - বঙ্গভবন",
+        exp: "বাংলাদেশের ঢাকা শহরে অবস্থিত রাষ্ট্রপতির অফিশিয়াল সরকারি বাসভবনের নাম হলো 'বঙ্গভবন'।",
+        special: "💡 বঙ্গভবন মূলত ব্রিটিশ আমলে গভর্নর হাউস হিসেবে নির্মিত হয়েছিল এবং পরবর্তীতে এটি রাষ্ট্রপতির বাসভবনে রূপান্তরিত হয়।"
+    },
+    {
+        q: "বাংলাদেশের প্রধানমন্ত্রীর সরকারি বাসভবনটিকে কী বলা হয়ে থাকে?",
+        opts: ["বঙ্গভবন", "লালদিঘি প্যালেস", "গণভবন", "সোনারগাঁও"],
+        ans: 2,
+        tag: "GK - গণভবন",
+        exp: "ঢাকা শহরে অবস্থিত বাংলাদেশের প্রধানমন্ত্রীর অফিশিয়াল সরকারি বাসভবনকে 'গণভবন' বলা হয়।",
+        special: "💡 গণভবন ঢাকার তেজগাঁও এলাকায় অবস্থিত এবং এটি অত্যন্ত নিরাপদ ও সুরক্ষিত একটি এলাকা।"
+    },
+    {
+        q: "ফ্রান্সের রাষ্ট্রপতির সরকারি বাসভবনের নাম নিচের কোনটি?",
+        opts: ["এলিসি প্যালেস (Elysee Palace)", "হোয়াইট হাউস", "ক্রেমলিন", "ব্লু হাউস"],
+        ans: 0,
+        tag: "GK - এলিসি প্যালেস",
+        exp: "প্যারিসে অবস্থিত 'এলিসি প্যালেস' হলো ফ্রান্সের মহামান্য রাষ্ট্রপতির অফিশিয়াল বাসভবন ও কার্যালয়।",
+        special: "💡 এলিসি প্যালেস ১৭২২ সালে নির্মিত হয় এবং ১৮৭৩ সাল থেকে এটি ফরাসি রাষ্ট্রপতির সরকারি বাসভবন হিসেবে ব্যবহৃত হচ্ছে।"
+    },
+    {
+        q: "দক্ষিণ কোরিয়ার রাজধানী সিওল শহরে অবস্থিত সে দেশের রাষ্ট্রপতির সরকারি বাসভবনটির নাম কী?",
+        opts: ["রেড হাউস", "গ্রিন হাউস", "ব্লু হাউস (Blue House)", "ইয়েলো প্যালেস"],
+        ans: 2,
+        tag: "GK - ব্লু হাউস",
+        exp: "দক্ষিণ কোরিয়ার সিওল শহরে অবস্থিত তাদের রাষ্ট্রপতির ঐতিহ্যবাহী সরকারি বাসভবনটির নাম হলো 'ব্লু হাউস'।",
+        special: "💡 ব্লু হাউস কোরিয়ান ভাষায় 'চং ওয়া দাই' নামে পরিচিত, যার অর্থ হলো 'নীল ছাদের ভবন'।"
+    },
+    {
+        q: "আমেরিকার ক্যালিফোর্নিয়ায় অবস্থিত তাদের বিখ্যাত মহাকাশ ও জ্যোতির্বিদ্যা পর্যবেক্ষণাগারের নাম কী?",
+        opts: ["লিক্ পর্যবেক্ষণাগার (Lick Observatory)", "গ্রিনিচ মানমন্দির", "কেপ কেনেডি", "নাসা সেন্টার"],
+        ans: 0,
+        tag: "GK - লিক্ পর্যবেক্ষণাগার",
+        exp: "আমেরিকার ক্যালিফোর্নিয়ায় অবস্থিত অত্যন্ত বিখ্যাত লিক্ পর্যবেক্ষণাগার (Lick Observatory) হলো আমেরিকার প্রধান সরকারি পর্যবেক্ষণাগার।",
+        special: "💡 ১৮৮৮ সালে প্রতিষ্ঠিত এই পর্যবেক্ষণাগারটি মাউন্ট হ্যামিল্টনের চূড়ায় অবস্থিত এবং এটি বিশ্বের প্রথম স্থায়ী পাহাড়ী মানমন্দির।"
+    },
+    {
+        q: "মার্কিন যুক্তরাষ্ট্রের নিউ ইয়র্ক শহরে অবস্থিত বিখ্যাত ১০২ তলার গগনচুম্বী ইমারতটির নাম কী?",
+        opts: ["বুর্জ খলিফা", "পেট্রোনাস টাওয়ার", "স্টেট এম্পায়ার বিল্ডিং (Empire State Building)", "ওয়ান ওয়ার্ল্ড ট্রেড সেন্টার"],
+        ans: 2,
+        tag: "GK - এম্পায়ার স্টেট বিল্ডিং",
+        exp: "আমেরিকার নিউ ইয়র্ক সিটিতে অবস্থিত ১০২ তলা বিশিষ্ট অত্যন্ত চমৎকার আকাশচুম্বী ঐতিহাসিক ইমারতটি হলো 'স্টেট এম্পায়ার বিল্ডিং'।",
+        special: "💡 ১৯৩১ সালে উদ্বোধন হওয়া এই ভবনটি প্রায় ৪০ বছর ধরে বিশ্বের tallest building ছিল।"
+    },
+    {
+        q: "জার্মানির বার্লিন শহরে অবস্থিত ওলন্দাজ আমলের অত্যন্ত বিখ্যাত ঐতিহাসিক প্রবেশদ্বার বা স্থাপত্যের নাম কী?",
+        opts: ["ইন্ডিয়া গেট", "ব্র্যান্ডেনবার্গ গেট (Brandenburg Gate)", "রুমি দরওয়াজা", "আলাই দরওয়াজা"],
+        ans: 1,
+        tag: "GK - ব্র্যান্ডেনবার্গ গেট",
+        exp: "জার্মানির বার্লিন শহরে ব্র্যান্ডেনবার্গ গেট (Brandenburg Gate) অবস্থিত, যা অষ্টাদশ শতকে নির্মিত একটি রাজকীয় ঐতিহাসিক তোরণ বা স্থাপত্য।",
+        special: "💡 বার্লিন প্রাচীর পতনের পর এই গেটটি জার্মান পুনর্মিলনের প্রতীক হিসেবে বিশ্বজুড়ে পরিচিতি লাভ করে।"
+    },
+    {
+        q: "ইন্দোনেশিয়ার রাজধানী জাকার্তায় অবস্থিত সে দেশের রাষ্ট্রপতির সরকারি বাসভবনের নাম কী?",
+        opts: ["মারডেকা প্যালেস (Merdeka Palace)", "ব্লু হাউস", "এলিসি প্যালেস", "ক্রেমলিন"],
+        ans: 0,
+        tag: "GK - মারডেকা প্যালেস",
+        exp: "জাকার্তায় অবস্থিত ইন্দোনেশিয়ার রাষ্ট্রপতির সরকারি বাসভবন ও কার্যালয়কে 'মারডেকা প্যালেস' বলা হয়।",
+        special: "💡 'মারডেকা' শব্দের অর্থ হলো 'স্বাধীনতা' - ইন্দোনেশিয়ার স্বাধীনতা আন্দোলনের ঐতিহাসিক স্মারক হিসেবে এই নামকরণ করা হয়েছে।"
+    },
+    {
+        q: "ভারতের নতুন দিল্লিতে অবস্থিত দেশের প্রধানমন্ত্রীর সরকারি বাসভবনটির নাম কী?",
+        opts: ["রাইসিনা হিলস", "৭, রেস কোর্স রোড", "রাষ্ট্রপতি ভবন", "লালকেল্লা"],
+        ans: 1,
+        tag: "GK - ৭, রেস কোর্স রোড",
+        exp: "ভারতের প্রধানমন্ত্রীর সরকারি বাসভবনের অফিশিয়াল ঠিকানা ও নাম হলো '৭, রেস কোর্স রোড' (যা বর্তমানে লোককল্যাণ মার্গ নামে পরিচিত)।",
+        special: "💡 দিল্লির 'রাইসিনা হিল' এলাকায় মূলত ভারতের মহামান্য রাষ্ট্রপতির সুবিশাল রাষ্ট্রপতি ভবন ও অন্যান্য গুরুত্বপূর্ণ কেন্দ্রীয় সরকারি ভবনসমূহ অবস্থিত।"
+    },
+    {
+        q: "আমেরিকার রাজধানী ওয়াশিংটনে অবস্থিত মার্কিন প্রতিরক্ষা বিভাগের সুবিশাল মুখ্য কার্যালয় বা সদর দফতরকে কী বলা হয়?",
+        opts: ["পেন্টাগন (Pentagon)", "হোয়াইট হাউস", "লিক সেন্টার", "নাসা হেডকোয়ার্টার্স"],
+        ans: 0,
+        tag: "GK - পেন্টাগন",
+        exp: "আমেরিকার ওয়াশিংটনে অবস্থিত মার্কিন প্রতিরক্ষা বিভাগের (Department of Defense) পঞ্চভুজাকৃতির বিশাল সদর দফতরটি 'পেন্টাগন' নামে বিশ্বখ্যাত।",
+        special: "💡 পেন্টাগন শব্দের অর্থ হলো 'পঞ্চভুজ' - ভবনটির আকৃতি পঞ্চভুজাকৃতি হওয়ায় এর এই নামকরণ। এটি বিশ্বের বৃহত্তম অফিস ভবনগুলির একটি।"
+    },
+    {
+        q: "নেপালের কাঠমান্ডুতে অবস্থিত সে দেশের রাজপরিবারের পূর্বতন রাজবাড়িটি বর্তমানে সরকারি উদ্যোগে মিউজিয়ামে পরিণত হয়েছে, এর নাম কী?",
+        opts: ["নারায়ণহিতি প্যালেস (Narayanhiti Palace)", "কাঠমান্ডু দরবার", "পশুপতিনাথ ভবন", "শিংহ দরবার"],
+        ans: 0,
+        tag: "GK - নারায়ণহিতি প্যালেস",
+        exp: "নেপালের কাঠমান্ডুতে অবস্থিত নেপালের রাজাদের পূর্বতন প্রধান বাসভবনটি হলো 'নারায়ণহিতি প্যালেস', যা বর্তমানে একটি জাতীয় ও ঐতিহাসিক জাদুঘর।",
+        special: "💡 ২০০১ সালের বিখ্যাত নেপাল রাজপরিবার হত্যাকাণ্ড এই নারায়ণহিতি প্যালেসেই সংঘটিত হয়েছিল।"
+    },
+    {
+        q: "গ্রিসের রাজধানী এথেন্স শহরে অবস্থিত সুপ্রাচীন দুর্গ এবং ঐতিহাসিক প্রত্নতাত্ত্বিক কেন্দ্রটির নাম কী?",
+        opts: ["অ্যাক্রো-পোলিস (Acropolis)", "আলহাম্ব্রা", "কলোসিয়াম", "পেট্রা"],
+        ans: 0,
+        tag: "GK - অ্যাক্রোপোলিস",
+        exp: "গ্রিসের এথেন্স শহরের একটি পাহাড়ের চূড়ায় অবস্থিত প্রাচীন গ্রিক সভ্যতার সুবিখ্যাত ধ্বংসাবশেষ ও দুর্গটিকে 'অ্যাক্রোপোলিস' বলা হয়।",
+        special: "💡 অ্যাক্রোপোলিসের মধ্যেই রয়েছে বিখ্যাত পার্থেনন মন্দির, যা দেবী অথেনার উদ্দেশ্যে নির্মিত হয়েছিল।"
+    },
+    {
+        q: "জার্মানির বাভারিয়া অঞ্চলে অবস্থিত অত্যন্ত রূপকথার মতো দেখতে সুদৃশ্য রাজপ্রাসাদটির নাম কী?",
+        opts: ["নয়সোয়ান-স্টাইন কাসল (Neuschwanstein Castle)", "আলহাম্ব্রা", "ক্রেমলিন", "বাকিংহাম প্যালেস"],
+        ans: 0,
+        tag: "GK - নয়সোয়ান-স্টাইন কাসল",
+        exp: "জার্মানিতে অবস্থিত মধ্যযুগীয় শৈলীতে নির্মিত অপূর্ব সুন্দর একটি রাজপ্রাসাদ হলো 'নয়সোয়ান-স্টাইন কাসল'।",
+        special: "💡 বাভারিয়ার বিখ্যাত রাজা দ্বিতীয় লুডভিগ বিখ্যাত সুরকার রিচার্ড ওয়াগনারের সম্মানে এই নয়সোয়ান-স্টাইন প্রাসাদের ভিত্তি স্থাপন করেছিলেন। ডিজনির বিখ্যাত স্লিপিং বিউটি ক্যাসল এই প্রাসাদ থেকে অনুপ্রাণিত।"
+    },
+    {
+        q: "মালয়েশিয়ার রাজধানী কুয়ালালামপুরে অবস্থিত পৃথিবীর অন্যতম দীর্ঘতম যুগ্ম আকাশচুম্বী ইমারতটির নাম কী?",
+        opts: ["বুর্জ খলিফা", "পেট্রোনাস টাওয়ার (Petronas Towers)", "এম্পায়ার স্টেট বিল্ডিং", "ওয়ান ওয়ার্ল্ড ট্রেড সেন্টার"],
+        ans: 1,
+        tag: "GK - পেট্রোনাস টাওয়ার",
+        exp: "মালয়েশিয়ার কুয়ালালামপুরে অবস্থিত অত্যন্ত জনপ্রিয় টুইন টাওয়ার বা যুগ্ম আকাশচুম্বী ভবনটি হলো 'পেট্রোনাস টাওয়ার'।",
+        special: "💡 ৮৮ তলা বিশিষ্ট এই ভবন দুটি ১৯৯৮ সালে সম্পন্ন হয় এবং ৪৫২ মিটার উচ্চতা নিয়ে ২০০৪ সাল পর্যন্ত বিশ্বের tallest building ছিল।"
+    },
+    {
+        q: "স্পেনের গ্রানাডায় অবস্থিত মুসলিম মুর স্থাপত্যশৈলীর বিখ্যাত ঐতিহাসিক রাজপ্রাসাদ ও দুর্গের নাম কী?",
+        opts: ["আলহাম্ব্রা (Alhambra)", "অ্যাক্রোপোলিস", "কলোসিয়াম", "পিসা টাওয়ার"],
+        ans: 0,
+        tag: "GK - আলহাম্ব্রা",
+        exp: "স্পেনের গ্রানাডায় পাহাড়ের ওপর অবস্থিত প্রাচীন মুদিয়াহ আমলের একটি অত্যন্ত সুন্দর ও সুরক্ষিত দুর্গ-প্রাসাদ হলো 'আলহাম্ব্রা' (Alhambra)।",
+        special: "💡 আলহাম্ব্রা ১৩-১৪ শতকে নাসরিদ রাজবংশ দ্বারা নির্মিত হয় এবং এটি ইসলামি স্থাপত্যশৈলীর এক অনন্য নিদর্শন।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (২০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

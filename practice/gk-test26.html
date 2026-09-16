@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Test 24 - International Peacekeeping & Diplomacy Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">GK</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GK TEST 24 — আন্তর্জাতিক শান্তি রক্ষা ও কূটনীতি সংক্রান্ত অভিযান
+// Source: বিভাগ-২ (প্রশ্ন ১৬ - ২৫)
+// প্রশ্ন নম্বর বাদ দেওয়া হয়েছে — শুধু প্রশ্ন
+// ============================================================
+const questions = [
+    {
+        q: "১৯৮৭ সালে শ্রীলঙ্কার গৃহযুদ্ধের অবসান ঘটাতে ও তামিল জঙ্গি গোষ্ঠী 'এলটিটিই' (LTTE)-কে নিরস্ত্র করার লক্ষ্যে ভারতীয় শান্তিরক্ষী বাহিনী (IPKF) যে বিশেষ অভিযান চালিয়েছিল, তার নাম কী ছিল?",
+        opts: ["অপারেশন পবন (Operation Pavan)", "অপারেশন ক্যাকটাস", "অপারেশন রাহত", "অপারেশন মদদ"],
+        ans: 0,
+        tag: "GK - অপারেশন পবন",
+        exp: "রাজীব গান্ধী-জে আর জয়বর্ধনে শান্তি চুক্তি স্বাক্ষরের পর ভারতীয় সেনা এলটিটিই-র হাত থেকে জাফনা উপদ্বীপ পুনরুদ্ধার করতে এই দীর্ঘস্থায়ী 'অপারেশন পবন' পরিচালনা করেছিল।",
+        special: "💡 IPKF-এর পুরো নাম ইন্ডিয়ান পিস কিপিং ফোর্স।"
+    },
+    {
+        q: "১৯৮৮ সালে ভারত মহাসাগরের ছোট্ট দ্বীপরাষ্ট্র মালদ্বীপে সশস্ত্র বিদ্রোহীদের হাত থেকে তৎকালীন রাষ্ট্রপতি মামুন আব্দুল গাইউমের গণতান্ত্রিক সরকারকে রক্ষা করার জন্য ভারতীয় সেনাবাহিনীর প্যারা কমান্ডোদের চমৎকার অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন ক্যাকটাস (Operation Cactus)", "অপারেশন পবন", "অপারেশন পোলো", "অপারেশন বিজয়"],
+        ans: 0,
+        tag: "GK - অপারেশন ক্যাকটাস",
+        exp: "মালদ্বীপের রাষ্ট্রপতির অনুরোধে ভারতীয় সশস্ত্র বাহিনী মাত্র কয়েক ঘণ্টার মধ্যে ভারতের আগ্রা থেকে আকাশপথে উড়ে গিয়ে বিদ্রোহীদের দমন করে দেশটির সার্বভৌমত্ব রক্ষা করে আন্তর্জাতিক মহলে প্রবল প্রশংসা কুড়ায়।",
+        special: "💡 অপারেশন ক্যাকটাস ভারতের অন্যতম সফল সামরিক অভিযান হিসেবে বিবেচিত।"
+    },
+    {
+        q: "২০১৬ সালে আফ্রিকার রক্তাক্ত গৃহযুদ্ধ কবলিত দক্ষিণ সুদান থেকে শত শত ভারতীয় নাগরিক ও অন্যান্য দেশের মানুষদের নিরাপদে আকাশপথে বের করে আনার কূটনৈতিক অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন সঙ্কট মোচন (Operation Sankat Mochan)", "অপারেশন দেবী শক্তি", "অপারেশন রাহত", "অপারেশন গঙ্গা"],
+        ans: 0,
+        tag: "GK - সঙ্কট মোচন",
+        exp: "তৎকালীন পররাষ্ট্র প্রতিমন্ত্রী জেনারেল ভি কে সিং নিজে দক্ষিণ সুদানের রাজধানী জুবা-তে গিয়ে ভারতীয় বায়ুসেনার সি-১৭ গ্লোবমাস্টার বিমানে করে ভারতীয়দের নিরাপদে নিয়ে আসেন।",
+        special: "💡 'সঙ্কট মোচন' শব্দের অর্থ হলো 'সংকট দূরীকরণ'।"
+    },
+    {
+        q: "২০২১ সালে আফগানিস্তানের ক্ষমতা চরমপন্থী গোষ্ঠী 'তালিবান'-এর হাতে চলে যাওয়ার পর রাজধানী কাবুল থেকে ভারতীয় নাগরিক এবং হিন্দু ও শিখ সংখ্যালঘুদের নিরাপদে উদ্ধার করার বায়ুসেনা অভিযানের নাম কী?",
+        opts: ["অপারেশন দেবী শক্তি (Operation Devi Shakti)", "অপারেশন গঙ্গা", "অপারেশন দোস্ত", "অপারেশন সঙ্কোচন"],
+        ans: 0,
+        tag: "GK - দেবী শক্তি",
+        exp: "চরম প্রতিকূল ও গোলযোগপূর্ণ কাবুল বিমানবন্দর থেকে শত শত ভারতীয় নাগরিক ও দুর্দশাগ্রস্ত আফগান শিখ-হিন্দুদের বিমানে করে নয়া দিল্লিতে ফিরিয়ে আনার এই মানবিক মিশনটি পরিচালনা করেছিল ভারত সরকার।",
+        special: "💡 'দেবী শক্তি' নামটি দেবী দুর্গার শক্তির প্রতীক।"
+    },
+    {
+        q: "২০১৭ সালে মায়ানমার থেকে প্রাণভয়ে পালিয়ে বাংলাদেশে আশ্রয় নেওয়া লক্ষ লক্ষ রোহিঙ্গা মুসলিম শরণার্থীদের সহায়তায় ভারত থেকে বিশাল পরিমাণ আন্তর্জাতিক ত্রাণসামগ্রী পাঠানোর কার্যক্রমের নাম কী ছিল?",
+        opts: ["অপারেশন ইনসানিয়ত (Operation Insaniyat)", "অপারেশন মৈত্রী", "অপারেশন সহমর্মিতা", "অপারেশন মদদ"],
+        ans: 0,
+        tag: "GK - ইনসানিয়ত",
+        exp: "মানবিকতার খাতিরে বাংলাদেশ সরকারের পাশে দাঁড়িয়ে ভারতীয় বায়ুসেনা বিমানে করে রোহিঙ্গাদের জন্য চাল, ডাল, চিনি, তেল ও শুকনো খাবার সরবরাহ করে।",
+        special: "💡 'ইনসানিয়ত' শব্দের অর্থ হলো 'মানবতা'।"
+    },
+    {
+        q: "প্রাচীন ভারতীয় সমরকৌশল ও চাণক্যের নীতিকে আধুনিক যুদ্ধ প্রকৌশল ও সামরিক সিদ্ধান্তের সাথে একীভূত করার উদ্দেশ্যে ভারতীয় সেনাবাহিনী সম্প্রতি ২০২৪ সালে কোন ঐতিহাসিক প্রকল্প চালু করেছে?",
+        opts: ["প্রজেক্ট উদ্ধব (Project Udbhav)", "প্রজেক্ট চাণক্য", "প্রজেক্ট শিবাজী", "প্রজেক্ট বীর"],
+        ans: 0,
+        tag: "GK - প্রজেক্ট উদ্ধব",
+        exp: "ভারতের অত্যন্ত প্রাচীন যুদ্ধশাস্ত্র যেমন অর্থশাস্ত্র, মহাভারত ও পঞ্চতন্ত্রের সুবর্ণ নীতিগুলোকে আধুনিক কমান্ড স্ট্রাকচারে অন্তর্ভুক্ত করার জন্য ভারতীয় সেনা এই চমৎকার প্রজেক্টটি চালু করেছে।",
+        special: "💡 প্রজেক্ট উদ্ধব ২০২৩ সালে চালু হয়েছিল।"
+    },
+    {
+        q: "ভারতের জাতীয় নিরাপত্তার অঙ্গ হিসেবে শক্তিশালী সাইবার ডিফেন্স বা ইন্টারনেটের মাধ্যমে সুরক্ষিত ব্যবস্থা গড়ে তোলার লক্ষ্যে ২০২৪ সালে কোন বিশেষ মহড়া আয়োজিত হয়েছিল?",
+        opts: ["এক্সারসাইজ সাইবার সুরক্ষা ২০২৪ (Exercise Cyber Suraksha)", "প্রজেক্ট সাইবার", "কুইক ডিফেন্স", "অপারেশন সাইবার থ্রেট"],
+        ans: 0,
+        tag: "GK - সাইবার সুরক্ষা",
+        exp: "ভারতীয় সশস্ত্র বাহিনীর সাইবার সেলের উদ্যোগে এবং দেশীয় প্রযুক্তিবিদদের অংশগ্রহণে ২০২৪ সালের মে মাসে এই উন্নত স্তরের সাইবার ডিফেন্স ওয়ার গেম ও ড্রিল পরিচালিত হয়।",
+        special: "💡 সাইবার নিরাপত্তা এখন জাতীয় নিরাপত্তার একটি গুরুত্বপূর্ণ অঙ্গ।"
+    },
+    {
+        q: "কর্ণাটকের কারওয়ারে অবস্থিত ভারতীয় নৌবাহিনীর জন্য তৈরি হওয়া এশিয়ার অন্যতম বৃহত্তম সমন্বিত আধুনিক নৌঘাঁটি স্থাপনের মেগা প্রজেক্টটির নাম কী?",
+        opts: ["প্রজেক্ট সীবার্ড (Project Seabird)", "প্রজেক্ট কোস্টগার্ড", "প্রজেক্ট সাবমেরিন", "প্রজেক্ট ব্লু ওয়াটার"],
+        ans: 0,
+        tag: "GK - প্রজেক্ট সীবার্ড",
+        exp: "কর্ণাটকের কারওয়ারে নির্মিত এই বিশাল নৌঘাঁটির নাম রাখা হয়েছে INS কদম্ব বা নেভাল বেস কারওয়ার, যার প্রথম পর্যায়ের রূপায়ণকে প্রজেক্ট সীবার্ড বলা হয়।",
+        special: "💡 প্রজেক্ট সীবার্ড এশিয়ার বৃহত্তম নৌঘাঁটি প্রকল্পগুলির একটি।"
+    },
+    {
+        q: "২০২৪ সালের ফেব্রুয়ারি মাসে ভারত ফ্রান্সের কাছ থেকে কোন বিখ্যাত অত্যাধুনিক পরমাণু সক্ষম সামুদ্রিক ফাইটার জেট কেনার জন্য বড়ো কূটনৈতিক চুক্তি সম্পন্ন করতে চলেছে?",
+        opts: ["রাফায়েল মেরিন (Rafale Marine)", "মিরাজ-২০০০", "সুখোই-৩০", "তেজস মার্ক-১"],
+        ans: 0,
+        tag: "GK - রাফায়েল মেরিন",
+        exp: "ভারতীয় নৌবাহিনীর আইএনএস বিক্রান্ত এয়ারক্রাফট কেরিয়ারের ডেক থেকে যুদ্ধবিমান ওড়ানোর চমৎকার সুবিধার জন্য ২৬টি রাফায়েল মেরিন যুদ্ধবিমান কেনার সিদ্ধান্ত চূড়ান্ত হয়েছে।",
+        special: "💡 রাফায়েল মেরিন হলো রাফায়েল যুদ্ধবিমানের নৌ-সংস্করণ।"
+    },
+    {
+        q: "প্রথম বিশ্বযুদ্ধ চলাকালীন শত্রুপক্ষের ডুবোজাহাজের বা সাবমেরিনের গতিবিধি ও অবস্থান নিখুঁতভাবে জানার জন্য প্রথম কোন ঐতিহাসিক প্রযুক্তির আবিষ্কার করা হয়েছিল?",
+        opts: ["সোনার (SONAR)", "রাডার (RADAR)", "জিপিএস (GPS)", "অপটিক্যাল সেন্সর"],
+        ans: 0,
+        tag: "GK - সোনার",
+        exp: "সমুদ্রের জলের তলায় শব্দের গতি ও প্রতিফলনের ওপর ভিত্তি করে সাবমেরিনের মতো ধাতব বস্তুর অবস্থান ট্র্যাক করতে সোনার বা 'সাউন্ড নেভিগেশন অ্যান্ড রেঞ্জিং' প্রযুক্তির প্রথম সফল প্রয়োগ শুরু হয়।",
+        special: "💡 SONAR-এর পুরো নাম Sound Navigation and Ranging।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 10 * 60; // ১০ মিনিট (১০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

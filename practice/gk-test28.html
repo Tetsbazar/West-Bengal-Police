@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Test 26 - Nicknames of Famous Personalities</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ২০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">GK</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GK TEST 26 — বিখ্যাত ব্যক্তিদের প্রচলিত উপনাম
+// Source: বিভাগ-১ (প্রশ্ন ১ - ২০)
+// প্রশ্ন নম্বর বাদ দেওয়া হয়েছে — শুধু প্রশ্ন
+// ============================================================
+const questions = [
+    {
+        q: "\"সীমান্ত গান্ধী\" (Frontier Gandhi) বা \"বাদশা খান\" নামে ভারতের কোন মহান স্বাধীনতা সংগ্রামী পরিচিত ছিলেন?",
+        opts: ["খান আবদুল গফফর খান", "দাদাভাই নৌরজি", "লাল বাহাদুর শাস্ত্রী", "বাল গঙ্গাধর তিলক"],
+        ans: 0,
+        tag: "GK - সীমান্ত গান্ধী",
+        exp: "অহিংস আন্দোলনের অন্যতম অগ্রদূত খান আবদুল গফফর খানকে উত্তর-পশ্চিম সীমান্ত প্রদেশে তাঁর অসামান্য অবদানের জন্য \"সীমান্ত গান্ধী\" এবং \"বাদশা খান\" বলা হতো। তিনি প্রথম অভারতীয় ব্যক্তিত্ব যিনি ১৯৮৭ সালে ভারতের সর্বোচ্চ বেসামরিক সম্মাননা \"ভারতরত্ন\" লাভ করেছিলেন।",
+        special: "💡 খান আবদুল গফফর খান 'সরহদ গান্ধী' নামেও পরিচিত ছিলেন।"
+    },
+    {
+        q: "ভারতের স্বাধীনতা অর্জনের পর দেশীয় রাজ্যগুলোকে ঐক্যবদ্ধ করার জন্য কাকে \"ভারতের লৌহমানব\" (Iron Man of India) বলা হয়?",
+        opts: ["জওহরলাল নেহরু", "সর্দার বল্লভভাই প্যাটেল", "সুভাষচন্দ্র বসু", "ড. রাজেন্দ্র প্রসাদ"],
+        ans: 1,
+        tag: "GK - লৌহমানব",
+        exp: "ভারতের স্বাধীনতার পর ৫৫০টিরও বেশি দেশীয় রাজ্যকে দৃঢ়তার সাথে ভারতীয় ইউনিয়নের অন্তর্ভুক্ত করার অনন্য ঐতিহাসিক কৃতিত্বের জন্য সর্দার বল্লভভাই প্যাটেলকে \"ভারতের লৌহমানব\" বলা হয়।",
+        special: "💡 সর্দার প্যাটেলকে 'ভারতের বিসমার্ক' নামেও ডাকা হয়।"
+    },
+    {
+        q: "কোন বিখ্যাত ভারতীয় স্বাধীনতা সংগ্রামী ও চরমপন্থী নেতাকে \"লোকমান্য\" (Lokmanya) উপাধিতে ভূষিত করা হয়?",
+        opts: ["লালা লাজপত রায়", "বাল গঙ্গাধর তিলক", "বিপিন চন্দ্র পাল", "গোপালকৃষ্ণ গোখলে"],
+        ans: 1,
+        tag: "GK - লোকমান্য",
+        exp: "বাল গঙ্গাধর তিলককে ভারতের স্বাধীনতা আন্দোলনে সাধারণ মানুষের মধ্যে জাতীয়তাবোধ জাগিয়ে তোলার অনন্য নেতৃত্বের জন্য জনগণ গভীর শ্রদ্ধায় \"লোকমান্য\" (জনগণের দ্বারা সম্মানিত) উপাধিতে ভূষিত করে।",
+        special: "💡 বাল গঙ্গাধর তিলককে 'ভারতের অরাজকতার জনক'ও বলা হয়।"
+    },
+    {
+        q: "বিশ্বের ফুটবল ইতিহাসে কাকে \"ফুটবল সম্রাট\" বা \"ও রেই\" (O Rei) নামে ভূষিত করা হয়েছে?",
+        opts: ["দিয়েগো মারাদোনা", "পেলে", "লিওনেল মেসি", "ক্রিশ্চিয়ানো রোনাল্ডো"],
+        ans: 1,
+        tag: "GK - পেলে",
+        exp: "ব্রাজিলের তিনবারের বিশ্বকাপ জয়ী ফুটবল কিংবদন্তি এডসন আরান্তেস দো নাসিমেন্তো-কে বিশ্বব্যাপী \"ফুটবল সম্রাট\" বা পর্তুগিজ ভাষায় \"ও রেই\" (The King) নামে ডাকা হয়।",
+        special: "💡 পেলে একমাত্র ফুটবলার যিনি তিনটি বিশ্বকাপ জিতেছেন (১৯৫৮, ১৯৬২, ১৯৭০)।"
+    },
+    {
+        q: "ভারতের স্বাধীনতা আন্দোলনের মহান পথপ্রদর্শক ও জাতীয়তাবাদী নেতা দাদাভাই নৌরজি কী নামে পরিচিত ছিলেন?",
+        opts: ["গ্র্যান্ড ওল্ড ম্যান অব ইন্ডিয়া", "ভারতের শান্তিমানব", "মহামান্য", "লোকনায়ক"],
+        ans: 0,
+        tag: "GK - দাদাভাই নৌরজি",
+        exp: "ভারতের ব্রিটিশ শোষণের বিরুদ্ধে প্রথম অর্থনৈতিক বিশ্লেষণ উপস্থাপনকারী বর্ষীয়ান নেতা দাদাভাই নৌরজিকে অত্যন্ত শ্রদ্ধার সাথে \"গ্র্যান্ড ওল্ড ম্যান অব ইন্ডিয়া\" (ভারতের মহান প্রবীণ ব্যক্তি) বলা হয়।",
+        special: "💡 দাদাভাই নৌরজি 'ভারতের জাতীয় কংগ্রেসের পিতা' নামেও পরিচিত।"
+    },
+    {
+        q: "স্বাধীন ভারতের প্রথম প্রধানমন্ত্রী জওহরলাল নেহরুর অত্যন্ত সুপরিচিত ও জনপ্রিয় উপনাম নিচের কোনটি?",
+        opts: ["চাচা বা পণ্ডিতজি", "লোকপ্রিয়", "রাজর্ষি", "দাদামণি"],
+        ans: 0,
+        tag: "GK - নেহরু",
+        exp: "জওহরলাল নেহরু শিশুদের অত্যন্ত ভালোবাসতেন এবং শিশুরা তাঁকে পরম স্নেহে \"চাচা নেহরু\" বলে ডাকত। রাজনৈতিক ও শিক্ষাগত পাণ্ডিত্যের জন্য তিনি \"পণ্ডিতজি\" নামেও পরিচিত ছিলেন।",
+        special: "💡 জওহরলাল নেহরুর জন্মদিন ১৪ নভেম্বর ভারতে 'শিশু দিবস' হিসেবে পালিত হয়।"
+    },
+    {
+        q: "আজাদ হিন্দ ফৌজের সর্বাধিনায়ক নেতাজী সুভাষচন্দ্র বসুকে তাঁর বিখ্যাত কোন উপনামে ডাকা হতো?",
+        opts: ["দ্য স্প্রিংগিং টাইগার (The Springing Tiger)", "ভারতের লৌহমানব", "শের-ই-পাঞ্জাব", "ভারতের চাণক্য"],
+        ans: 0,
+        tag: "GK - নেতাজি",
+        exp: "সুভাষচন্দ্র বসুর অদম্য সাহস, সামরিক দূরদর্শিতা ও স্বাধীনতার আপসহীন সংগ্রামের কারণে আন্তর্জাতিক মহলে তাঁকে \"নেতাজি\" এবং \"দ্য স্প্রিংগিং টাইগার\" বলা হতো।",
+        special: "💡 নেতাজি সুভাষচন্দ্র বসু 'ভারতের স্বাধীনতা সংগ্রামের অগ্নিশিখা' নামেও পরিচিত।"
+    },
+    {
+        q: "ভারতের বিখ্যাত সমাজসেবিকা ও কলকাতা তথা বিশ্বজুড়ে কুষ্ঠ ও আর্তমানুষের ত্রাতা মাদার টেরেসা-কে কী বলা হয়?",
+        opts: ["সেন্ট অব দ্য গাটার্স (Saint of the Gutters)", "লোকমাতা", "ভারতের নাইটিঙ্গেল", "মেইড অব ওরলিয়ানস"],
+        ans: 0,
+        tag: "GK - মাদার টেরেসা",
+        exp: "কলকাতার বস্তি ও নর্দমার পাশে পড়ে থাকা মুমূর্ষু ও অসহায় মানুষদের কোলে তুলে নিয়ে পরম যত্নে সেবা করার জন্য মাদার টেরেসাকে বিশ্বজুড়ে \"Saint of the Gutters\" বা \"নর্দমার সাধু\" বলা হতো।",
+        special: "💡 মাদার টেরেসা ১৯৭৯ সালে নোবেল শান্তি পুরস্কার পেয়েছিলেন।"
+    },
+    {
+        q: "প্রথম ভারতীয় মহিলা হিসেবে ভারতীয় জাতীয় কংগ্রেসের কানপুর অধিবেশনের সভাপতি হওয়া সরোজিনী নাইডুর উপনাম কী ছিল?",
+        opts: ["ভারত কোকিলা (Nightingale of India)", "লেডি উইথ দ্য ল্যাম্প", "স্বর কোকিলা", "মেইড অব ওরলিয়ানস"],
+        ans: 0,
+        tag: "GK - সরোজিনী নাইডু",
+        exp: "সরোজিনী নাইডুর অসাধারণ কাব্য প্রতিভা এবং তাঁর সুললিত কণ্ঠস্বরের জন্য মহাত্মা গান্ধী তাঁকে \"ভারতের নাইটিঙ্গেল\" বা \"ভারত কোকিলা\" উপাধিতে ভূষিত করেছিলেন।",
+        special: "💡 সরোজিনী নাইডু ভারতের প্রথম মহিলা রাজ্যপাল (উত্তরপ্রদেশ) ছিলেন।"
+    },
+    {
+        q: "ভারতের স্বনামধন্য শিক্ষাবিদ স্যার আশুতোষ মুখার্জিকে তাঁর অকুতোভয় চরিত্রের জন্য কোন উপনামে ডাকা হতো?",
+        opts: ["বাংলার বাঘ (Tiger of Bengal)", "বিহার কেশরী", "অন্ধ্র কেশরী", "পাঞ্জাব কেশরী"],
+        ans: 0,
+        tag: "GK - আশুতোষ মুখার্জি",
+        exp: "কলকাতা বিশ্ববিদ্যালয়ের দীর্ঘকালীন উপাচার্য ও কলকাতা হাইকোর্টের প্রধান বিচারপতি স্যার আশুতোষ মুখার্জির তেজোদীপ্ত ও আপসহীন ব্যক্তিত্বের কারণে তাঁকে \"বাংলার বাঘ\" বলা হতো।",
+        special: "💡 স্যার আশুতোষ মুখার্জি কলকাতা বিশ্ববিদ্যালয়ের প্রথম ভারতীয় উপাচার্য ছিলেন।"
+    },
+    {
+        q: "ভারতীয় স্বাধীনতা সংগ্রামের অন্যতম জনপ্রিয় বিপ্লবী দেশনেতা চিত্তরঞ্জন দাশ-কে কোন বিখ্যাত উপনামে ডাকা হতো?",
+        opts: ["দেশবন্ধু (Friend of the Nation)", "দীনবন্ধু", "বঙ্গবন্ধু", "লোকনায়ক"],
+        ans: 0,
+        tag: "GK - দেশবন্ধু",
+        exp: "ব্যারিস্টার চিত্তরঞ্জন দাশ নিজের সমস্ত সম্পত্তি ও বিলাসবহুল জীবন উৎসর্গ করে দেশের স্বাধীনতা ও দরিদ্র মানুষের সেবায় বিলিয়ে দিয়েছিলেন বলে দেশের মানুষ তাঁকে ভালোবেসে \"দেশবন্ধু\" উপাধি দেয়।",
+        special: "💡 দেশবন্ধু চিত্তরঞ্জন দাশ 'দেশবন্ধু' নামে ইতিহাসে immortal হয়ে আছেন।"
+    },
+    {
+        q: "দীনবন্ধু বা \"ফ্রেন্ড অব দ্য পুওর\" (Friend of the Poor) নামে কোন সমাজহিতৈষী ইংরেজ ভারতপ্রেমী পরিচিত ছিলেন?",
+        opts: ["সি এফ অ্যান্ড্রুজ (C.F. Andrews)", "লর্ড লিটন", "অ্যালান অক্টাভিয়ান হিউম", "উইলিয়াম জোন্স"],
+        ans: 0,
+        tag: "GK - দীনবন্ধু",
+        exp: "ইংরেজ মিশনারি ও সমাজ সংস্কারক চার্লস ফ্রিয়ার অ্যান্ড্রুজ ভারতের অবহেলিত শ্রমিক ও দরিদ্র জনগোষ্ঠীর পাশে দাঁড়িয়েছিলেন বলে মহাত্মা গান্ধী ও দেশবাসী তাঁকে \"দীনবন্ধু\" নামে অভিহিত করেন।",
+        special: "💡 সি এফ অ্যান্ড্রুজ 'দীনবন্ধু' নামে পরিচিত ছিলেন।"
+    },
+    {
+        q: "ভারতের প্রথম নির্বাচিত ও দীর্ঘতম মেয়াদের রাষ্ট্রপতি ড. রাজেন্দ্র প্রসাদকে মহাত্মা গান্ধী কোন নামে ডেকেছিলেন?",
+        opts: ["দেশরত্ন বা অজাতশত্রু", "মহামান্য", "রাজর্ষি", "লোকপ্রিয়"],
+        ans: 0,
+        tag: "GK - রাজেন্দ্র প্রসাদ",
+        exp: "ড. রাজেন্দ্র প্রসাদের মৃদুভাষী, নিরহংকারী স্বভাব এবং যার কোনো শত্রু নেই এমন এক অসাধারণ চরিত্রের জন্য তাঁকে \"দেশরত্ন\" বা \"অজাতশত্রু\" উপাধি দেওয়া হয়েছিল।",
+        special: "💡 ড. রাজেন্দ্র প্রসাদ ভারতের প্রথম রাষ্ট্রপতি এবং ১২ বছর দায়িত্ব পালন করেছিলেন।"
+    },
+    {
+        q: "ভারতীয় হকি ইতিহাসের কিংবদন্তি খেলোয়াড় মেজর ধ্যানচাঁদকে কোন বিখ্যাত উপনামে ডাকা হয়?",
+        opts: ["হকির জাদুকর বা উইজার্ড (Wizard of Hockey)", "হরিয়ানা হ্যারিকেন", "লিটল মাস্টার", "টারবুনেটর"],
+        ans: 0,
+        tag: "GK - ধ্যানচাঁদ",
+        exp: "হকির মাঠে ধ্যানচাঁদের অবিশ্বাস্য স্টিক-ওয়ার্ক এবং প্রতিপক্ষের গোলপোস্টে বল প্রবেশ করানোর জাদুকরী ক্ষমতার জন্য তাঁকে বিশ্বজুড়ে \"হকির জাদুকর\" বলা হয়।",
+        special: "💡 ধ্যানচাঁদের জন্মদিন ২৯ আগস্ট ভারতে 'জাতীয় ক্রীড়া দিবস' হিসেবে পালিত হয়।"
+    },
+    {
+        q: "ভারতীয় অ্যাথলেটিক্সের ট্র্যাকে অসাধারণ গতির অধিকারী পিটি ঊষা কোন নামে দেশজুড়ে সমাদৃত?",
+        opts: ["উড়ান পরী বা সোনার মেয়ে (Golden Girl)", "ধিং এক্সপ্রেস", "সুপার মেরি", "মিসাইল ওম্যান"],
+        ans: 0,
+        tag: "GK - পিটি ঊষা",
+        exp: "অলিম্পিক ট্র্যাকের ফাইনালে ওঠা পিটি ঊষাকে তাঁর ঝোড়ো গতি এবং অসামান্য পদকজয়ের রেকর্ডগুলোর জন্য \"উড়ান পরী\" বা \"সোনার মেয়ে\" নামে ডাকা হয়।",
+        special: "💡 পিটি ঊষাকে 'পায়েল এক্সপ্রেস' নামেও ডাকা হয়।"
+    },
+    {
+        q: "সমুদ্রগুপ্তের অসামান্য সামরিক দক্ষতা ও রাজ্য বিস্তারের কারণে তাঁকে কে \"ভারতীয় নেপোলিয়ন\" (Indian Napoleon) বলে অভিহিত করেছিলেন?",
+        opts: ["ঐতিহাসিক ভি এ স্মিথ", "কুতুবউদ্দিন আইবক", "হিউয়েন সাং", "মেগাস্থিনিস"],
+        ans: 0,
+        tag: "GK - সমুদ্রগুপ্ত",
+        exp: "গুপ্ত বংশের সর্বশ্রেষ্ঠ সম্রাট সমুদ্রগুপ্ত তাঁর সমগ্র জীবনে কোনো যুদ্ধে পরাজিত হননি। তাঁর এই অপরাজিত বীরত্বের কারণে ঐতিহাসিক ভি এ স্মিথ তাঁকে \"ভারতের নেপোলিয়ন\" বলে অভিহিত করেন।",
+        special: "💡 সমুদ্রগুপ্তকে 'ভারতের নেপোলিয়ন' বলা হয়।"
+    },
+    {
+        q: "প্রাচীন ভারতের কোন মহান রাজনৈতিক ও অর্থনৈতিক দূরদর্শী পণ্ডিতকে \"ভারতের মেকিয়াভেলি\" বলা হয়?",
+        opts: ["চাণক্য বা কৌটিল্য", "কালিদাস", "বরাহমিহির", "আর্যভট্ট"],
+        ans: 0,
+        tag: "GK - চাণক্য",
+        exp: "প্রাচীন ভারতের মৌর্য সাম্রাজ্যের প্রতিষ্ঠাতা চন্দ্রগুপ্ত মৌর্যের প্রধান উপদেষ্টা চাণক্যের প্রখর রাজনৈতিক চতুরতা ও নীতিশাস্ত্রের জন্য তাঁকে ইতালির রাষ্ট্রনীতিবিদ নিকোলো মেকিয়াভেলির সাথে তুলনা করে \"ভারতের মেকিয়াভেলি\" বলা হয়।",
+        special: "💡 চাণক্য 'কৌটিল্য' নামেও পরিচিত এবং তিনি 'অর্থশাস্ত্র' গ্রন্থের রচয়িতা।"
+    },
+    {
+        q: "ভারতের প্রথম বাঙালি আন্তর্জাতিক মানের ফুটবলার যিনি পদ্মশ্রী পুরস্কার লাভ করেন, সেই গোষ্ঠ পাল কোন উপনামে পরিচিত ছিলেন?",
+        opts: ["চাইনিজ ওয়াল বা চিনের প্রাচীর (Chinese Wall)", "রাজপুত্র", "কালো চিতা", "ক্যাঙ্গারু"],
+        ans: 0,
+        tag: "GK - গোষ্ঠ পাল",
+        exp: "ডিফেন্ডার হিসেবে গোষ্ঠ পালের শারীরিক শক্তি এবং বিপক্ষ দলের ফরোয়ার্ডদের রুখে দেওয়ার অদম্য দৃঢ়তার জন্য তাঁকে ফুটবলের \"চাইনিজ ওয়াল\" বা \"চিনের প্রাচীর\" বলা হতো।",
+        special: "💡 গোষ্ঠ পাল ভারতের প্রথম ফুটবলার যিনি পদ্মশ্রী পেয়েছিলেন।"
+    },
+    {
+        q: "কাশ্মীরের কোন উদার ও পরমতসহিষ্ণু সুলতানকে তাঁর মহান কার্যাবলির জন্য \"কাশ্মীরের আকবর\" বলা হয়?",
+        opts: ["জয়নুল আবেদিন", "শাহ মীর", "সিকান্দার শাহ", "হোসেন শাহ"],
+        ans: 0,
+        tag: "GK - জয়নুল আবেদিন",
+        exp: "কাশ্মীরের সুলতান জয়নুল আবেদিন হিন্দুদের ওপর থেকে জিজিয়া কর প্রত্যাহার করেন, মন্দির পুনর্নির্মাণ করেন এবং শিক্ষা ও সাহিত্যের এক অভূতপূর্ব বিকাশ ঘটান। তাই তাঁকে \"কাশ্মীরের আকবর\" বলা হয়।",
+        special: "💡 জয়নুল আবেদিন 'কাশ্মীরের আকবর' নামে পরিচিত।"
+    },
+    {
+        q: "ভারতের স্বাধীনতা আন্দোলনের অন্যতম সমাজতান্ত্রিক নেতা জয়প্রকাশ নারায়ণ-কে ভালোবেসে কী নামে ডাকা হতো?",
+        opts: ["লোকনায়ক বা জেপি (Loknayak)", "জন নায়ক", "লোকমান্য", "দেশবন্ধু"],
+        ans: 0,
+        tag: "GK - জেপি",
+        exp: "১৯৭০-এর দশকে জরুরি অবস্থা বিরোধী সর্বাত্মক আন্দোলনের প্রধান নেতা জয়প্রকাশ নারায়ণকে দেশের সাধারণ মানুষের অকৃত্রিম ভালোবাসার জন্য \"লোকনায়ক\" (জনগণের নেতা) উপাধি দেওয়া হয়।",
+        special: "💡 জয়প্রকাশ নারায়ণ 'জেপি' নামে পরিচিত ছিলেন।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (২০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

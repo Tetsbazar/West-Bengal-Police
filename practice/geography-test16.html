@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geography Test 16 - Rivers of North India</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১৫</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">Geography</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GEOGRAPHY TEST 16 — ভারতের নদনদী (উত্তর ভারত)
+// Source: প্রশ্ন ১ - ১৫
+// প্রশ্ন নম্বর বাদ — শুধু প্রশ্ন
+// ইংরেজি বন্ধনী বাদ — শুধু বাংলা
+// ============================================================
+const questions = [
+    {
+        q: "ভারতের জাতীয় নদী গঙ্গার মোট দৈর্ঘ্য কত এবং এটি উত্তরাখণ্ডের কোন হিমবাহ থেকে উৎপত্তি লাভ করেছে?",
+        opts: ["২৯০০ কিমি; চেমায়ুং দুং হিমবাহ", "২৫২৫ কিমি; গঙ্গোত্রী হিমবাহের গোমুখ তুষারগুহা", "২৮৮০ কিমি; সিঙ্গ খাবাব হিমবাহ", "১৩৭৬ কিমি; যমুনোত্রী হিমবাহ"],
+        ans: 1,
+        tag: "Geography - গঙ্গা",
+        exp: "গঙ্গা ভারতের দীর্ঘতম ও জাতীয় নদী, যার মোট দৈর্ঘ্য ২৫২৫ কিমি। এটি উত্তরাখণ্ডের গঙ্গোত্রী হিমবাহের গোমুখ তুষারগুহা থেকে ভাগীরথী নদী নামে উৎপন্ন হয়েছে।",
+        special: "💡 গঙ্গোত্রী থেকে উৎপন্ন হওয়া ভাগীরথী নদী এবং অলকানন্দা নদী দেবপ্রয়াগে মিলিত হওয়ার পর থেকেই নদীটি 'গঙ্গা' নামে পরিচিত হয়েছে।"
+    },
+    {
+        q: "গঙ্গা নদীর ডানদিকের প্রধান দুটি উপনদী কোনটি কোনটি?",
+        opts: ["গোমতী ও ঘর্ঘরা", "যমুনা ও শোন", "গণ্ডক ও কোশি", "রামগঙ্গা ও তিস্তা"],
+        ans: 1,
+        tag: "Geography - গঙ্গার উপনদী",
+        exp: "গঙ্গা নদীর ডানদিকের বা ডানতীরের প্রধান দুটি উপনদী হলো যমুনা ও শোন।",
+        special: "💡 যমুনা নদীটি গঙ্গার দীর্ঘতম উপনদী এবং শোন নদীটি অমরকণ্টক মালভূমি থেকে উৎপন্ন হয়ে উত্তর দিকে প্রবাহিত হয়ে পাটনার কাছে গঙ্গায় পতিত হয়েছে।"
+    },
+    {
+        q: "নিচের কোন নদীগুলি গঙ্গার বামতীরের প্রধান উপনদী হিসেবে পরিচিত?",
+        opts: ["চম্বল, বেতোয়া ও কেন", "গোমতী, ঘর্ঘরা, রামগঙ্গা, গণ্ডক ও কোশি", "শিয়ক, গিলগিট ও শতদ্রু", "সুবর্ণরেখা ও দামোদর"],
+        ans: 1,
+        tag: "Geography - গঙ্গার বামতীর",
+        exp: "গঙ্গার বামদিকের বা বামতীরের প্রধান উপনদীগুলি হলো গোমতী, ঘর্ঘরা, রামগঙ্গা, গণ্ডক ও কোশি।",
+        special: "💡 এদের মধ্যে কোশি নদীটি তার প্রলয়ংকরী বন্যার জন্য \"বিহারের দুঃখ\" নামে পরিচিত।"
+    },
+    {
+        q: "পশ্চিমবঙ্গের মুর্শিদাবাদ জেলার ধুলিয়ানের কাছে গঙ্গা নদীটি দুটি শাখায় বিভক্ত হয়েছে। এর প্রধান শাখাটি বাংলাদেশে কী নামে প্রবেশ করেছে?",
+        opts: ["ভাগীরথী নদী", "পদ্মা নদী", "হুগলি নদী", "যমুনা নদী"],
+        ans: 1,
+        tag: "Geography - পদ্মা",
+        exp: "রাজমহল পাহাড়ের কাছে গঙ্গা পশ্চিমবঙ্গে প্রবেশ করে মুর্শিদাবাদ জেলার ধুলিয়ানের কাছে দুটি শাখায় বিভক্ত হয়েছে। এর প্রধান শাখাটি 'পদ্মা' নাম নিয়ে বাংলাদেশে প্রবেশ করেছে এবং পরে মেঘনার সাথে মিলিত হয়ে বঙ্গোপসাগরে পড়েছে।",
+        special: "💡 গঙ্গার দ্বিতীয় শাখাটি আমাদের পশ্চিমবঙ্গে ভাগীরথী ও হুগলি নদী নামে প্রবাহিত হয়ে বঙ্গোপসাগরে পড়েছে এবং এটিই হলদিয়া ও কলকাতা বন্দরের প্রধান জলপথ।"
+    },
+    {
+        q: "তিব্বতের মানস সরোবরের কাছে অবস্থিত কোন হিমবাহ থেকে ব্রহ্মপুত্র নদ উৎপন্ন হয়েছে এবং তিব্বতে এটি কী নামে পরিচিত?",
+        opts: ["গঙ্গোত্রী; ভাগীরথী", "চেমায়ুং দুং হিমবাহ; সাংপো", "সিঙ্গ খাবাব; ডিহং", "যমুনোত্রী; যমুনা"],
+        ans: 1,
+        tag: "Geography - ব্রহ্মপুত্র",
+        exp: "ব্রহ্মপুত্র নদ তিব্বতের চেমায়ুং দুং হিমবাহ থেকে উৎপন্ন হয়েছে এবং সেখানে এটি 'সাংপো' নামে পরিচিত।",
+        special: "💡 তিব্বতি ভাষায় 'সাংপো' শব্দটির আক্ষরিক অর্থ হলো 'পবিত্রকারী' বা 'The Purifier'। এই নদীর মোট দৈর্ঘ্য ২৯০০ কিমি, যার মধ্যে ভারতে ৯১৬ কিমি প্রবাহিত হয়েছে।"
+    },
+    {
+        q: "তিব্বত মালভূমির ওপর দিয়ে প্রবাহিত হওয়ার পর ব্রহ্মপুত্র নদ কোন পর্বত শৃঙ্গের কাছে ইউ-টার্ন নিয়ে ভারতে প্রবেশ করেছে?",
+        opts: ["গডউইন অস্টিন; সিন্ধু নামে", "নামচাবারওয়া শৃঙ্গ; ডিহং নামে", "কাঞ্চনজঙ্ঘা; লোহিত নামে", "সান্দাকফু; তিস্তা নামে"],
+        ans: 1,
+        tag: "Geography - ডিহং",
+        exp: "ব্রহ্মপুত্র নদ প্রথমে তিব্বতের ওপর দিয়ে প্রবাহিত হওয়ার পর নামচাবারওয়া পর্বত শৃঙ্গের কাছে তীব্র বাঁক নিয়ে 'ডিহং' নামে ভারতে (অরুণাচল প্রদেশে) প্রবেশ করেছে।",
+        special: "💡 অরুণাচল প্রদেশে ডিহং নামে প্রবেশের পর অসম উপত্যকায় দিবাং ও লোহিত নদীর সাথে মিলিত হয়ে এটি আনুষ্ঠানিকভাবে 'ব্রহ্মপুত্র' নাম ধারণ করে।"
+    },
+    {
+        q: "ব্রহ্মপুত্র নদের বুকে গঠিত 'মাজুলি' দ্বীপটি কোন ধরনের ভৌগোলিক বৈশিষ্ট্য এবং এর বিশেষ গুরুত্ব কী?",
+        opts: ["ভারতের বৃহত্তম কৃত্রিম দ্বীপ", "ব্রহ্মপুত্র নদে গঠিত মাজুলি দ্বীপটি পৃথিবীর বৃহত্তম নদী-দ্বীপ", "ভারতের একমাত্র প্রবাল দ্বীপ", "একটি সক্রিয় আগ্নেয় দ্বীপ"],
+        ans: 1,
+        tag: "Geography - মাজুলি",
+        exp: "অসমের জোরাহাটের কাছে ব্রহ্মপুত্র নদে গঠিত মাজুলি দ্বীপটি হলো পৃথিবীর বৃহত্তম নদী-দ্বীপ।",
+        special: "💡 বাংলাদেশে পদ্মার সঙ্গে মিলিত হওয়ার আগে ব্রহ্মপুত্র নদ অসম উপত্যকায় বিনুনির মতো এঁকেবেঁকে প্রবাহিত হয়েছে বলে নদীখাতে অনেক বালুচর ও মাজুলির মতো নদী-দ্বীপের সৃষ্টি হয়েছে।"
+    },
+    {
+        q: "নিচের কোন নদীগুলি ব্রহ্মপুত্র নদের ডানতীরের প্রধান উপনদী?",
+        opts: ["ধানসিরি, কোপিলি ও বুড়ি ডিহিং", "সুবনসিরি, কামেং, মানস, সংকোশ ও তিস্তা", "চম্বল, বেতোয়া ও কেন", "শোন, পুনপুন ও ফল্গু"],
+        ans: 1,
+        tag: "Geography - ব্রহ্মপুত্রের উপনদী",
+        exp: "ব্রহ্মপুত্রের ডানতীরের বা ডানদিকের প্রধান উপনদীগুলি হলো সুবনসিরি, কামেং, মানস, সংকোশ এবং তিস্তা।",
+        special: "💡 তিস্তা নদীটি সিকিমের জেমু হিমবাহ থেকে উৎপন্ন হয়েছে এবং উত্তরবঙ্গের প্রধান নদী হিসেবে পরিচিত।"
+    },
+    {
+        q: "তিব্বতের মানস সরোবর হ্রদের কাছে অবস্থিত কোন হিমবাহ থেকে সিন্ধু নদের উৎপত্তি হয়েছে এবং এর মোট দৈর্ঘ্য কত?",
+        opts: ["চেমায়ুং দুং; ২৯০০ কিমি", "সিঙ্গ খাবাব হিমবাহ; ২৮৮০ কিমি", "যমুনোত্রী; ১৩৭৬ কিমি", "গঙ্গোত্রী; ২৫২৫ কিমি"],
+        ans: 1,
+        tag: "Geography - সিন্ধু",
+        exp: "সিন্ধু নদ তিব্বতের মানস সরোবরের কাছে অবস্থিত 'সিঙ্গ খাবাব' হিমবাহ থেকে উৎপন্ন হয়েছে এবং এর মোট দৈর্ঘ্য ২৮৮০ কিমি।",
+        special: "💡 সিন্ধু নদ ভারতের লাদাখ অঞ্চলের মধ্য দিয়ে প্রবাহিত হয়ে পাকিস্তানে প্রবেশ করেছে এবং করাচির দক্ষিণ-পূর্ব দিক দিয়ে আরব সাগরে পতিত হয়েছে।"
+    },
+    {
+        q: "সিন্ধু নদের বামতীরের প্রধান পাঁচটি উপনদী (যা পাঞ্জাব ও হিমাচল প্রদেশে প্রবাহিত) কোনগুলি?",
+        opts: ["শিয়ক, গিলগিট ও শিগার", "শতদ্রু, বিপাশা, ইরাবতী, চন্দ্রভাগা ও বিতস্তা বা ঝিলাম", "সুবনসিরি, কামেং ও মানস", "চম্বল, বেতোয়া ও কেন"],
+        ans: 1,
+        tag: "Geography - পাঞ্জাবের নদী",
+        exp: "সিন্ধু নদের বামতীরের প্রধান পাঁচটি উপনদী হলো শতদ্রু, বিপাশা, ইরাবতী, চন্দ্রভাগা এবং বিতস্তা বা ঝিলাম।",
+        special: "💡 এই পাঁচটি নদীর পলিগঠিত অববাহিকার উপস্থিতির কারণেই ভারতের 'পাঞ্জাব' রাজ্যের নামকরণ হয়েছে (পঞ্চ + আব = পাঁচ নদীর দেশ)।"
+    },
+    {
+        q: "সিন্ধু নদের ডানতীরের প্রধান উপনদীগুলি কোনগুলি, যা মূলত লাদাখ ও পাহাড়ি অঞ্চলে অবস্থিত?",
+        opts: ["শতদ্রু ও বিপাশা", "শিয়ক, গিলগিট ও শিগার", "গোমতী ও রামগঙ্গা", "মঞ্জিরা ও প্রাণহিতা"],
+        ans: 1,
+        tag: "Geography - সিন্ধুর উপনদী",
+        exp: "সিন্ধু নদের ডানতীরের বা ডানদিকের প্রধান উপনদীগুলি হলো শিয়ক, গিলগিট এবং শিগার।",
+        special: "💡 শিয়ক নদীকে তার অত্যন্ত তীব্র ও ভয়ংকর স্রোতের কারণে স্থানীয়ভাবে \"মৃত্যুর নদী\" বলা হয়ে থাকে।"
+    },
+    {
+        q: "যমুনোত্রী হিমবাহ থেকে উৎপন্ন হওয়া যমুনা নদীর দৈর্ঘ্য কত এবং এর ডানতীরের প্রধান উপনদীগুলি কী কী?",
+        opts: ["২৫২৫ কিমি; গোমতী ও ঘর্ঘরা", "১৩৭৬ কিমি; চম্বল, বেতোয়া, কেন ও সিন্ধ", "৮০০ কিমি; ভবানী ও অমরাবতী", "৭২৪ কিমি; পূর্ণা ও গিরনা"],
+        ans: 1,
+        tag: "Geography - যমুনা",
+        exp: "যমুনোত্রী হিমবাহ থেকে উৎপন্ন যমুনা নদীর দৈর্ঘ্য ১৩৭৬ কিমি এবং এর ডানতীরের প্রধান উপনদীগুলি হলো চম্বল, বেতোয়া, কেন ও সিন্ধ।",
+        special: "💡 যমুনা নদীটি উত্তরপ্রদেশের প্রয়াগরাজে গিয়ে গঙ্গা ও পৌরাণিক সরস্বতী নদীর সাথে মিলিত হয়েছে, যা 'ত্রিবেনী সঙ্গম' নামে পরিচিত।"
+    },
+    {
+        q: "ভারতের কোন পবিত্র নদীর তীরে সবচেয়ে বেশি সংখ্যক মেট্রো শহর এবং তীর্থ শহর অবস্থিত?",
+        opts: ["যমুনা নদী", "গঙ্গা নদী", "ব্রহ্মপুত্র নদ", "গোদাবরী নদী"],
+        ans: 1,
+        tag: "Geography - গঙ্গার তীর",
+        exp: "গঙ্গা নদীর তীরে ভারতের সবচেয়ে বেশি সংখ্যক (১৬টি) মেট্রো শহর এবং সর্বাধিক তীর্থ শহর অবস্থিত।",
+        special: "💡 গঙ্গার তীরে অবস্থিত প্রধান তীর্থ শহরগুলির মধ্যে হরিদ্বার, বারাণসী, প্রয়াগরাজ, ঋষিকেশ ও বদ্রীনাথ অন্যতম।"
+    },
+    {
+        q: "গঙ্গা নদীর দূষণ কমানোর জন্য কত সালে তৎকালীন প্রধানমন্ত্রী রাজীব গান্ধী বিখ্যাত \"গঙ্গা অ্যাকশন প্ল্যান\" এর সূচনা করেছিলেন?",
+        opts: ["১৯৭২ সালে", "১৯৮৬ সালে", "১৯৯২ সালে", "২০০৫ সালে"],
+        ans: 1,
+        tag: "Geography - গঙ্গা অ্যাকশন প্ল্যান",
+        exp: "গঙ্গার জলের ক্রমবর্ধমান দূষণ দূরীকরণের লক্ষ্যে ১৯৮৬ সালে তৎকালীন প্রধানমন্ত্রী রাজীব গান্ধী 'গঙ্গা অ্যাকশন প্ল্যান' বা GAP-এর সূচনা করেন।",
+        special: "💡 পরবর্তীতে ২০১৪ সালে ভারতের এই জাতীয় নদীটির সম্পূর্ণ পরিচ্ছন্নতা ও পুনরুজ্জীবনের জন্য ভারত সরকার \"নমামী গঙ্গে\" নামক একটি বৃহৎ ফ্ল্যাগশিপ প্রোগ্রাম চালু করেছে।"
+    },
+    {
+        q: "কোন গিরিপথটি ভারতের শ্রীনগর ও লেহ শহরকে নদী উপত্যকার মধ্য দিয়ে যুক্ত করেছে?",
+        opts: ["বানিহাল গিরিপথ", "জোজি লা", "নাথুলা গিরিপথ", "রোটাং গিরিপথ"],
+        ans: 1,
+        tag: "Geography - জোজি লা",
+        exp: "জম্মু ও কাশ্মীরে অবস্থিত জোজি লা গিরিপথটি শ্রীনগর ও লেহ-কে সড়কপথে সংযুক্ত করেছে।",
+        special: "💡 শীতকালে অতিরিক্ত তুষারপাতের কারণে এই অত্যন্ত গুরুত্বপূর্ণ গিরিপথটি বছরের প্রায় অর্ধেক সময় বন্ধ থাকে।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 15 * 60; // ১৫ মিনিট (১৫ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

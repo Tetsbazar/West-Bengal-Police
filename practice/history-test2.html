@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History Test 2 - মেহেরগড় ও সিন্ধু সভ্যতা</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+/* Result Wrap - Matching the image exactly */
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 4rem; margin-bottom: 0.5rem; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem; }
+.result-percent { font-size: 5rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; line-height: 1; margin: 0.5rem 0; }
+.result-grade { font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1.2rem 0.7rem; border: 2px solid var(--border-color); }
+.rb-num { font-size: 2.5rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.marks-bar { background: var(--bg-main); border-radius: 12px; padding: 1.2rem 0.7rem; border: 2px solid var(--border-color); max-width: 180px; margin: 0 auto 1.5rem auto; }
+.marks-num { font-size: 2.5rem; font-weight: 900; font-family: 'Syne'; color: var(--primary); }
+.marks-label { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.demo-note { background: var(--bg-main); border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; border-left: 4px solid var(--accent); }
+.demo-note p { font-family: 'Tiro Bangla', serif; color: var(--text-meta); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 14px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-retry:hover { background: #138496; }
+.btn-home { background: #6c757d; color: white; }
+.btn-home:hover { background: #5a6268; }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3.5rem; }
+.result-heading { font-size: 1.5rem; }
+.result-percent { font-size: 4rem; }
+.result-grade { font-size: 1rem; }
+.rb-num, .marks-num { font-size: 2rem; }
+.result-actions button { padding: 12px; font-size: 0.95rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+.result-percent { font-size: 3.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১৬</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: </span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">History</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">💪</div>
+        <div class="result-heading">আপনার ফলাফল</div>
+        <div class="result-percent" id="finalPercent">0%</div>
+        <div class="result-grade" id="finalGrade">গ্রেড: চেষ্টা চালিয়ে যাও!</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল</div>
+            </div>
+        </div>
+        <div class="marks-bar">
+            <div class="marks-num" id="finalMarks">0</div>
+            <div class="marks-label">প্রাপ্ত নম্বর</div>
+        </div>
+        <div class="demo-note">
+            <p>📌 এটি একটি ফ্রি ডেমো টেস্ট। আপনি যতবার খুশি চেষ্টা করতে পারেন।</p>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">📖 উত্তর ও ব্যাখ্যা দেখুন</button>
+            <button class="btn-retry" onclick="retryTest()">🔄 আবার চেষ্টা করো</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Demo Hub-এ ফিরুন</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// HISTORY TEST 2 — মেহেরগড় ও সিন্ধু সভ্যতা
+// Topic: মেহেরগড় ও সিন্ধু সভ্যতা (টপিক - ২)
+// ============================================================
+const questions = [
+    {
+        q: "মেহেরগড় সভ্যতা মূলত কোন সময়ের ঐতিহাসিক যুগকে নির্দেশ করে?",
+        opts: ["১০০০ - ৫০০ খ্রি. পূ.", "৪০০০ - ১০০০ খ্রি. পূ.", "৭০০০ - ২০০০ খ্রি. পূ.", "৯০০০ - ৫০০ খ্রি. পূ."],
+        ans: 2,
+        tag: "মেহেরগড় সময়কাল",
+        exp: "মেহেরগড় সভ্যতা আনুমানিক ৭০০০ খ্রি. পূ. থেকে ২০০ খ্রি. পূ. পর্যন্ত স্থায়ী ছিল। এটি ভারতীয় উপমহাদেশের অন্যতম প্রাচীন কৃষিভিত্তিক সভ্যতা।",
+        special: "💡 মেহেরগড় সভ্যতা আবিষ্কারের ফলে প্রমাণিত হয় যে সিন্ধু সভ্যতার অনেক পূর্বেই এই অঞ্চলে একটি উন্নত গ্রামীণ কৃষি সভ্যতার বিকাশ ঘটেছিল।"
+    },
+    {
+        q: "১৯৪ সালে মেহেরগড় সভ্যতা আবিষ্কারের সাথে কোন ফরাসি প্রত্নতাত্ত্বিকের নাম জড়িত?",
+        opts: ["রাখালদাস বন্দ্যোপাধ্যায়", "জাঁ ফ্রাঁসোয়া জারিজ", "দয়ারাম সাহানি", "স্যার জন মার্শাল"],
+        ans: 1,
+        tag: "মেহেরগড় আবিষ্কার",
+        exp: "১৯৭৪ সালে ফরাসি প্রত্নতাত্ত্বিক জাঁ ফ্রাঁসোয়া জারিজ এবং তাঁর সহযোগী রিচার্ড মিডো বালুচিস্তানে এই সভ্যতার সন্ধান পান।",
+        special: " জাঁ ফ্রাঁসোয়া জারিজের এই যুগান্তকারী আবিষ্কার ভারতের ইতিহাসের প্রাচীনত্বকে আরও কয়েক হাজার বছর পিছিয়ে দেয়।"
+    },
+    {
+        q: "মেহেরগড় সভ্যতার ভৌগোলিক বিস্তার মূলত কোন বিখ্যাত গিরিপথ ও নদীর অববাহিকায় ছিল?",
+        opts: ["খাইবার গিরিপথ ও গঙ্গা নদী", "নাথুলা গিরিপথ ও যমুনা নদী", "বোলান গিরিপথ ও সিন্ধু নদের পশ্চিম অংশ", "জোজিলা গিরিপথ ও ঝিলাম নদী"],
+        ans: 2,
+        tag: "মেহেরগড়ের অবস্থান",
+        exp: "বালুচিস্তানের বোলান গিরিপথ এবং কাচ্চি উপত্যকা থেকে শুরু করে সিন্ধু নদের পশ্চিম অংশ পর্যন্ত মেহেরগড় সভ্যতা বিস্তৃত ছিল।",
+        special: "💡 এই বোলান গিরিপথটি প্রাচীনকালে ভারতীয় উপমহাদেশের সাথে মধ্য এশিয়ার বাণিজ্যিক যোগাযোগের একটি অন্যতম প্রধান পথ ছিল।"
+    },
+    {
+        q: "নিচের কোনটি মেহেরগড় সভ্যতার একটি অন্যতম প্রধান প্রত্নতাত্ত্বিক কেন্দ্র নয়?",
+        opts: ["কিলেগুল মহম্মদ", "রানাঘুনডাই", "কোটদিজি", "কালিবঙ্গান"],
+        ans: 3,
+        tag: "মেহেরগড় কেন্দ্র",
+        exp: "কালিবঙ্গান হলো রাজস্থানে অবস্থিত সিন্ধু সভ্যতার কেন্দ্র। অন্যদিকে মেহেরগড়, কিলেগুল মহম্মদ, রানাঘুনডাই, কোটদিজি, নৌসেরা ও কাচ্চিবেগ হলো মেহেরগড় সভ্যতার কেন্দ্র।",
+        special: "💡 কোটদিজি কেন্দ্রটি সিন্ধু সভ্যতার ঠিক আগের স্তরের (Early Harappan phase) একটি অন্যতম গুরুত্বপূর্ণ কেন্দ্র হিসেবে চিহ্নিত।"
+    },
+    {
+        q: "মেহেরগড় সভ্যতার মানুষ প্রথম কোন ধাতুর ব্যবহার সফলভাবে করতে পেরেছিল?",
+        opts: ["সোনা", "তামা", "লোহা", "ব্রোঞ্জ"],
+        ans: 1,
+        tag: "মেহেরগড়ের ধাতু",
+        exp: "মেহেরগড় সভ্যতার সময় মানুষ তামা ব্যবহারে সক্ষম হয়েছিল। এই যুগে পাথরের পাশাপাশি তামার ব্যবহার অত্যন্ত গুরুত্বপূর্ণ ছিল।",
+        special: "💡 তামা হলো মানুষের ব্যবহৃত প্রাচীনতম ধাতু, যা নব্য প্রস্তর যুগের শেষভাগে আবিষ্কৃত হয়েছিল।"
+    },
+    {
+        q: "মেহেরগড় সভ্যতার ধ্বংসাবশেষ থেকে নিচের কোন ফসলটির চাষের প্রাচীনতম নিদর্শন পাওয়া যায়?",
+        opts: ["ধান", "গম ও বার্লি", "ভুট্টা", "আলু"],
+        ans: 1,
+        tag: "মেহেরগড়ের কৃষি",
+        exp: "মেহেরগড় সভ্যতার খননকার্যের ফলে মানুষের উৎপাদিত প্রধান খাদ্যশস্য হিসেবে গম, বার্লি, খেজুর ও তুলো চাষের সুস্পষ্ট নিদর্শন পাওয়া গিয়েছে।",
+        special: "💡 মেহেরগড়ের মানুষেরাই প্রথম সুতিবস্ত্র তৈরির কাঁচামাল অর্থাৎ কার্পাস তুলোর চাষ শুরু করেছিল।"
+    },
+    {
+        q: "মেহেরগড়ের অধিবাসীরা অলংকার ও প্রত্নতাত্ত্বিক সামগ্রী তৈরির জন্য কোন কোন নীল ও মূল্যবান পাথর ব্যবহার করত?",
+        opts: ["হীরা", "লাপিস লাজুলি ও নীলকান্ত মনি", "চুনি ও পান্না", "প্রবাল ও মুক্তো"],
+        ans: 1,
+        tag: "মেহেরগড়ের অলংকার",
+        exp: "মেহেরগড় সভ্যতায় পোড়া মাটির ছোট ছোট মূর্তি এবং নীলকান্ত মনি, লাপিস লাজুলি ও শঙ্খ নির্মিত অলংকারের নিদর্শন পাওয়া গেছে।",
+        special: "💡 লাপিস লাজুলি বা নীলকান্ত মণি ছিল অত্যন্ত উজ্জ্বল ও মূল্যবান পাথর, যা মধ্য এশিয়া বা আফগানিস্তান থেকে আমদানি করা হতো।"
+    },
+    {
+        q: "মেহেরগড় সভ্যতার বাণিজ্যিক যোগাযোগ মূলত কোন কোন বহির্ভারতের অঞ্চলের সাথে ছিল?",
+        opts: ["রোম ও গ্রিস", "চীন ও তিব্বত", "আফগানিস্তান, পারস্য (ইরান) ও মেসোপটেমিয়া", "শ্রীলঙ্কা ও মালদ্বীপ"],
+        ans: 2,
+        tag: "মেহেরগড়ের বাণিজ্য",
+        exp: "মেহেরগড় সভ্যতার ভৌগোলিক অবস্থান এমন ছিল যে তাদের সাথে আফগানিস্তান, পশ্চিম এশিয়া, ইরান ও মেসোপটেমিয়ার নিয়মিত বাণিজ্যিক লেনদেন চলত।",
+        special: "💡 এই দীর্ঘ দূরত্বের বাণিজ্য মূলত স্থলপথের মাধ্যমে বিভিন্ন গিরিপথ অতিক্রম করে সম্পন্ন হতো।"
+    },
+    {
+        q: "মেহেরগড়ে অতিরিক্ত ফসল ও খাদ্যশস্য নিরাপদে জমিয়ে রাখার জন্য কিসের সন্ধান মিলেছে?",
+        opts: ["মাটির কুঁড়েঘর", "ভূগর্ভস্থ গর্ত", "পৃথক শস্যাগার", "পাথরের বাক্স"],
+        ans: 2,
+        tag: "মেহেরগড়ের শস্যাগার",
+        exp: "মেহেরগড় সভ্যতায় খাদ্যশস্য দীর্ঘকাল ধরে সঞ্চয় করে রাখার জন্য মাটির তৈরি উন্নত ও পৃথক শস্যাগারের নিদর্শন পাওয়া গেছে।",
+        special: "💡 এটিই ভারতীয় উপমহাদেশে আবিষ্কৃত প্রথম শস্যাগারের প্রাচীনতম নিদর্শন, যা মানুষের পরিকল্পিত জীবনযাত্রার প্রমাণ দেয়।"
+    },
+    {
+        q: "সিন্ধু সভ্যতার সক্রিয় সময়কাল আনুমানিক কত খ্রিস্টপূর্বাব্দের মধ্যে ধরা হয়ে থাকে?",
+        opts: ["৩৫০০ - ৩০০০ খ্রি. পূ.", "২৬০০ - ১৯০০ খ্রি. পূ.", "১৫০০ - ১০০০ খ্রি. পূ.", "১০০০ - ৫০০ খ্রি. পূ."],
+        ans: 1,
+        tag: "সিন্ধু সভ্যতার সময়কাল",
+        exp: "সিন্ধু সভ্যতার পরিণত বা সবচেয়ে বিকশিত সময়কাল ছিল আনুমানিক ২৬০০ খ্রি. পূ. থেকে ১৯০০ খ্রি. পূ. পর্যন্ত।",
+        special: "💡 কার্বন ডেটিং পরীক্ষার মাধ্যমে এই সভ্যতার সময়কাল অত্যন্ত বৈজ্ঞানিকভাবে নির্ধারণ করা হয়েছে।"
+    },
+    {
+        q: "সিন্ধু সভ্যতার প্রত্নতাত্ত্বিক কেন্দ্রগুলির মধ্যে সর্বপ্রথম কোন শহরটি আবিষ্কৃত হয়েছিল?",
+        opts: ["মহেন-জো-দারো", "লোথাল", "হরপ্পা", "কালিবঙ্গান"],
+        ans: 2,
+        tag: "হরপ্পা আবিষ্কার",
+        exp: "সিন্ধু সভ্যতার কেন্দ্রগুলির মধ্যে প্রথম আবিষ্কৃত হয় 'হরপ্পা'। এই কারণে সিন্ধু সভ্যতাকে প্রায়শই 'হরপ্পা সভ্যতা' নামে ডাকা হয়।",
+        special: "💡 কোনো ঐতিহাসিক সভ্যতার প্রথম আবিষ্কৃত স্থলের নামানুসারে সেই সভ্যতার নামকরণ করার প্রত্নতাত্ত্বিক রীতি রয়েছে।"
+    },
+    {
+        q: "১২১ সালে হরপ্পা প্রত্নক্ষেত্রটি কে আবিষ্কার করেছিলেন?",
+        opts: ["রাখালদাস বন্দ্যোপাধ্যায়", "দয়ারাম সাহানি", "এস আর রাও", "স্যার জন মার্শাল"],
+        ans: 1,
+        tag: "হরপ্পা আবিষ্কারক",
+        exp: "১২১ খ্রিস্টাব্দে ভারতীয় প্রত্নতাত্ত্বিক দয়ারাম সাহানি হরপ্পা শহরের ধ্বংসাবশেষ প্রথম আবিষ্কার ও খননকাজ শুরু করেন।",
+        special: " এই আবিষ্কারের সময় ভারতের প্রত্নতাত্ত্বিক সর্বেক্ষণ (ASI)-এর প্রধান অধিকর্তা ছিলেন স্যার জন মার্শাল।"
+    },
+    {
+        q: "হরপ্পা কেন্দ্রটি বর্তমানে কোন দেশে এবং কোন নদীর তীরে অবস্থিত?",
+        opts: ["ভারত, গঙ্গা নদী", "পাকিস্তান, ইরাবতী বা রাভি নদী", "পাকিস্তান, সিন্ধু নদী", "আফগানিস্তান, আমু দরিয়া"],
+        ans: 1,
+        tag: "হরপ্পার অবস্থান",
+        exp: "হরপ্পা বর্তমানে পাকিস্তানের পাঞ্জাব প্রদেশের মন্টগোমারি জেলায় রাভি বা ইরাবতী নদীর তীরে অবস্থিত।",
+        special: "💡 এই নদীর তীরে অবস্থিত হওয়ার কারণে শহরটি কৃষি ও নদীপথের বাণিজ্যের ক্ষেত্রে অত্যন্ত উর্বর ও সুবিধাজনক ছিল।"
+    },
+    {
+        q: "'মহেন-জো-দারো' শব্দটির সিন্ধি ভাষার অর্থ কী?",
+        opts: ["সোনার শহর", "মৃতের স্তূপ", "বাণিজ্য নগরী", "কালো বালা"],
+        ans: 1,
+        tag: "মহেন-জো-দারো অর্থ",
+        exp: "সিন্ধি ভাষায় 'মহেন-জো-দারো' শব্দের আক্ষরিক অর্থ হলো 'মৃতের স্তূপ' (Mound of the Dead)।",
+        special: "💡 খননকার্যের সময় এই অঞ্চলে প্রচুর কঙ্কাল ও মৃতদেহের সন্ধান পাওয়ায় স্থানীয়রা একে মৃতের স্তূপ নামে ডাকত।"
+    },
+    {
+        q: "১৯২২ সালে সিন্ধু প্রদেশের লারকানা জেলায় মহেন-জো-দারো শহরটি কে আবিষ্কার করেন?",
+        opts: ["দয়ারাম সাহানি", "রাখালদাস বন্দ্যোপাধ্যায়", "জগৎপতি যোশি", "ননীগোপাল মজুমদার"],
+        ans: 1,
+        tag: "মহেন-জো-দারো আবিষ্কার",
+        exp: "১৯২২ খ্রিস্টাব্দে বাঙালি প্রত্নতাত্ত্বিক রাখালদাস বন্দ্যোপাধ্যায় সিন্ধু প্রদেশের লারকানা জেলায় মহেন-জো-দারো আবিষ্কার করেন।",
+        special: "💡 এই দুটি বড় শহরের (হরপ্পা ও মহেন-জো-দারো) আবিষ্কারের মাধ্যমে বিশ্বের দরবারে ভারতের প্রাচীন সভ্যতার এক গৌরবময় রূপ আত্মপ্রকাশ করে।"
+    },
+    {
+        q: "সিন্ধু সভ্যতার কোন দুটি শহরকে প্রাচীনকালের 'যমজ নগরী' (Twin City) বলা হয়?",
+        opts: ["লোথাল ও কালিবঙ্গান", "হরপ্পা ও মহেন-জো-দারো", "রোপার ও বানওয়ালি", "ধোলাভিরা ও সুরকোতাডা"],
+        ans: 1,
+        tag: "যমজ নগরী",
+        exp: "হরপ্পা এবং মহেন-জো-দারো শহর দুটিকে তাদের অসামান্য আকার, প্রশাসনিক মিল ও নগর পরিকল্পনার জন্য ঐতিহাসিক পিগট 'যমজ নগরী' বা 'Twin City' বলে অভিহিত করেছেন।",
+        special: "💡 এই দুটি শহরের দূরত্ব ছিল প্রায় ৪০০ মাইলের বেশি, কিন্তু তাও এদের শাসন ও সংস্কৃতিতে আশ্চর্য মিল ছিল।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (১৬ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? ' ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById('finalPercent').innerText = `${percentage}%`;
+    document.getElementById('finalMarks').innerText = `${toBn(score)}/${toBn(questions.length)}`;
+
+    let gradeText = "গ্রেড: ";
+    if (percentage >= 80) gradeText += "চমৎকার! অভিনন্দন!";
+    else if (percentage >= 60) gradeText += "ভালো! চালিয়ে যাও!";
+    else if (percentage >= 40) gradeText += "মাঝারি। আরও চেষ্টা করো!";
+    else gradeText += "চেষ্টা চালিয়ে যাও!";
+
+    document.getElementById('finalGrade').innerText = gradeText;
+    document.getElementById('rbCorrect').innerText = toBn(score);
+    document.getElementById('rbWrong').innerText = toBn(wrong);
+
+    let icon = '💪';
+    if (percentage >= 80) icon = '';
+    else if (percentage >= 60) icon = '🎉';
+    else if (percentage >= 40) icon = '';
+    else icon = '💪';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Demo Hub-এ ফিরুন</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function retryTest() {
+    currentQ = 0;
+    userAnswers = [];
+    score = 0;
+    wrong = 0;
+    timeLeft = TOTAL_TIME;
+    answered = false;
+    clearInterval(timerInterval);
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+    document.getElementById('timerBox').classList.remove('danger');
+    renderQuestion();
+    startTimer();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

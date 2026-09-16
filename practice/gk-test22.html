@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Test 22 - Olympic Medalists & Other First Achievers</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">12:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১২</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">GK</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GK TEST 22 — অলিম্পিক পদকজয়ী এবং অন্যান্য প্রথম অর্জনকারী
+// Source: বিভাগ-৫ (প্রশ্ন ৪৯ - ৬০)
+// প্রশ্ন নম্বর বাদ দেওয়া হয়েছে — শুধু প্রশ্ন
+// ============================================================
+const questions = [
+    {
+        q: "স্বাধীন ভারতের অলিম্পিক ইতিহাসের প্রথম কোন ভারতীয় একক ক্রীড়াবিদ হিসেবে কুস্তিতে পদক (ব্রোঞ্জ) জিতেছিলেন?",
+        opts: ["কে ডি যাদব (K. D. Jadhav)", "ধ্যানচাঁদ", "মিলখা সিং", "অভিনব বিন্দ্রা"],
+        ans: 0,
+        tag: "GK - কে ডি যাদব",
+        exp: "১৯৫২ সালের হেলসিঙ্কি অলিম্পিকে কুস্তির ফ্রিস্টাইল বিভাগে কে ডি যাদব (খাশাবা দাদাসাহেব যাদব) ব্রোঞ্জ পদক জিতে স্বাধীন ভারতের প্রথম একক পদকজয়ী হন।",
+        special: "💡 কে ডি যাদবের জীবনী নিয়ে বলিউডে 'দঙ্গল' ছবিটি নির্মিত হয়েছিল।"
+    },
+    {
+        q: "প্রথম ভারতীয় মহিলা ক্রীড়াবিদ হিসেবে অলিম্পিক গেমসের আঙিনায় পদক জিতে ইতিহাস গড়েছেন কে?",
+        opts: ["কর্ণম মালেশ্বরী (Karnam Malleswari)", "পিটি ঊষা", "পি ভি সিন্ধু", "মেরি কম"],
+        ans: 0,
+        tag: "GK - কর্ণম মালেশ্বরী",
+        exp: "২০০০ সালের সিডনি অলিম্পিকে ভারোত্তোলন বা ওয়েটলিফটিং প্রতিযোগিতায় কর্ণম মালেশ্বরী ব্রোঞ্জ পদক জিতে ভারতের প্রথম মহিলা অলিম্পিক পদকজয়ী হন।",
+        special: "💡 কর্ণম মালেশ্বরী অন্ধ্রপ্রদেশের বাসিন্দা এবং তাঁকে 'ভারতের আয়রন লেডি' বলা হয়।"
+    },
+    {
+        q: "অলিম্পিক গেমসের ব্যক্তিগত ইভেন্টে প্রথম ভারতীয় রূপোর বা রৌপ্য পদক বিজেতা কে?",
+        opts: ["রাজ্যবর্ধন সিং রাঠোর (Rajyavardhan Singh Rathore)", "অভিনব বিন্দ্রা", "নীরজ চোপড়া", "পি ভি সিন্ধু"],
+        ans: 0,
+        tag: "GK - রাজ্যবর্ধন",
+        exp: "২০০৪ সালের অ্যাথেন্স অলিম্পিকে পুরুষদের ডাবল ট্র্যাপ শুটিং প্রতিযোগিতায় রাজ্যবর্ধন সিং রাঠোর রুপো জিতে ভারতের হয়ে প্রথম অলিম্পিক রূপোর রেকর্ড গড়েন।",
+        special: "💡 রাজ্যবর্ধন সিং রাঠোর পরবর্তীতে ভারতের ক্রীড়ামন্ত্রী হয়েছিলেন।"
+    },
+    {
+        q: "অলিম্পিকের ব্যক্তিগত ক্রীড়া বিভাগে ভারতের প্রথম সোনা বা স্বর্ণপদকজয়ী সোনার ছেলে কে?",
+        opts: ["অভিনব বিন্দ্রা (Abhinav Bindra)", "নীরজ চোপড়া", "কে ডি যাদব", "ললিত কুমার"],
+        ans: 0,
+        tag: "GK - অভিনব বিন্দ্রা",
+        exp: "২০০৮ সালের বেজিং অলিম্পিকে ১০ মিটার এয়ার রাইফেল শুটিং প্রতিযোগিতায় অভিনব বিন্দ্রা স্বর্ণপদক জিতে ভারতের প্রথম অলিম্পিক ব্যক্তিগত স্বর্ণপদক বিজেতা হন।",
+        special: "💡 অভিনব বিন্দ্রা পাঞ্জাবের বাসিন্দা এবং তিনি ২০০৮ সালে এই ঐতিহাসিক কৃতিত্ব অর্জন করেন।"
+    },
+    {
+        q: "অলিম্পিক গেমসের ইতিহাসে প্রথম ভারতীয় মহিলা অ্যাথলেট হিসেবে রৌপ্য পদক (Silver Medal) কে জিতেছিলেন?",
+        opts: ["পি ভি সিন্ধু (P. V. Sindhu)", "সাইনা নেহওয়াল", "সানিয়া মির্জা", "মেরি কম"],
+        ans: 0,
+        tag: "GK - পি ভি সিন্ধু",
+        exp: "২০১৬ সালের রিও অলিম্পিকে ব্যাডমিন্টন ওম্যানস সিঙ্গলস-এর ফাইনালে পৌঁছে প্রথম ভারতীয় নারী হিসেবে পি ভি সিন্ধু রূপোর পদক জেতার ঐতিহাসিক কৃতিত্ব অর্জন করেন।",
+        special: "💡 পি ভি সিন্ধু পরে ২০২০ টোকিও অলিম্পিকে ব্রোঞ্জ পদকও জিতেছিলেন।"
+    },
+    {
+        q: "১৯৫৮ সালে প্রথম ভারতীয় পুরুষ হিসেবে জলপথে অত্যন্ত দুর্গম 'ইংলিশ চ্যানেল' সাঁতরে পার হয়ে ইতিহাস গড়েছিলেন কে?",
+        opts: ["মিহির সেন (Mihir Sen)", "আরতি সাহা", "তারানাথ শেনয়", "সত্যরূপ সিদ্ধান্ত"],
+        ans: 0,
+        tag: "GK - মিহির সেন",
+        exp: "১৯৫৮ সালের সেপ্টেম্বর মাসে বীর সাঁতারু মিহির সেন প্রথম ভারতীয় হিসেবে ডোভার থেকে ক্যালে পর্যন্ত সফলভাবে সাঁতার কেটে ইংলিশ চ্যানেল পার হন।",
+        special: "💡 মিহির সেন পরবর্তীতে বিশ্বের সাতটি মহাসাগর সাঁতরে পার হওয়ার রেকর্ডও গড়েছিলেন।"
+    },
+    {
+        q: "প্রথম ভারতীয় ও এশীয় মহিলা সাঁতারু হিসেবে ১৯৫৯ সালে সফলভাবে ইংলিশ চ্যানেল পার হয়েছিলেন কে?",
+        opts: ["আরতি সাহা (Arati Saha)", "বুলা চৌধুরী", "আরতি প্রধান", "মিহির সেন"],
+        ans: 0,
+        tag: "GK - আরতি সাহা",
+        exp: "১৯৫৯ সালের ২৯শে সেপ্টেম্বর মাত্র ১৯ বছর বয়সে আরতি সাহা প্রথম ভারতীয় ও এশীয় নারী হিসেবে বিখ্যাত ইংলিশ চ্যানেল সফলভাবে সাঁতরে পার হন।",
+        special: "💡 আরতি সাহা প্রথম এশীয় মহিলা হিসেবে ইংলিশ চ্যানেল সাঁতরে পার হয়েছিলেন।"
+    },
+    {
+        q: "পৃথিবীর একমাত্র মহিলা সাঁতারু হিসেবে পাঁচটি মহাদেশের পাঁচটি প্রধান সমুদ্র বা চ্যানেল সাঁতরে পার হওয়ার বিশ্বরেকর্ড গড়েছেন কে?",
+        opts: ["বুলা চৌধুরী (Bula Choudhury)", "আরতি সাহা", "আরতি প্রধান", "রিণা কৌশল"],
+        ans: 0,
+        tag: "GK - বুলা চৌধুরী",
+        exp: "ভারতের স্বনামধন্য সাঁতারু বুলা চৌধুরী বিশ্বের প্রথম মহিলা যিনি পাঁচটি মহাদেশের সাতটি গুরুত্বপূর্ণ সমুদ্র চ্যানেল সফলভাবে জয় করে সমুদ্রের জলকন্যা উপাধি পেয়েছেন।",
+        special: "💡 বুলা চৌধুরীকে 'সমুদ্রের জলকন্যা' (Sea Mermaid) বলা হয়।"
+    },
+    {
+        q: "বিশ্বের প্রথম মহিলা হিসেবে জিব্রাল্টার প্রণালী (Gibraltar Strait) সাঁতরে পার হওয়ার অবিস্মরণীয় রেকর্ড কার রয়েছে?",
+        opts: ["আরতি প্রধান (Arati Pradhan)", "বুলা চৌধুরী", "আরতি সাহা", "মেহের মুস"],
+        ans: 0,
+        tag: "GK - আরতি প্রধান",
+        exp: "ভারতের আরতি প্রধান প্রথম ভারতীয় এবং বিশ্বমঞ্চের নারী হিসেবে অত্যন্ত তীব্র জলস্রোতের জিব্রাল্টার প্রণালী সাঁতার কেটে পার হওয়ার অনন্য নজির সৃষ্টি করেন।",
+        special: "💡 জিব্রাল্টার প্রণালীকে 'ভূমধ্যসাগরের চাবি' বলা হয়।"
+    },
+    {
+        q: "প্রথম ভারতীয় মহিলা অ্যাথলেট হিসেবে অলিম্পিকের মূল ট্র্যাক অ্যান্ড ফিল্ডের রুদ্ধশ্বাস ফাইনালে (৪০০ মিটার হার্ডলসে) পৌঁছেছিলেন কে?",
+        opts: ["পিটি ঊষা (P. T. Usha)", "কমলজিৎ সাধু", "অঞ্জু ববি জর্জ", "কর্ণম মালেশ্বরী"],
+        ans: 0,
+        tag: "GK - পিটি ঊষা",
+        exp: "১৯৮৪ সালের লস অ্যাঞ্জেলেস অলিম্পিকে ৪০০ মিটার হার্ডলসে মাত্র এক সেকেন্ডের শতভাগের এক ভাগের (০.০১ সেকেন্ড) জন্য ব্রোঞ্জ পদক হাতছাড়া করা পিটি ঊষা অলিম্পিক ট্র্যাকের ফাইনালে ওঠা প্রথম ভারতীয় নারী।",
+        special: "💡 পিটি ঊষার বিখ্যাত ভৌগোলিক ডাকনাম হলো 'পায়েল এক্সপ্রেস' বা 'সোনার মেয়ে' (Golden Girl)।"
+    },
+    {
+        q: "স্বাধীন ভারতের কেন্দ্রীয় মন্ত্রিসভায় স্থান পাওয়া ভারতের প্রথম মহিলা ক্যাবিনেট মন্ত্রী কে ছিলেন?",
+        opts: ["রাজকুমারী অমৃত কাউর (Rajkumari Amrit Kaur)", "সুচেতা কৃপালিনী", "সরোজিনী নাইডু", "বিজয়লক্ষ্মী পণ্ডিত"],
+        ans: 0,
+        tag: "GK - অমৃত কাউর",
+        exp: "স্বাধীন ভারতের প্রথম জাতীয় মন্ত্রিসভায় রাজকুমারী অমৃত কাউর প্রথম মহিলা স্বাস্থ্যমন্ত্রী হিসেবে দায়িত্ব পালন করেন।",
+        special: "💡 রাজকুমারী অমৃত কাউর প্রথম মহিলা ক্যাবিনেট মন্ত্রী হিসেবে স্বাস্থ্য দপ্তরের দায়িত্ব পেয়েছিলেন।"
+    },
+    {
+        q: "সম্মিলিত জাতিপুঞ্জের (UN) সাধারণ সভার প্রথম মহিলা সভাপতি (President) হিসেবে বিশ্বমঞ্চে ভারতের মুখ উজ্জ্বল করেছিলেন কে?",
+        opts: ["বিজয়লক্ষ্মী পণ্ডিত (Vijaya Lakshmi Pandit)", "সরোজিনী নাইডু", "সুচেতা কৃপালিনী", "ইন্দিরা গান্ধী"],
+        ans: 0,
+        tag: "GK - বিজয়লক্ষ্মী পণ্ডিত",
+        exp: "পন্ডিত জওহরলাল নেহরুর ভগিনী শ্রীমতি বিজয়লক্ষ্মী পণ্ডিত ১৯৫৩ সালে সম্মিলিত জাতিপুঞ্জের সাধারণ পরিষদের প্রথম মহিলা সভাপতি নির্বাচিত হয়ে বিশ্বমঞ্চে এক উজ্জ্বল নজির স্থাপন করেন।",
+        special: "💡 বিজয়লক্ষ্মী পণ্ডিত ইন্দিরা গান্ধীর পিসি ছিলেন।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 12 * 60; // ১২ মিনিট (১২ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

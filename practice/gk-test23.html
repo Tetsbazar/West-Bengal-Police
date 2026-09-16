@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Test 23 - Military, Diplomatic & Rescue Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১৫</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">GK</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GK TEST 23 — গুরুত্বপূর্ণ সামরিক, কূটনৈতিক ও উদ্ধার অভিযান
+// Source: বিভাগ-১ (প্রশ্ন ১ - ১৫)
+// প্রশ্ন নম্বর বাদ দেওয়া হয়েছে — শুধু প্রশ্ন
+// ============================================================
+const questions = [
+    {
+        q: "১৯৪৮ সালে ভারত সরকার ভারতের মানচিত্রে হায়দরাবাদকে অন্তর্ভুক্ত করার জন্য নিজাম শাসনের বিরুদ্ধে যে বিশেষ সামরিক অভিযান পরিচালনা করেছিল, তার কোড নাম কী ছিল?",
+        opts: ["অপারেশন মেঘদূত", "অপারেশন পোলো (Operation Polo)", "অপারেশন বিজয়", "অপারেশন ক্যাকটাস"],
+        ans: 1,
+        tag: "GK - অপারেশন পোলো",
+        exp: "১৯৪৮ সালের সেপ্টেম্বর মাসে স্বাধীন ভারতের অন্তর্ভুক্ত হতে অস্বীকৃতি জানানোয় হায়দরাবাদের নিজাম উসমান আলি খানের পুলিশ বাহিনীর বিরুদ্ধে ভারতীয় সেনা ৫ দিনব্যাপী এই পুলিশি অ্যাকশন বা 'অপারেশন পোলো' পরিচালনা করে হায়দরাবাদকে ভারতের অন্তর্ভুক্ত করে।",
+        special: "💡 হায়দরাবাদকে তৎকালীন সময়ে বিশ্বের পোলো খেলার অন্যতম বড়ো হাব হিসেবে বিবেচনা করা হতো বলেই এই অভিযানের নাম রাখা হয়েছিল অপারেশন পোলো।"
+    },
+    {
+        q: "১৯৬১ সালে গোয়া, দমন ও দিউকে পর্তুগিজদের দীর্ঘ ঔপনিবেশিক শাসন থেকে মুক্ত করে ভারতীয় ইউনিয়নে যুক্ত করার সেন অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন বিজয় (Operation Vijay)", "অপারেশন মেঘদূত", "অপারেশন পবন", "অপারেশন পোলো"],
+        ans: 0,
+        tag: "GK - অপারেশন বিজয়",
+        exp: "১৯৬১ সালের ১৮ ও ১৯শে ডিসেম্বর ভারতীয় সশস্ত্র বাহিনী মাত্র ৩৬ ঘণ্টার এক ঝটিকা স্থল ও নৌ অভিযানের মাধ্যমে পর্তুগিজ বাহিনীকে পরাস্ত করে গোয়াকে ভারতের অবিচ্ছেদ্য অংশ হিসেবে ফিরিয়ে নেয়।",
+        special: "💡 পর্তুগিজরা ৪৫১ বছর ধরে গোয়া শাসন করেছিল।"
+    },
+    {
+        q: "১৯৮৪ সালে অমৃতসরের পবিত্র শিখ তীর্থস্থান 'স্বর্ণমন্দির' (হরমন্দির সাহিব) থেকে চরমপন্থীদের উৎখাত করার জন্য ভারতীয় সেনাবাহিনী কর্তৃক পরিচালিত বহুল আলোচিত অভিযানের নাম কী?",
+        opts: ["অপারেশন ব্লু স্টার (Operation Blue Star)", "অপারেশন অল আউট", "অপারেশন পবন", "অপারেশন সূর্য হোপ"],
+        ans: 0,
+        tag: "GK - ব্লু স্টার",
+        exp: "তৎকালীন প্রধানমন্ত্রী ইন্দিরা গান্ধীর নির্দেশে ১৯৮৪ সালের জুনে স্বর্ণমন্দির চত্বরে আশ্রয় নেওয়া স্বাধিকারকামী জঙ্গি নেতা জার্নেল সিং ভিন্দ্রানওয়ালে এবং তার অনুসারীদের দমন করতে ভারতীয় সেনা এই কমান্ডো অভিযান পরিচালনা করে।",
+        special: "💡 অপারেশন ব্লু স্টারের পর ইন্দিরা গান্ধীকে তাঁর দেহরক্ষীরা হত্যা করেছিলেন।"
+    },
+    {
+        q: "বিশ্বের সর্বোচ্চ যুদ্ধক্ষেত্র সিয়াচেন হিমবাহে পাকিস্তানের আগ্রাসন প্রতিহত করে ভারতের সম্পূর্ণ কর্তৃত্ব প্রতিষ্ঠা করার জন্য ১৯৮৪ সালের এপ্রিল মাসে পরিচালিত অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন মেঘদূত (Operation Meghdoot)", "অপারেশন বিজয়", "অপারেশন ক্যাকটাস", "অপারেশন সফেদ সাগর"],
+        ans: 0,
+        tag: "GK - মেঘদূত",
+        exp: "১৯৮৪ সালের ১৩ই এপ্রিল সিয়াচেনের অত্যন্ত তীব্র ঠান্ডা ও প্রতিকূল পরিবেশে ভারতীয় সেনাবাহিনী এক দুঃসাহসী হেলিকপ্টার এয়ারলিফটের মাধ্যমে পাকিস্তানি বাহিনীকে পরাস্ত করে সম্পূর্ণ সিয়াচেন হিমবাহ এলাকা নিজেদের নিয়ন্ত্রণে নেয়।",
+        special: "💡 সিয়াচেন হিমবাহকে 'বিশ্বের সর্বোচ্চ যুদ্ধক্ষেত্র' বলা হয় এবং এটি সমুদ্রপৃষ্ঠ থেকে প্রায় ৬,৪০০ মিটার উঁচুতে অবস্থিত।"
+    },
+    {
+        q: "১৯৯৯ সালে জম্মু ও কাশ্মীরের কার্গিল সেক্টরে অনুপ্রবেশকারী পাকিস্তানি সেনাদের হঠিয়ে পুনরায় ভারতের নিয়ন্ত্রণ প্রতিষ্ঠার জন্য পরিচালিত বিখ্যাত স্থল অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন পোলো", "অপারেশন বিজয়-২ (Operation Vijay)", "অপারেশন মেঘদূত", "অপারেশন অল আউট"],
+        ans: 1,
+        tag: "GK - কার্গিল",
+        exp: "কার্গিল যুদ্ধে পাকিস্তানি নিয়মিত সেনা ও উপজাতীয় অনুপ্রবেশকারীদের পরাস্ত করার মূল সেন অভিযানের নাম ছিল 'অপারেশন বিজয়'।",
+        special: "💡 কার্গিল যুদ্ধে বিজয়ের স্মরণে প্রতি বছর ২৬শে জুলাই ভারতজুড়ে অত্যন্ত শ্রদ্ধার সাথে 'কার্গিল বিজয় দিবস' (Kargil Vijay Diwas) উদযাপন করা হয়।"
+    },
+    {
+        q: "১৯৯৯ সালের কার্গিল যুদ্ধ চলাকালীন ভারতীয় স্থলবাহিনীকে সাহায্য করার জন্য ভারতীয় বিমানবাহিনী (IAF) যে বিশেষ ফাইটার জেট অভিযান পরিচালনা করেছিল, তার নাম কী?",
+        opts: ["অপারেশন সফেদ সাগর (Operation Safed Sagar)", "অপারেশন মেঘদূত", "অপারেশন বন্দর", "অপারেশন সূর্য হোপ"],
+        ans: 0,
+        tag: "GK - সফেদ সাগর",
+        exp: "কার্গিলের অত্যন্ত উঁচুতে বাঙ্কারে লুকিয়ে থাকা অনুপ্রবেশকারীদের বিমান থেকে নিখুঁতভাবে চিহ্নিত করে মিরাজ-২০০০ ও মিগ বিমানের সাহায্যে বোমা বর্ষণ করার বিমানবাহিনীর এই অভিযানের কোড নাম ছিল 'অপারেশন সফেদ সাগর'।",
+        special: "💡 'সফেদ সাগর' শব্দের অর্থ হলো 'সাদা সমুদ্র' যা হিমালয়ের বরফের প্রতীক।"
+    },
+    {
+        q: "২০০৮ সালের ২৬শে নভেম্বর মুম্বাইয়ের তাজ হোটেলসহ বিভিন্ন স্থানে হওয়া জঙ্গি হামলার প্রত্যুত্তরে ভারতের জাতীয় নিরাপত্তা রক্ষীবাহিনী (NSG) কর্তৃক পরিচালিত সফল কমান্ডো অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন ব্ল্যাক টর্নেডো (Operation Black Tornado)", "অপারেশন অল আউট", "অপারেশন সূর্য হোপ", "অপারেশন পরাক্রম"],
+        ans: 0,
+        tag: "GK - ব্ল্যাক টর্নেডো",
+        exp: "মুম্বাইয়ের তাজমহল প্যালেস হোটেলে লুকিয়ে থাকা লশকর-ই-তৈবার ১০ জন দুর্ধর্ষ জঙ্গিকে খতম করে জিম্মিদের নিরাপদে উদ্ধার করার জন্য এনএসজি (NSG) কমান্ডোরা এই ঝটিকা অভিযান শুরু করেছিলেন।",
+        special: "💡 এই হামলায় ১৬৬ জন নিরীহ মানুষ প্রাণ হারিয়েছিলেন এবং ৯ জন জঙ্গি নিহত হয়।"
+    },
+    {
+        q: "১৯৭৪ সালের ১৮ই মে রাজস্থানের পোখরানে ভারতের সর্বপ্রথম সফল ভূগর্ভস্থ পারমাণবিক পরীক্ষা সম্পন্ন করার সাংকেতিক নাম কী রাখা হয়েছিল?",
+        opts: ["স্মাইলিং বুদ্ধ বা হাস হাস্যময় বুদ্ধ (Smiling Buddha)", "অপারেশন শক্তি", "অপারেশন মেঘদূত", "অপারেশন সূর্য হোপ"],
+        ans: 0,
+        tag: "GK - স্মাইলিং বুদ্ধ",
+        exp: "ভারতের পরমাণু শক্তি কমিশনের তৎকালীন প্রধান হোমি সেঠনার তত্ত্বাবধানে বুদ্ধপূর্ণিমার পবিত্র দিনে এই সফল পরীক্ষাটি সম্পন্ন হয়েছিল বলে এর কোড নাম রাখা হয় 'স্মাইলিং বুদ্ধ'।",
+        special: "💡 ১৯৭৪ সালের ১৮ই মে বুদ্ধপূর্ণিমার দিনে এই পরীক্ষা হয়েছিল।"
+    },
+    {
+        q: "১৯৯৮ সালের মে মাসে ভারতের তৎকালীন প্রধানমন্ত্রী অটল বিহারী বাজপেয়ীর আমলে পোখরানে দ্বিতীয় দফার ৫টি পারমাণবিক বোমা পরীক্ষার ঐতিহাসিক কোড নাম কী রাখা হয়েছিল?",
+        opts: ["অপারেশন শক্তি (Operation Shakti)", "অপারেশন বুদ্দ", "অপারেশন মেঘদূত", "অপারেশন বিজয়"],
+        ans: 0,
+        tag: "GK - অপারেশন শক্তি",
+        exp: "১৯৯৮ সালের ১১ ও ১৩ই মে ভারতের রাজস্থানের থর মরুভূমির পোখরান সেনা ঘাঁটিতে ড. এ পি জে আবদুল কালামের নেতৃত্বে ৫টি অত্যন্ত শক্তিশালী পারমাণবিক সফল পরীক্ষা করা হয়।",
+        special: "💡 এই দিনটিকে স্মরণীয় করতে প্রতি বছর ১১ই মে ভারতে জাতীয় প্রযুক্তি দিবস (National Technology Day) পালিত হয়।"
+    },
+    {
+        q: "চন্দন দস্যু এবং কুখ্যাত চোর বীরপ্পনকে খতম করার জন্য তামিলনাড়ু ও কর্ণাটক সরকারের বিশেষ যৌথ টাস্ক ফোর্স কর্তৃক পরিচালিত সফল অভিযানের নাম কী?",
+        opts: ["অপারেশন কোকুন (Operation Cocoon)", "অপারেশন সূর্য হোপ", "অপারেশন মেঘদূত", "অপারেশন অল আউট"],
+        ans: 0,
+        tag: "GK - কোকুন",
+        exp: "প্রায় দুই দশক ধরে চলা দীর্ঘ তল্লাশি অভিযানের পর ২০০৪ সালে তামিলনাড়ুর বিশেষ পুলিশ বাহিনীর আধিকারিক কে বিজয়ন-এর চতুর পরিকল্পনায় 'অপারেশন কোকুন'-এর মাধ্যমে বিখ্যাত দস্যু বীরপ্পনকে খতম করা হয়।",
+        special: "💡 বীরপ্পন ছিল চন্দন কাঠ ও হাতির দাঁত পাচারের জন্য কুখ্যাত।"
+    },
+    {
+        q: "২০১৬ সালের উরি সেনা ছাউনিতে হওয়া ভয়াবহ জঙ্গি হামলার জেরে ভারতীয় বিশেষ কমান্ডো দল নিয়ন্ত্রণরেখা (LOC) পেরিয়ে পাকিস্তান অধিকৃত কাশ্মীরে যে ঝটিকা দমন অভিযান চালিয়েছিল, তাকে মূলত কী বলা হয়?",
+        opts: ["সার্জিক্যাল স্ট্রাইক (Surgical Strike)", "এয়ার স্ট্রাইক", "অপারেশন সূর্য হোপ", "অপারেশন সূর্যালোক"],
+        ans: 0,
+        tag: "GK - সার্জিক্যাল স্ট্রাইক",
+        exp: "২০১৬ সালের ২৮শে সেপ্টেম্বর দিবাগত রাতে ভারতের প্যারা কমান্ডোরা নিয়ন্ত্রণরেখা পেরিয়ে গিয়ে জঙ্গি লঞ্চ প্যাডগুলি গুঁড়িয়ে দেয়।",
+        special: "💡 উরি সেনা ছাউনিতে ১৯ জন ভারতীয় সেনা শহিদ হয়েছিলেন।"
+    },
+    {
+        q: "২০১৯ সালের ১৪ই ফেব্রুয়ারি পুলওয়ামা সন্ত্রাসী হামলার বদলা নিতে ২৬শে ফেব্রুয়ারি ভারতীয় বিমানবাহিনী পাকিস্তানের বালাকোটে জইশ-ই-মহম্মদের জঙ্গি শিবিরে যে এয়ার স্ট্রাইক চালিয়েছিল, তার কোড নাম কী ছিল?",
+        opts: ["অপারেশন বান্দর (Operation Bandar)", "অপারেশন মেঘদূত", "অপারেশন শক্তি", "অপারেশন পরাক্রম"],
+        ans: 0,
+        tag: "GK - বান্দর",
+        exp: "মিরাজ-২০০০ যুদ্ধবিমানের সাহায্যে রাতের অন্ধকারে অত্যন্ত সফলভাবে পাকিস্তানি সীমানার গভীরে ঢুকে জঙ্গি ঘাঁটিতে স্পাইস বোমার নিখুঁত হামলা চালানোর বিমানবাহিনীর এই সাংকেতিক নাম ছিল 'অপারেশন বান্দর'।",
+        special: "💡 'বান্দর' শব্দের হিন্দি অর্থ হলো 'বাঁদর'।"
+    },
+    {
+        q: "কাশ্মীর উপত্যকা থেকে উগ্রপন্থী ও জঙ্গিদের সম্পূর্ণরূপে নির্মূল করতে ২০১৭ সালে ভারতীয় সেনার বিশেষ ত্রিমুখী যৌথ অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন অল আউট (Operation All Out)", "অপারেশন দেবী শক্তি", "অপারেশন সূর্য হোপ", "অপারেশন সূর্যালোক"],
+        ans: 0,
+        tag: "GK - অল আউট",
+        exp: "ভারতীয় সেনাবাহিনী, সেন্ট্রাল রিজার্ভ পুলিশ ফোর্স (CRPF) এবং জম্মু ও কাশ্মীর পুলিশের যৌথ উদ্যোগে ২০১৭ সালে কাশ্মীরের অভ্যন্তরে জঙ্গি দমনে এই সাঁড়াশি অভিযান চালানো হয়।",
+        special: "💡 অপারেশন অল আউটের লক্ষ্য ছিল কাশ্মীরে জঙ্গিবাদের সম্পূর্ণ নির্মূল।"
+    },
+    {
+        q: "১৯৭১ সালের ইন্দো-পাকিস্তান যুদ্ধ চলাকালীন ৪ঠা ডিসেম্বর ভারতীয় নৌবাহিনী পাকিস্তানের করাচি বন্দরে অতর্কিতে ক্ষেপণাস্ত্র হামলা চালিয়ে পাকিস্তানি যুদ্ধজাহাজ 'পিএনএস খাইবার' ধ্বংস করে দিয়েছিল, সেই বিখ্যাত জলপথ অভিযানের নাম কী ছিল?",
+        opts: ["অপারেশন ট্রাইডেন্ট (Operation Trident)", "অপারেশন ক্যাকটাস", "অপারেশন রাহত", "অপারেশন মদদ"],
+        ans: 0,
+        tag: "GK - ট্রাইডেন্ট",
+        exp: "ভারতীয় নৌবাহিনীর চমৎকার ও সাহসী এই হামলার কারণে করাচি বন্দর কয়েক দিন ধরে দাউ দাউ করে জ্বলেছিল।",
+        special: "💡 এই গৌরবময় বিজয়কে স্মরণে রেখে প্রতি বছর ৪ঠা ডিসেম্বর ভারতজুড়ে 'নৌসেনা দিবস' (Navy Day) পালন করা হয়।"
+    },
+    {
+        q: "১৯৭১ সালের বাংলাদেশের মহান মুক্তিযুদ্ধের সময় মেঘনা নদী পারাপারের ঐতিহাসিক এয়ারলিফট 'মেঘনা হেলি ব্রিজ' অপারেশনের সামরিক কোড নাম কী ছিল?",
+        opts: ["অপারেশন ক্যাকটাস লিলি (Operation Cactus-Lilly)", "অপারেশন বিজয়", "অপারেশন পবন", "অপারেশন মেঘদূত"],
+        ans: 0,
+        tag: "GK - ক্যাকটাস লিলি",
+        exp: "ভারতীয় বিমানবাহিনীর এমআই-৪ হেলিকপ্টার ব্যবহার করে পাকিস্তানি ডিফেন্স লাইনকে পাশ কাটিয়ে বাংলাদেশ ও ভারতীয় মিত্র বাহিনীকে নদী পার করার এই অপারেশনের আনুষ্ঠানিক কোড নাম রাখা হয়েছিল 'অপারেশন ক্যাকটাস লিলি'।",
+        special: "💡 এই অপারেশনে প্রায় ৩,০০০ সেনাকে মেঘনা নদী পার করানো হয়েছিল।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 15 * 60; // ১৫ মিনিট (১৫ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

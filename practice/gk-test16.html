@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Test 16 - Geographical Nicknames of the World</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ২০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">GK</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GK TEST 16 — বিশ্ব ও ভারতের বিভিন্ন স্থানের ভৌগোলিক উপনাম
+// Source: বিভাগ-১ (প্রশ্ন ১ - ২০)
+// প্রশ্ন নম্বর বাদ দেওয়া হয়েছে — শুধু প্রশ্ন
+// ============================================================
+const questions = [
+    {
+        q: "বিশ্বজুড়ে কোন দেশটিকে 'উদীয়মান সূর্যের দেশ' (Land of the Rising Sun) বলা হয়ে থাকে?",
+        opts: ["নরওয়ে", "জাপান", "ব্রিটেন", "নিউজিল্যান্ড"],
+        ans: 1,
+        tag: "GK - জাপান",
+        exp: "জাপান ভৌগোলিকভাবে পৃথিবীর পূর্বপ্রান্তে অবস্থিত হওয়ায় সেখানে সবার আগে সূর্যোদয় দেখা যায়। এই কারণে জাপানকে 'উদীয়মান সূর্যের দেশ' বলা হয়।",
+        special: "💡 জাপানি ভাষায় এই দেশকে বলা হয় 'নিপ্পন' বা 'নিহন', যার অর্থও হলো সূর্যের উৎস।"
+    },
+    {
+        q: "ইউরোপের কোন দেশটিকে 'ইউরোপের ককপিট' (Cockpit of Europe) নামে ডাকা হয়?",
+        opts: ["বেলজিয়াম", "সুইজারল্যান্ড", "ইতালি", "ফ্রান্স"],
+        ans: 0,
+        tag: "GK - বেলজিয়াম",
+        exp: "বেলজিয়ামকে 'ইউরোপের ককপিট' বলা হয় কারণ অতীতে ইউরোপের বহু বড়ো বড়ো যুদ্ধ ও ঐতিহাসিক সংঘাত এই দেশের মাটিতেই সংঘটিত হয়েছিল (যেমন ওয়াটারলুর যুদ্ধ)।",
+        special: "💡 এছাড়াও বেলজিয়ামের রাজধানী ব্রাসেলস-এ ইউরোপীয় ইউনিয়ন (EU) ও ন্যাটোর (NATO) সদর দফতর অবস্থিত।"
+    },
+    {
+        q: "ইতালির প্রাচীন ও ঐতিহাসিক রাজধানী রোম শহরটি নিচের কোন ভৌগোলিক উপনামে পরিচিত?",
+        opts: ["নীরব শহর বা চিরন্তন শহর (Eternal City)", "বাতাসের শহর", "নিষিদ্ধ শহর", "লিলি ফুলের দেশ"],
+        ans: 0,
+        tag: "GK - রোম",
+        exp: "রোম শহরকে 'নীরব শহর' বা 'চিরন্তন শহর' বলা হয় কারণ হাজার হাজার বছর ধরে এই শহরের প্রাচীন সভ্যতা ও ইতিহাস আজও প্রায় অপরিবর্তিত ও মহিমান্বিতভাবে টিকে রয়েছে।",
+        special: "💡 সাতটি পাহাড়ের ওপর গড়ে ওঠার কারণে রোমকে 'সপ্ত পাহাড়ের শহর' (City of Seven Hills)-ও বলা হয়।"
+    },
+    {
+        q: "উত্তর ইউরোপের কোন দেশটিকে 'মধ্যরাতের সূর্যের দেশ' (Land of the Midnight Sun) বলা হয়?",
+        opts: ["ফিনল্যান্ড", "সুইডেন", "নরওয়ে", "গ্রিনল্যান্ড"],
+        ans: 2,
+        tag: "GK - নরওয়ে",
+        exp: "নরওয়ের উত্তরভাগে মে থেকে জুলাই মাসের শেষভাগ পর্যন্ত রাতের বেলাতেও সূর্য দিগন্তে পুরোপুরি অস্ত যায় না এবং মধ্যরাতেও চমৎকার সূর্যের আলো দেখা যায়।",
+        special: "💡 নরওয়ের হ্যামারফেস্ট নামক বন্দর শহরে এই দৃশ্যটি সবচেয়ে সুন্দরভাবে উপভোগ করা যায়।"
+    },
+    {
+        q: "এশিয়ার কোন রাষ্ট্রটি 'শ্বেতহস্তী বা সাদা হাতির দেশ' (Land of White Elephants) নামে পরিচিত?",
+        opts: ["কম্বোডিয়া", "মায়ানমার", "থাইল্যান্ড", "শ্রীলঙ্কা"],
+        ans: 2,
+        tag: "GK - থাইল্যান্ড",
+        exp: "থাইল্যান্ডে রাজকীয় মর্যাদায় অতি বিরল সাদা হাতি বা শ্বেতহস্তী পালন করা হয়, যা দেশটির সমৃদ্ধি ও সৌভাগ্যের প্রতীক হিসেবে বিবেচিত।",
+        special: "💡 থাইল্যান্ডের প্রাচীন নাম ছিল সিয়াম এবং এর রাজধানী হলো ব্যাংকক।"
+    },
+    {
+        q: "আমেরিকার কোন বিখ্যাত শহরটি 'গগনচুম্বী অট্টালিকার শহর' (City of Skyscrapers) নামে পরিচিত?",
+        opts: ["লস অ্যাঞ্জেলেস", "শিকাগো", "নিউ ইয়র্ক", "ওয়াশিংটন ডি.সি."],
+        ans: 2,
+        tag: "GK - নিউ ইয়র্ক",
+        exp: "নিউ ইয়র্ক শহরে অসাধারণ স্থাপত্যশৈলীর অগণিত সুউচ্চ আকাশচুম্বী বহুতল ভবন রয়েছে বলে একে গগনচুম্বী অট্টালিকার শহর বলা হয়।",
+        special: "💡 এছাড়াও এই শহরটির আরেকটি বিখ্যাত ভৌগোলিক উপনাম হলো 'বিগ অ্যাপেল' (Big Apple)।"
+    },
+    {
+        q: "তিব্বতের রাজধানী 'লাসা' শহরটি দীর্ঘকাল ধরে বিশ্বের কাছে রহস্যময় ও দুর্গম থাকার কারণে কী নামে পরিচিত?",
+        opts: ["নিষিদ্ধ শহর (Forbidden City)", "নীরব শহর", "বজ্রপাত ও মেঘের দেশ", "প্রাচ্যের ভেনিস"],
+        ans: 0,
+        tag: "GK - লাসা",
+        exp: "লাসা শহরটি তিব্বতের অত্যন্ত উঁচুতে। হিমালয়ের কোলে অবস্থিত এবং অতীতে সেখানে সাধারণ বিদেশিদের প্রবেশাধিকার কঠোরভাবে নিষিদ্ধ ছিল বলেই একে নিষিদ্ধ শহর বলা হতো।",
+        special: "💡 লাসা তিব্বতের রাজধানী এবং এটি সমুদ্রপৃষ্ঠ থেকে প্রায় ৩,৬৫০ মিটার উঁচুতে অবস্থিত।"
+    },
+    {
+        q: "উত্তর ইউরোপের কোন দেশটিকে 'হাজার হ্রদের দেশ' (Land of Thousand Lakes) বলা হয়ে থাকে?",
+        opts: ["স্কটল্যান্ড", "ফিনল্যান্ড", "আয়ারল্যান্ড", "আইসল্যান্ড"],
+        ans: 1,
+        tag: "GK - ফিনল্যান্ড",
+        exp: "ফিনল্যান্ডে প্রায় ১,৮৭,৮৮৮টি বড়ো ও মাঝারি হ্রদ বা লেক রয়েছে, যা দেশের মোট আয়তনের এক বিশাল অংশ জুড়ে বিস্তৃত।",
+        special: "💡 একই কারণে ফিনল্যান্ডকে পৃথিবীর অন্যতম প্রধান প্রাকৃতিক পরিবেশবান্ধব সুখী দেশ হিসেবেও গণ্য করা হয়।"
+    },
+    {
+        q: "ক্যারিবিয়ান সাগরের বুকে অবস্থিত চিনি উৎপাদনের জন্য বিখ্যাত দ্বীপরাষ্ট্র 'কিউবা'-কে কী বলা হয়?",
+        opts: ["মুক্তার দ্বীপ", "লবঙ্গের দ্বীপ", "বিশ্বের চিনির বাটি (Sugar Bowl of the World)", "সোনালী তোরণের দেশ"],
+        ans: 2,
+        tag: "GK - কিউবা",
+        exp: "বিশ্ববাজারে কিউবা একসময় প্রচুর পরিমাণে চিনি উৎপাদন ও রপ্তানি করত বলে একে বিশ্বের চিনির বাটি বলা হয়।",
+        special: "💡 কিউবার রাজধানী হলো হাভানা এবং এটি ক্যারিবীয় অঞ্চলের একটি বিখ্যাত বিপ্লবী সমাজতান্ত্রিক দেশ।"
+    },
+    {
+        q: "এশিয়ার কোন হিমালয় সংলগ্ন পার্বত্য দেশকে 'বজ্রপাতের দেশ' (Land of the Thunder Dragon) নামে অভিহিত করা হয়?",
+        opts: ["নেপাল", "তিব্বত", "ভুটান", "মঙ্গোলিয়া"],
+        ans: 2,
+        tag: "GK - ভুটান",
+        exp: "ভুটানের সুউচ্চ পার্বত্য উপত্যকাগুলিতে প্রায়শই ভারত মহাসাগর থেকে আসা মেঘের সংঘর্ষে ভয়াবহ বজ্রপাত সহ ঝড়-বৃষ্টি হয় বলে স্থানীয় ভাষায় একে 'ড্রুক ইয়ুল' বা বজ্র ড্রাগনের দেশ বলা হয়।",
+        special: "💡 ভুটানের রাজধানী হলো থিম্পু এবং এদের জাতীয় পশু হলো টাকিন।"
+    },
+    {
+        q: "আফ্রিকার পূর্ব উপকূলে অবস্থিত লবঙ্গ চাষের জন্য বিখ্যাত 'জাঞ্জিবার' দ্বীপটির ভৌগোলিক উপনাম কী?",
+        opts: ["মশাল দ্বীপ", "লবঙ্গ দ্বীপ (Clove Island)", "স্বর্ণ দ্বীপ", "পান্না দ্বীপ"],
+        ans: 1,
+        tag: "GK - জাঞ্জিবার",
+        exp: "তাঞ্জানিয়ার অন্তর্গত জাঞ্জিবার দ্বীপে বিশ্বের সিংহভাগ উচ্চমানের সুগন্ধি মশলা 'লবঙ্গ' উৎপাদিত ও প্রক্রিয়াজাত করা হয় বলে একে লবঙ্গ দ্বীপ বলা হয়।",
+        special: "💡 জাঞ্জিবার একটি স্বায়ত্তশাসিত অঞ্চল যা তাঞ্জানিয়ার অংশ।"
+    },
+    {
+        q: "এশিয়ার আরব সাগরের বুকে অবস্থিত কোন উপসাগরীয় রাষ্ট্রটি 'মুক্তার দ্বীপ' (Island of Pearls) নামে পরিচিত?",
+        opts: ["বাহরিন", "ওমান", "কাতার", "কুয়েত"],
+        ans: 0,
+        tag: "GK - বাহরিন",
+        exp: "বাহরিনের সমুদ্র উপকূলবর্তী অগভীর উপসাগরে প্রাকৃতিকভাবে বিশ্বের অন্যতম শ্রেষ্ঠ ও উৎকৃষ্ট মানের আসল মুক্তা পাওয়া যায় বলে একে মুক্তার দ্বীপ বলা হয়।",
+        special: "💡 বাহরিনের রাজধানী হলো মানামা এবং এদের মুদ্রা হলো বাহরাইনি দিনার।"
+    },
+    {
+        q: "আমেরিকার বিখ্যাত শহর 'শিকাগো'-র সুপরিচিত ভৌগোলিক উপনাম নিচের কোনটি?",
+        opts: ["বাতাসের শহর (Windy City)", "মোটর গাড়ি শহর", "সোনালী তোরণ শহর", "সংস্কৃতির রাজধানী"],
+        ans: 0,
+        tag: "GK - শিকাগো",
+        exp: "মিশিগান হ্রদের পার থেকে ধেয়ে আসা তীব্র বাতাস প্রায় সারা বছরই এই শহরের ওপর দিয়ে প্রবাহিত হয় বলে শিকাগোকে 'বাতাসের শহর' বলা হয়ে থাকে।",
+        special: "💡 শিকাগো আমেরিকার ইলিনয় রাজ্যে অবস্থিত এবং এটি একটি গুরুত্বপূর্ণ শিল্প ও বাণিজ্যিক শহর।"
+    },
+    {
+        q: "আমেরিকার ক্যালিফোর্নিয়ার কোন বিখ্যাত শহরটি 'সোনালী তোরণের শহর' (City of Golden Gate) নামে পরিচিত?",
+        opts: ["সান ফ্রান্সিসকো", "লস অ্যাঞ্জেলেস", "সান দিয়েগো", "নিউ ইয়র্ক"],
+        ans: 0,
+        tag: "GK - সান ফ্রান্সিসকো",
+        exp: "সান ফ্রান্সিসকো উপসাগরের মুখে অবস্থিত বিশ্ববিখ্যাত ঐতিহাসিক ঝুলন্ত লালচে-কমলা রঙের সেতু 'গোল্ডেন গেট ব্রিজ'-এর উপস্থিতির কারণে এই শহরকে সোনালী তোরণের শহর বলা হয়।",
+        special: "💡 গোল্ডেন গেট ব্রিজ ১৯৩৭ সালে নির্মিত হয় এবং এটি সান ফ্রান্সিসকোর একটি প্রতীক।"
+    },
+    {
+        q: "আফ্রিকার মরুভূমি বেষ্টিত সুপ্রাচীন দেশ 'মিশর'-কে কার দান বা উপহার বলা হয়ে থাকে?",
+        opts: ["আমাজন নদীর দান", "নীল নদের দান (Gift of the Nile)", "কঙ্গো নদীর দান", "লোহিত সাগরের দান"],
+        ans: 1,
+        tag: "GK - মিশর",
+        exp: "মিশরের বুক চিরে প্রবাহিত হওয়া নীল নদ যদি না থাকত, তবে আজ মিশর একটি অনুর্বর বন্ধ্যা মরুভূমিতে পরিণত হতো। নীল নদের পলির গুণেই প্রাচীন মিশরীয় সভ্যতা ও কৃষির বিকাশ ঘটেছিল।",
+        special: "💡 এই বিখ্যাত উক্তিটি করেছেন প্রাচীন গ্রিক ইতিহাসবিদ হেরোডোটাস।"
+    },
+    {
+        q: "উত্তর আমেরিকার অত্যন্ত শান্তিপূর্ণ ও সুশোভিত দেশ 'কানাডা' নিচের কোন ফুলের দেশ নামে পরিচিত?",
+        opts: ["গোলাপ ফুলের দেশ", "লিলি ফুলের দেশ (Land of Lilies)", "পদ্ম ফুলের দেশ", "টিউলিপ ফুলের দেশ"],
+        ans: 1,
+        tag: "GK - কানাডা",
+        exp: "কানাডায় প্রচুর পরিমাণে লিলি ফুল জন্মায় এবং এটি সে দেশের মানুষের কাছে অত্যন্ত প্রিয়। একই সাথে ম্যাপেল পাতার প্রাচুর্যের জন্য কানাডাকে 'ম্যাপেল পাতার দেশ'-ও বলা হয়।",
+        special: "💡 কানাডার রাজধানী হলো ওটাওয়া এবং এটি বিশ্বের দ্বিতীয় বৃহত্তম দেশ।"
+    },
+    {
+        q: "প্রশান্ত মহাসাগরের বুকে অবস্থিত দ্বীপরাষ্ট্র 'নিউজিল্যান্ড' মূলত কোন ভৌগোলিক নামে পরিচিত?",
+        opts: ["দক্ষিণের গ্রেট ব্রিটেন (Great Britain of the South)", "ইউরোপের খেলার মাঠ", "নীরব দ্বীপ", "ক্যাঙ্গারুর দেশ"],
+        ans: 0,
+        tag: "GK - নিউজিল্যান্ড",
+        exp: "নিউজিল্যান্ডের ভৌগোলিক অবস্থান, জলবায়ু এবং সামাজিক-সাংস্কৃতিক জীবনযাত্রার সাথে ব্রিটেনের গভীর মিল রয়েছে বলে একে দক্ষিণের গ্রেট ব্রিটেন বলা হয়।",
+        special: "💡 নিউজিল্যান্ডের রাজধানী হলো ওয়েলিংটন এবং জাতীয় পাখি হলো কিউই।"
+    },
+    {
+        q: "ইউরোপের পাহাড়ি সৌন্দর্যমণ্ডিত দেশ 'সুইজারল্যান্ড'-এর বিখ্যাত ভৌগোলিক উপনাম নিচের কোনটি?",
+        opts: ["ইউরোপের খেলার মাঠ (Playground of Europe)", "ইউরোপের ককপিট", "ইউরোপের প্রবেশদ্বার", "হৃদপিণ্ড শহর"],
+        ans: 0,
+        tag: "GK - সুইজারল্যান্ড",
+        exp: "সুইজারল্যান্ড তার চোখ ধাঁধানো আল্পস পর্বতমালা, চমৎকার জলবায়ু এবং সারা বছর নানারকম স্কি ও শীতকালীন খেলাধুলার পর্যটন আকর্ষণের কারণে ইউরোপের খেলার মাঠ নামে পরিচিত।",
+        special: "💡 সুইজারল্যান্ডের রাজধানী হলো বার্ন এবং এদের মুদ্রা হলো সুইস ফ্রাঁ।"
+    },
+    {
+        q: "মধ্যপ্রাচ্যের এশীয় ভূখণ্ড 'প্যালেস্টাইন' বা ফিলিস্তিন মূলত কোন ভৌগোলিক নামে পরিচিত?",
+        opts: ["পবিত্র ভূমি (Holy Land)", "লবঙ্গ দ্বীপ", "অশ্রুর প্রবেশদ্বার", "প্রাচ্যের রানি"],
+        ans: 0,
+        tag: "GK - ফিলিস্তিন",
+        exp: "ইসলাম, খ্রিস্টধর্ম এবং ইহুদি ধর্ম—এই তিনটি প্রধান অব্রাহামীয় ধর্মের পবিত্র ধর্মীয় ইতিহাস ও পীঠস্থানগুলি (যেমন জেরুসালেম) এই অঞ্চলে অবস্থিত হওয়ায় একে 'পবিত্র ভূমি' বলা হয়।",
+        special: "💡 জেরুসালেম শহরটি এই তিনটি ধর্মের কাছেই অত্যন্ত পবিত্র স্থান হিসেবে বিবেচিত।"
+    },
+    {
+        q: "লোহিত সাগর এবং এডেন উপসাগরের সংযোগস্থলে অবস্থিত 'বাব-এল-মান্দেব' প্রণালীকে কী বলা হয়ে থাকে?",
+        opts: ["অশ্রুর প্রবেশদ্বার (Gate of Tears)", "স্বর্গের দরজা", "সমুদ্রের চাবি", "প্রশান্তির তোরণ"],
+        ans: 0,
+        tag: "GK - বাব-এল-মান্দেব",
+        exp: "আরবি শব্দ 'বাব-এল-মান্দেব'-এর অর্থ হলো কান্নার তোরণ বা অশ্রুর প্রবেশদ্বার। এই প্রণালীতে প্রাচীনকালে তীব্র ঘূর্ণাবর্ত এবং সামুদ্রিক বিপদের কারণে বহু জাহাজ ধ্বংস হয়ে নাবিকদের প্রাণহানি ঘটত বলেই এই নামকরণ।",
+        special: "💡 এই প্রণালীটি ইয়েমেন ও জিবুতি/এরিত্রিয়ার মধ্যে অবস্থিত এবং এটি লোহিত সাগরকে এডেন উপসাগরের সাথে যুক্ত করেছে।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (২০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `(${LABELS[q.ans]}) ${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> (${LABELS[q.ans]}) ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> (${LABELS[userAns]}) ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

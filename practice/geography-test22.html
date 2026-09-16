@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geography Test 22 - World Physical Geography (Part 2)</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১৫</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">Geography</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GEOGRAPHY TEST 22 — বিশ্বের প্রাকৃতিক ভূগোল (পর্ব ২)
+// Source: প্রশ্ন ৫১ - ৬৫
+// প্রশ্ন নম্বর বাদ — শুধু প্রশ্ন
+// ইংরেজি বন্ধনী বাদ — শুধু বাংলা
+// ============================================================
+const questions = [
+    {
+        q: "পৃথিবীর দীর্ঘতম পর্বতশ্রেণী কোনটি এবং এটি কোন মহাদেশে অবস্থিত?",
+        opts: ["হিমালয় পর্বতমালা; এশিয়া", "আন্দিজ পর্বতমালা; দক্ষিণ আমেরিকা", "রকি পর্বতমালা; উত্তর আমেরিকা", "আল্পস পর্বতমালা; ইউরোপ"],
+        ans: 1,
+        tag: "Geography - আন্দিজ",
+        exp: "দক্ষিণ আমেরিকা মহাদেশের পশ্চিম উপকূল বরাবর উত্তর থেকে দক্ষিণে বিস্তৃত 'আন্দিজ পর্বতমালা' হলো পৃথিবীর দীর্ঘতম পর্বতশ্রেণী, যার দৈর্ঘ্য প্রায় ৭,০০০ কিমি।",
+        special: "💡 উচ্চতার বিচারে হিমালয়ের পর আন্দিজ দ্বিতীয় স্থানে থাকলেও দৈর্ঘ্যে এটি হিমালয়ের চেয়ে প্রায় তিন গুণ বড়। এই পর্বতমালাই দক্ষিণ আমেরিকার জলবায়ু ও জীববৈচিত্র্য নিয়ন্ত্রণ করে।"
+    },
+    {
+        q: "উত্তর আমেরিকা মহাদেশের দীর্ঘতম পর্বতমালা কোনটি, যা জলবায়ু ও বৃষ্টিপাত নিয়ন্ত্রণে ভূমিকা রাখে?",
+        opts: ["আন্দিজ পর্বতমালা", "রকি পর্বতমালা", "ককেশাস পর্বতমালা", "অ্যাপালাচিয়ান পর্বতমালা"],
+        ans: 1,
+        tag: "Geography - রকি",
+        exp: "উত্তর আমেরিকা মহাদেশের পশ্চিম অংশ জুড়ে বিস্তৃত বিখ্যাত নবীন ভঙ্গিল পর্বতমালাটির নাম হলো 'রকি পর্বতমালা'।",
+        special: "💡 রকি পর্বতমালার সর্বোচ্চ শৃঙ্গ হলো 'মাউন্ট এলবার্ট' (৪,৪০১ মিটার)। এই পর্বতশ্রেণী প্রশান্ত মহাসাগর থেকে আসা আর্দ্র বায়ুকে বাধা দিয়ে বৃষ্টিপাত ঘটায়।"
+    },
+    {
+        q: "ইউরোপের দীর্ঘতম ও সবচেয়ে সুপরিচিত ভঙ্গিল পর্বতমালা কোনটি?",
+        opts: ["ইউরাল পর্বতমালা", "আল্পস পর্বতমালা", "ককেশাস পর্বতমালা", "পিরেনিজ পর্বতমালা"],
+        ans: 1,
+        tag: "Geography - আল্পস",
+        exp: "ইউরোপের দক্ষিণ-মধ্যভাগে বিস্তৃত বিখ্যাত ভঙ্গিল পর্বতমালাটি হলো 'আল্পস পর্বতমালা'।",
+        special: "💡 আল্পসের সর্বোচ্চ শৃঙ্গ হলো 'মাউন্ট ব্ল্যাঙ্ক', যার উচ্চতা ৪,৮১০ মিটার। এটি ফ্রান্স ও ইতালির সীমান্তে অবস্থিত একটি অত্যন্ত আকর্ষণীয় পর্বত শৃঙ্গ।"
+    },
+    {
+        q: "কোন পর্বতমালাকে এশিয়া ও ইউরোপ মহাদেশের প্রাকৃতিক সীমানা বা প্রাচীর বলা হয়?",
+        opts: ["হিমালয় পর্বতমালা", "ইউরাল পর্বতমালা", "ককেশাস পর্বতমালা", "আল্পস পর্বতমালা"],
+        ans: 1,
+        tag: "Geography - ইউরাল",
+        exp: "রাশিয়া ও কাজাখস্তানের মধ্য দিয়ে উত্তর থেকে দক্ষিণে বিস্তৃত 'ইউরাল পর্বতমালা' এশিয়া ও ইউরোপ মহাদেশের প্রাকৃতিক সীমানা নির্ধারণ করে।",
+        special: "💡 ইউরাল পর্বতমালা খনিজ সম্পদে অত্যন্ত সমৃদ্ধ। এই পর্বতশ্রেণীর পূর্ব দিককে এশিয়া এবং পশ্চিম দিককে ইউরোপ মহাদেশের অংশ ধরা হয়।"
+    },
+    {
+        q: "উত্তর-পশ্চিম আফ্রিকায় অবস্থিত মরক্কো ও আলজেরিয়ার মধ্য দিয়ে বিস্তৃত একমাত্র নবীন ভঙ্গিল পর্বতমালা কোনটি?",
+        opts: ["কিলিমাঞ্জারো", "অ্যাটলাস পর্বতমালা", "ড্রাকেনসবার্গ পর্বতমালা", "রুয়েনজোরি পর্বতমালা"],
+        ans: 1,
+        tag: "Geography - অ্যাটলাস",
+        exp: "আফ্রিকার উত্তর-পশ্চিম কোণে অবস্থিত একমাত্র প্রধান ভঙ্গিল পর্বতমালাটি হলো 'অ্যাটলাস পর্বতমালা'।",
+        special: "💡 অ্যাটলাসের সর্বোচ্চ শৃঙ্গ হলো 'মাউন্ট তৌবকাল' (৪,১৬৭ মিটার)। এই পর্বতশ্রেণীটি সাহারা মরুভূমির চরম শুষ্ক বাতাসকে ভূমধ্যসাগরীয় অঞ্চলে প্রবেশ করতে বাধা দেয়।"
+    },
+    {
+        q: "অস্ট্রেলিয়ার পূর্ব উপকূল বরাবর বিস্তৃত দীর্ঘতম পর্বতশ্রেণীটির নাম কী?",
+        opts: ["আল্পস পর্বতমালা", "গ্রেট ডিভাইডিং রেঞ্জ", "রকি পর্বতমালা", "হিমালয় পর্বতমালা"],
+        ans: 1,
+        tag: "Geography - গ্রেট ডিভাইডিং",
+        exp: "অস্ট্রেলিয়ার পূর্ব উপকূলে উত্তর থেকে দক্ষিণে বিস্তৃত দীর্ঘতম পর্বতশ্রেণীটি হলো 'গ্রেট ডিভাইডিং রেঞ্জ'।",
+        special: "💡 এই পর্বতশ্রেণীর সর্বোচ্চ শৃঙ্গ হলো 'মাউন্ট কোসিউস্কো' (২,২৫৮ মিটার)। এটি অস্ট্রেলিয়ার পূর্ব উপকূলের উর্বর সমভূমিকে ভেতরের শুষ্ক মালভূমি থেকে আলাদা করেছে।"
+    },
+    {
+        q: "জাপানের সর্বোচ্চ পর্বত এবং অতি সুন্দর পবিত্র জীবন্ত আগ্নেয়গিরি 'মাউন্ট ফুজি' কোন ধরনের পর্বতের উদাহরণ?",
+        opts: ["ভঙ্গিল পর্বত", "সঞ্চয়জাত বা আগ্নেয় পর্বত", "স্তূপ পর্বত", "ক্ষয়জাত পর্বত"],
+        ans: 1,
+        tag: "Geography - ফুজি",
+        exp: "লাভা ও ভস্ম সঞ্চিত হয়ে গঠিত হওয়ায় জাপানের 'মাউন্ট ফুজি' একটি বিখ্যাত সঞ্চয়জাত বা আগ্নেয় পর্বত।",
+        special: "💡 ফুজি পর্বতের চূড়াটি প্রায় বৃত্তাকার এবং এটি দেখতে একটি নিখুঁত প্রতিসাম্য শঙ্কুর মতো। জাপানি সংস্কৃতিতে ফুজিকে অত্যন্ত পবিত্র ও সৌভাগ্যের প্রতীক মনে করা হয়।"
+    },
+    {
+        q: "কোন মহাসাগরের তলদেশে পৃথিবীর দীর্ঘতম পর্বতশ্রেণী বা 'মিড-ওশেনিক রিজ' অবস্থিত?",
+        opts: ["প্রশান্ত মহাসাগর", "আটলান্টিক মহাসাগর", "ভারত মহাসাগর", "সুমেরু মহাসাগর"],
+        ans: 1,
+        tag: "Geography - মিড-অ্যাটলান্টিক",
+        exp: "আটলান্টিক মহাসাগরের তলদেশে উত্তর থেকে দক্ষিণে বিস্তৃত 'মধ্য আটলান্টিক শৈলশিরা' হলো জলের নিচে অবস্থিত পৃথিবীর দীর্ঘতম পর্বতশ্রেণী।",
+        special: "💡 প্লেট টেকটোনিকস বা পাতের চলনের ফলে মহাসাগরীয় ভূত্বক ফেটে লাভা বের হয়ে এই বিশাল ডুবো পর্বতশ্রেণীটি তৈরি করেছে, যার কিছু চূড়া দ্বীপ হিসেবে জলের ওপরে জেগে রয়েছে (যেমন: আইসল্যান্ড)।"
+    },
+    {
+        q: "ইতালির ভয়ংকর সক্রিয় আগ্নেয়গিরি 'মাউন্ট ভিসুভিয়াস' কোন সাগরের তীরে অবস্থিত?",
+        opts: ["লোহিত সাগর", "ভূমধ্যসাগর", "কালো সাগর", "কাস্পিয়ান সাগর"],
+        ans: 1,
+        tag: "Geography - ভিসুভিয়াস",
+        exp: "ইতালির নেপলস উপসাগরের তীরে ভূমধ্যসাগরীয় অঞ্চলে অবস্থিত একটি অত্যন্ত কুখ্যাত আগ্নেয়গিরি হলো 'মাউন্ট ভিসুভিয়াস'।",
+        special: "💡 ৭৯ খ্রিস্টাব্দে ভিসুভিয়াসের এক প্রলয়ংকরী অগ্ন্যুৎপাতে প্রাচীন রোমান শহর 'পম্পেই' এবং 'হারকুলেনিয়াম' সম্পূর্ণভাবে উত্তপ্ত ছাই ও লাভার নিচে চাপা পড়ে ধ্বংস হয়ে গিয়েছিল।"
+    },
+    {
+        q: "পৃথিবীর উচ্চতম সক্রিয় আগ্নেয়গিরি 'ওহোস ডেল সালাডো' কোন দুটি দেশের সীমান্তে অবস্থিত?",
+        opts: ["ভারত ও নেপাল", "আর্জেন্টিনা ও চিলি", "কেনিয়া ও তাঞ্জানিয়া", "ইতালি ও গ্রিস"],
+        ans: 1,
+        tag: "Geography - ওহোস ডেল সালাডো",
+        exp: "আন্দিজ পর্বতমালায় অবস্থিত পৃথিবীর সর্বোচ্চ সক্রিয় আগ্নেয়গিরি 'ওহোস ডেল সালাডো' আর্জেন্টিনা এবং চিলির আন্তর্জাতিক সীমান্তে অবস্থিত, যার উচ্চতা ৬,৮৯৩ মিটার।",
+        special: "💡 এর চূড়ার কাছে একটি স্থায়ী বরফাবৃত হ্রদ রয়েছে, যা বিশ্বের সবচেয়ে উঁচুতে অবস্থিত হ্রদগুলির অন্যতম। এটি শুষ্ক জলবায়ুর কারণে বরফ থাকলেও তুষারপাত খুব কম পায়।"
+    },
+    {
+        q: "ইউরোপ মহাদেশের দীর্ঘতম নদী কোনটি, যা কাস্পিয়ান সাগরে পতিত হয়েছে?",
+        opts: ["দানিউব নদী", "ভলগা নদী", "রাইন নদী", "টেমস নদী"],
+        ans: 1,
+        tag: "Geography - ভলগা",
+        exp: "রাশিয়ার মধ্য দিয়ে প্রবাহিত 'ভলগা নদী' হলো ইউরোপ মহাদেশের দীর্ঘতম নদী (দৈর্ঘ্য ৩,৫৩০ কিমি), যা কাস্পিয়ান সাগরে গিয়ে মিশেছে।",
+        special: "💡 রুশ সংস্কৃতি ও সাহিত্যে এই নদীটির গুরুত্ব অপরিসীম। ভালোবেসে একে রুশ জনগণ 'মাদার ভলগা' বা 'ভলগা মাতা' বলে ডাকেন। এটি রাশিয়ার প্রধান বাণিজ্যিক জলপথ।"
+    },
+    {
+        q: "কোন বিখ্যাত আফ্রিকান নদীটি পৃথিবীর বিষুবরেখাকে দুবার অতিক্রম করেছে?",
+        opts: ["নীল নদ", "কঙ্গো বা জায়ার নদী", "নাইজার নদী", "জাম্বেসি নদী"],
+        ans: 1,
+        tag: "Geography - কঙ্গো",
+        exp: "মধ্য আফ্রিকার 'কঙ্গো নদী' বা জায়ার নদী তার প্রবাহপথে বিষুবরেখাকে দুই বার অতিক্রম বা ছেদ করেছে।",
+        special: "💡 আমাজন নদীর পর কঙ্গো হলো বিশ্বের দ্বিতীয় বৃহত্তম জলবাহী নদী এবং এটি পৃথিবীর গভীরতম নদী (গভীরতা প্রায় ২২০ মিটার)।"
+    },
+    {
+        q: "আফ্রিকার কোন নদীটি মকরক্রান্তি রেখাকে দুবার অতিক্রম করে ভারত মহাসাগরে পতিত হয়েছে?",
+        opts: ["কঙ্গো নদী", "লিম্পোপো নদী", "নীল নদ", "অরেঞ্জ নদী"],
+        ans: 1,
+        tag: "Geography - লিম্পোপো",
+        exp: "দক্ষিণ আফ্রিকার 'লিম্পোপো নদী' মকরক্রান্তি রেখাকে দুই বার ছেদ করে প্রবাহিত হয়েছে।",
+        special: "💡 এই নদীটি বন্যপ্রাণী ও বিশেষ করে কুমিরের স্বর্গরাজ্য হিসেবে পরিচিত। বিখ্যাত লেখক রুডইয়ার্ড কিপলিং তাঁর গল্পে একে \"ধূসর-সবুজ, তৈলাক্ত লিম্পোপো নদী\" বলে উল্লেখ করেছিলেন।"
+    },
+    {
+        q: "উত্তর আমেরিকা মহাদেশের দীর্ঘতম নদী প্রণালী কোনটি, যার ব-দ্বীপ দেখতে পাখির পায়ের মতো?",
+        opts: ["কলোরাডো নদী", "মিসিসিপি-মিসৌরি নদী", "সেন্ট লরেন্স নদী", "ইউকন নদী"],
+        ans: 1,
+        tag: "Geography - মিসিসিপি-মিসৌরি",
+        exp: "উত্তর আমেরিকার দীর্ঘতম নদী প্রণালী হলো 'মিসিসিপি-মিসৌরি'। এই নদী মেক্সিকো উপসাগরে যেখানে পতিত হয়েছে, সেখানে পাখির পায়ের মতো আকৃতির ব-দ্বীপ তৈরি করেছে।",
+        special: "💡 এই নদী অববাহিকাটি আমেরিকার প্রধান গম ও ভুট্টা বলয় অঞ্চলকে উর্বর পলি দিয়ে সমৃদ্ধ করেছে।"
+    },
+    {
+        q: "ইউরোপের কোন বিখ্যাত আন্তর্জাতিক নদীটিকে \"ইউরোপের জীবনরেখা\" বলা হয় এবং এটি জার্মানির ব্ল্যাক ফরেস্ট থেকে উৎপত্তি লাভ করেছে?",
+        opts: ["রাইন নদী", "দানিউব নদী", "ভলগা নদী", "টেমস নদী"],
+        ans: 1,
+        tag: "Geography - দানিউব",
+        exp: "জার্মানির ব্ল্যাক ফরেস্ট পার্বত্য অঞ্চল থেকে উৎপন্ন হয়ে ১০টি দেশের মধ্য দিয়ে প্রবাহিত হয়ে কৃষ্ণ সাগরে পতিত হওয়া 'দানিউব নদী' কে ইউরোপের জীবনরেখা বলা হয়।",
+        special: "💡 দানিউব বিশ্বের একমাত্র নদী যা ৪টি দেশের রাজধানী শহরকে (ভিয়েনা, ব্রাতিস্লাভা, বুদাপেস্ট এবং বেলগ্রেড) স্পর্শ করে প্রবাহিত হয়েছে।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 15 * 60; // ১৫ মিনিট (১৫ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

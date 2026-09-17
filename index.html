@@ -105,12 +105,17 @@ a { text-decoration: none; }
 
 /* ================= SETS GRID (Practice Zone) ================= */
 .sets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-.set-btn { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.set-btn { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; position: relative; }
 .set-btn:hover { background: var(--bg-card); border-color: var(--primary); transform: scale(1.05) translateY(-3px); box-shadow: 0 6px 15px rgba(26,122,74,0.1); }
 .set-btn.free { border-left: 4px solid #10b981; }
+.set-btn.locked-out { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.7); }
+.set-btn.locked-out:hover { transform: none; box-shadow: none; border-color: var(--border-color); }
 .set-badge { font-family: 'Tiro Bangla', serif; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
 .set-badge.free-tag { background: #d1fae5; color: #065f46; }
 .set-badge.locked-tag { background: #fee2e2; color: #991b1b; }
+.set-badge.used-tag { background: #fef3c7; color: #92400e; }
+.set-badge.left-tag { background: #dbeafe; color: #1e40af; }
+.set-attempts-info { position: absolute; bottom: 3px; right: 5px; font-family: 'Tiro Bangla', serif; font-size: 0.65rem; color: var(--text-meta); font-weight: 700; }
 
 /* ================= LOGIN ================= */
 .login-box { max-width: 400px; text-align: center; }
@@ -162,23 +167,6 @@ a { text-decoration: none; }
 /* ================= RESULT ================= */
 .result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid var(--border-color); display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
 .result-wrap.show { display: block; }
-.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1; }
-.result-score { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 5px; }
-.result-total { font-size: 1rem; color: var(--text-meta); margin-bottom: 0.5rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
-.result-grade { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e8730a; }
-.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-.result-bar { background: var(--bg-main); border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid var(--border-color); }
-.rb-num { font-size: 1.8rem; font-weight: 800; }
-.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); margin-top: 0.2rem; font-weight: bold; }
-.attempt-info { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--primary); font-weight: bold; margin-bottom: 1.5rem; background: #e8f7ef; padding: 10px; border-radius: 8px; }
-.result-actions { display: flex; flex-direction: column; gap: 10px; }
-.result-actions button { width: 100%; padding: 14px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; }
-.btn-retry { background: #17a2b8; color: white; }
-.btn-retry:hover { background: #138496; }
-.btn-review { background: #28a745; color: white; }
-.btn-review:hover { background: #218838; }
-.btn-home { background: transparent; color: #5a7a66; border: 2px solid var(--border-color); }
-.btn-home:hover { background: var(--bg-main); }
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
@@ -225,7 +213,7 @@ a { text-decoration: none; }
 <div class="action-title">Practice Zone</div>
 <div class="action-subtitle">Subject & Chapter Wise Test</div>
 </div>
-<span class="action-meta">📖 সকল বিষয় · 📝 মাসে ৫ বার</span>
+<span class="action-meta">📖 সকল বিষয় · 📝 প্রতি সেটে ৫ বার</span>
 <div class="action-btn">প্রবেশ করুন →</div>
 </div>
 
@@ -275,7 +263,7 @@ a { text-decoration: none; }
 <button class="modal-close" onclick="closeModal('setsModal')">&times;</button>
 <div class="modal-header">
 <h3 id="modalSubjectTitle">বিষয়</h3>
-<p class="modal-sub" id="modalSetSub">৩০টি সেট · ১ম ২টি ফ্রি · মাসে ৫ বার</p>
+<p class="modal-sub" id="modalSetSub">৩০টি সেট · ১ম ২টি ফ্রি · প্রতি সেটে ৫ বার</p>
 </div>
 <div class="sets-grid" id="modalSetsGrid"></div>
 </div>
@@ -290,7 +278,6 @@ a { text-decoration: none; }
 <p class="modal-sub" id="calendarSub">আজকের তারিখ সবার আগে</p>
 </div>
 
-<!-- TODAY BANNER -->
 <div class="today-banner">
     <div class="today-banner-left">
         <h2 id="todayBannerTitle">📅 আজকের পরীক্ষা</h2>
@@ -299,7 +286,6 @@ a { text-decoration: none; }
     <button class="today-banner-btn" id="todayBannerBtn" onclick="startTodayQuiz()">🚀 শুরু করুন</button>
 </div>
 
-<!-- FILTER TABS -->
 <div class="filter-tabs">
     <div class="filter-tab active" onclick="filterDays('all', this)">📋 সব দিন</div>
     <div class="filter-tab" onclick="filterDays('completed', this)">✅ সম্পন্ন</div>
@@ -307,11 +293,9 @@ a { text-decoration: none; }
     <div class="filter-tab" onclick="filterDays('upcoming', this)">🔒 আসন্ন</div>
 </div>
 
-<!-- UPCOMING -->
 <div class="section-heading"><span>📅</span> আগামী দিনগুলো</div>
 <div class="days-grid" id="upcomingGrid"></div>
 
-<!-- PAST -->
 <div class="section-heading"><span>🕐</span> আগের দিনগুলো</div>
 <div class="days-grid" id="pastGrid"></div>
 </div>
@@ -322,17 +306,15 @@ a { text-decoration: none; }
 <div class="modal-box login-box">
 <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
 <div class="login-icon">🔒</div>
-<h3 class="bn-font" style="margin-bottom: 10px; color: var(--primary);">টেস্টটি লক করা আছে</h3>
-<p class="bn-font" style="font-size: 0.95rem; color: var(--text-meta); margin-bottom: 15px;">এটি আনলক করতে সঠিক ইউজারনেম ও পাসওয়ার্ড প্রদান করুন।</p>
+<h3 class="bn-font" id="loginTitle" style="margin-bottom: 10px; color: var(--primary);">টেস্টটি লক করা আছে</h3>
+<p class="bn-font" id="loginSubtitle" style="font-size: 0.95rem; color: var(--text-meta); margin-bottom: 15px;">এটি আনলক করতে সঠিক ইউজারনেম ও পাসওয়ার্ড প্রদান করুন।</p>
 
-<!-- Saved credentials info -->
 <div class="login-saved-info" id="loginSavedInfo">
     💾 আগের লগইন তথ্য পাওয়া গেছে — শুধু ক্লিক করুন
 </div>
 
-<!-- Attempt info -->
 <div class="login-attempt-info" id="loginAttemptInfo">
-    ⏳ এই মাসে বাকি আছে <span id="loginAttemptsLeft">৫</span> বার টেস্ট দেওয়ার সুযোগ
+    ⏳ এই সেটে বাকি আছে <span id="loginAttemptsLeft">৫</span> বার টেস্ট দেওয়ার সুযোগ
 </div>
 
 <input type="text" id="usernameInput" class="login-input" placeholder="ইউজারনেম দিন">
@@ -428,50 +410,49 @@ const PREVIOUS_YEAR_DATA = {
 let targetSubjectCode = "";
 let targetSetNum = 0;
 let calendarMode = "";
-let activeDateKey = "";
 const LABELS = ['A', 'B', 'C', 'D'];
-const MONTHLY_LIMIT = 5; // ★ প্রতি মাসে ৫ বার
+const PER_SET_LIMIT = 5; // ★ প্রতি সেটে ৫ বার
 
 // ============================================================
-// ★ MONTHLY ATTEMPT TRACKING (ইউজারনেম অনুযায়ী)
+// ★ ATTEMPT TRACKING (প্রতি সেটে আলাদা, প্রতি মাসে রিসেট)
 // ============================================================
+// Key format: "attempts_<username>_<subjectCode>_set<num>_<YYYY-MM>"
+// এভাবে প্রতিটি সেটের কাউন্ট আলাদা থাকবে এবং প্রতি মাসে রিসেট হবে
+
 function getMonthKey() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 }
 
-// প্রতিটি ইউজারের জন্য আলাদা key: "attempts_<username>_<YYYY-MM>"
-function getAttemptStorageKey(username) {
-    return `attempts_${username}_${getMonthKey()}`;
+function getAttemptStorageKey(username, subjectCode, setNum) {
+    return `attempts_${username}_${subjectCode}_set${setNum}_${getMonthKey()}`;
 }
 
-// ইউজারের এই মাসের কতবার টেস্ট দিয়েছে
-function getMonthlyAttempts(username) {
-    if (!username) return 0;
-    const raw = localStorage.getItem(getAttemptStorageKey(username));
+// ★ নির্দিষ্ট সেটে ইউজার কতবার দিয়েছে
+function getSetAttempts(username, subjectCode, setNum) {
+    if (!username || !subjectCode) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username, subjectCode, setNum));
     return raw ? parseInt(raw) : 0;
 }
 
-// ইউজারের attempt বাড়ানো
-function incrementMonthlyAttempts(username) {
-    if (!username) return;
-    const current = getMonthlyAttempts(username);
-    localStorage.setItem(getAttemptStorageKey(username), current + 1);
+// ★ নির্দিষ্ট সেটে ইউজারের attempt বাড়ানো
+function incrementSetAttempts(username, subjectCode, setNum) {
+    if (!username || !subjectCode) return;
+    const current = getSetAttempts(username, subjectCode, setNum);
+    localStorage.setItem(getAttemptStorageKey(username, subjectCode, setNum), current + 1);
 }
 
-// ইউজারের বাকি কতবার আছে
-function getRemainingAttempts(username) {
-    return Math.max(0, MONTHLY_LIMIT - getMonthlyAttempts(username));
+// ★ নির্দিষ্ট সেটে বাকি কতবার
+function getSetRemaining(username, subjectCode, setNum) {
+    return Math.max(0, PER_SET_LIMIT - getSetAttempts(username, subjectCode, setNum));
 }
 
 // ============================================================
-// ★ SAVED CREDENTIALS (স্টুডেন্টের সুবিধার জন্য)
+// ★ SAVED CREDENTIALS
 // ============================================================
 const SAVED_CRED_KEY = "testBazarSavedCredentials";
 
 function saveCredentials(username, password) {
-    // শুধু username সেভ করব, password নয় (নিরাপত্তার জন্য)
-    // তবে ইউজার চাইলে দুটোই সেভ করা যায়
     localStorage.setItem(SAVED_CRED_KEY, JSON.stringify({
         username: username,
         password: password,
@@ -482,15 +463,7 @@ function saveCredentials(username, password) {
 function getSavedCredentials() {
     const raw = localStorage.getItem(SAVED_CRED_KEY);
     if (!raw) return null;
-    try {
-        return JSON.parse(raw);
-    } catch(e) {
-        return null;
-    }
-}
-
-function clearSavedCredentials() {
-    localStorage.removeItem(SAVED_CRED_KEY);
+    try { return JSON.parse(raw); } catch(e) { return null; }
 }
 
 // ============================================================
@@ -529,26 +502,57 @@ function openSets(subjectCode, subjectName) {
     targetSubjectCode = subjectCode;
     document.getElementById('modalSubjectTitle').innerHTML = `📖 ${subjectName} - সেটসমূহ`;
 
-    // ★ বাকি attempts দেখাও (লগইন করা ইউজারের জন্য)
     const loggedInUser = sessionStorage.getItem("currentStudent") || "";
-    let remaining = MONTHLY_LIMIT;
-    if (loggedInUser) {
-        remaining = getRemainingAttempts(loggedInUser);
-    }
     document.getElementById('modalSetSub').innerHTML =
-        `৩০টি সেট · ১ম ২টি ফ্রি · এই মাসে বাকি <b style="color:var(--primary);">${toBnNum(remaining)}</b> বার`;
+        `৩০টি সেট · ১ম ২টি ফ্রি · প্রতি সেটে <b style="color:var(--primary);">${toBnNum(PER_SET_LIMIT)}</b> বার`;
 
     const grid = document.getElementById('modalSetsGrid');
     grid.innerHTML = '';
+
     for (let i = 1; i <= 30; i++) {
         const isFree = i <= 2;
         const setBtn = document.createElement('div');
         setBtn.className = `set-btn ${isFree ? 'free' : ''}`;
-        setBtn.onclick = () => handleSetClick(subjectCode, i);
-        setBtn.innerHTML = `
-            <span class="bn-font" style="font-size: 1.1rem; color: var(--primary);">সেট - ${i}</span>
-            <span class="set-badge ${isFree ? 'free-tag' : 'locked-tag'}">${isFree ? '🆓 ফ্রি' : '🔒 লক'}</span>
-        `;
+
+        if (isFree) {
+            // ★ ফ্রি সেট — লিমিট নেই
+            setBtn.onclick = () => {
+                window.location.href = `practice/${subjectCode}-test${i}.html`;
+            };
+            setBtn.innerHTML = `
+                <span class="bn-font" style="font-size: 1.1rem; color: var(--primary);">সেট - ${toBnNum(i)}</span>
+                <span class="set-badge free-tag">🆓 ফ্রি</span>
+            `;
+        } else {
+            // ★ লক করা সেট — লগইন লাগবে, প্রতি সেটে ৫ বার
+            let attemptsLeft = PER_SET_LIMIT;
+            let attemptsUsed = 0;
+
+            if (loggedInUser) {
+                attemptsUsed = getSetAttempts(loggedInUser, subjectCode, i);
+                attemptsLeft = Math.max(0, PER_SET_LIMIT - attemptsUsed);
+            }
+
+            if (loggedInUser && attemptsLeft === 0) {
+                // ★ এই সেটে এই মাসে ৫ বার শেষ
+                setBtn.classList.add('locked-out');
+                setBtn.innerHTML = `
+                    <span class="bn-font" style="font-size: 1.1rem; color: var(--text-meta);">সেট - ${toBnNum(i)}</span>
+                    <span class="set-badge used-tag">⛔ শেষ</span>
+                    <span class="set-attempts-info">${toBnNum(attemptsUsed)}/${toBnNum(PER_SET_LIMIT)}</span>
+                `;
+                setBtn.onclick = () => {
+                    showSMS(`⚠️ এই মাসে Set ${toBnNum(i)} এ আপনার ${toBnNum(PER_SET_LIMIT)} বার টেস্ট দেওয়ার সীমা শেষ!\n📅 পরের মাসে আবার ${toBnNum(PER_SET_LIMIT)} বার পাবেন।`);
+                };
+            } else {
+                setBtn.innerHTML = `
+                    <span class="bn-font" style="font-size: 1.1rem; color: var(--primary);">সেট - ${toBnNum(i)}</span>
+                    <span class="set-badge left-tag">🔒 ${toBnNum(attemptsLeft)} বার বাকি</span>
+                `;
+                setBtn.onclick = () => handleSetClick(subjectCode, i);
+            }
+        }
+
         grid.appendChild(setBtn);
     }
     openModal('setsModal');
@@ -556,15 +560,6 @@ function openSets(subjectCode, subjectName) {
 
 function handleSetClick(subjectCode, setNum) {
     targetSetNum = setNum;
-
-    // ★ Set 1 ও Set 2 — ফ্রি, লগইন ছাড়াই যাবে
-    if (setNum <= 2) {
-        window.location.href = `practice/${subjectCode}-test${setNum}.html`;
-        return;
-    }
-
-    // ★ Set 3 থেকে Set 30 — লগইন বাধ্যতামূলক
-    // প্রতিবার লগইন করতে হবে, কিন্তু credentials saved থাকলে সহজ হবে
     closeModal('setsModal');
     openLoginModal(subjectCode, setNum);
 }
@@ -574,10 +569,9 @@ function handleSetClick(subjectCode, setNum) {
 // ============================================================
 function openLoginModal(subjectCode, setNum) {
     // Modal-এ subject/set info দেখাও
-    document.querySelector('#loginModal .login-icon').innerText = '🔒';
-    document.querySelector('#loginModal h3').innerText = 'টেস্টটি লক করা আছে';
-    document.querySelector('#loginModal p').innerText =
-        `Set ${toBnNum(setNum)} আনলক করতে সঠিক ইউজারনেম ও পাসওয়ার্ড প্রদান করুন।`;
+    document.getElementById('loginTitle').innerText = `🔒 Set ${toBnNum(setNum)} আনলক করুন`;
+    document.getElementById('loginSubtitle').innerText =
+        `প্রতিবার টেস্ট দেওয়ার আগে ইউজারনেম ও পাসওয়ার্ড দিতে হবে।`;
 
     // Saved credentials চেক করো
     const saved = getSavedCredentials();
@@ -589,18 +583,18 @@ function openLoginModal(subjectCode, setNum) {
         userInput.value = saved.username;
         passInput.value = saved.password || '';
         savedInfo.classList.add('show');
-        savedInfo.innerHTML = `💾 স্বাগতম <b>${saved.username}</b>! পাসওয়ার্ড দিয়ে "টেস্ট শুরু করুন" চাপুন।`;
+        savedInfo.innerHTML = `💾 স্বাগতম <b>${saved.username}</b>! শুধু "টেস্ট শুরু করুন" চাপুন।`;
     } else {
         userInput.value = '';
         passInput.value = '';
         savedInfo.classList.remove('show');
     }
 
-    // Attempt info
+    // Attempt info for this set
     const attemptInfo = document.getElementById('loginAttemptInfo');
-    const loggedInUser = sessionStorage.getItem("currentStudent") || saved?.username || "";
-    if (loggedInUser) {
-        const left = getRemainingAttempts(loggedInUser);
+    const checkUser = userInput.value || saved?.username || "";
+    if (checkUser) {
+        const left = getSetRemaining(checkUser, subjectCode, setNum);
         document.getElementById('loginAttemptsLeft').innerText = toBnNum(left);
         attemptInfo.classList.add('show');
     } else {
@@ -610,13 +604,10 @@ function openLoginModal(subjectCode, setNum) {
     // Error hide
     document.getElementById('loginErrorMsg').style.display = 'none';
 
-    // Focus on password if username already filled
+    // Focus
     setTimeout(() => {
-        if (userInput.value) {
-            passInput.focus();
-        } else {
-            userInput.focus();
-        }
+        if (userInput.value) passInput.focus();
+        else userInput.focus();
     }, 100);
 
     openModal('loginModal');
@@ -624,6 +615,9 @@ function openLoginModal(subjectCode, setNum) {
     // Enter key handler
     passInput.onkeydown = (e) => {
         if (e.key === 'Enter') attemptLogin();
+    };
+    userInput.onkeydown = (e) => {
+        if (e.key === 'Enter') passInput.focus();
     };
 }
 
@@ -649,10 +643,10 @@ function attemptLogin() {
         return;
     }
 
-    // ★ Check monthly limit for this user
-    const remaining = getRemainingAttempts(uName);
+    // ★ Check THIS SET's monthly limit for this user
+    const remaining = getSetRemaining(uName, targetSubjectCode, targetSetNum);
     if (remaining <= 0) {
-        errorMsg.innerText = `⚠️ এই মাসে আপনার ${toBnNum(MONTHLY_LIMIT)} বার টেস্ট দেওয়ার সীমা শেষ! পরের মাসে আবার চেষ্টা করুন।`;
+        errorMsg.innerText = `⚠️ এই মাসে Set ${toBnNum(targetSetNum)} এ আপনার ${toBnNum(PER_SET_LIMIT)} বার টেস্ট দেওয়ার সীমা শেষ! পরের মাসে আবার চেষ্টা করুন।`;
         errorMsg.style.display = 'block';
         return;
     }
@@ -660,28 +654,27 @@ function attemptLogin() {
     // ★ Save credentials for next time
     saveCredentials(uName, pWord);
 
-    // ★ Increment attempt count
-    incrementMonthlyAttempts(uName);
+    // ★ Increment THIS SET's attempt count
+    incrementSetAttempts(uName, targetSubjectCode, targetSetNum);
 
     // ★ Set session
     sessionStorage.setItem("testBazarUserLoggedIn", "true");
     sessionStorage.setItem("currentStudent", uName);
 
     // ★ Calculate new remaining and show SMS
-    const newRemaining = getRemainingAttempts(uName);
-    showSMS(`✅ লগইন সফল! Set ${toBnNum(targetSetNum)} শুরু হচ্ছে...\n📊 এই মাসে বাকি: ${toBnNum(newRemaining)} বার`);
+    const newRemaining = getSetRemaining(uName, targetSubjectCode, targetSetNum);
+    showSMS(`✅ লগইন সফল! Set ${toBnNum(targetSetNum)} শুরু হচ্ছে...\n📊 এই সেটে বাকি: ${toBnNum(newRemaining)} বার`);
 
     // Redirect to test page
     setTimeout(() => {
         window.location.href = `practice/${targetSubjectCode}-test${targetSetNum}.html`;
-    }, 800);
+    }, 900);
 }
 
 // ============================================================
 // ★ SMS / TOAST NOTIFICATION
 // ============================================================
 function showSMS(message) {
-    // পুরনো toast মুছে ফেলো
     const oldToast = document.getElementById('smsToastGlobal');
     if (oldToast) oldToast.remove();
 
@@ -699,16 +692,14 @@ function showSMS(message) {
     toast.innerText = message;
     document.body.appendChild(toast);
 
-    // Show
     requestAnimationFrame(() => {
         toast.style.transform = 'translateX(-50%) translateY(0)';
     });
 
-    // Auto hide
     setTimeout(() => {
         toast.style.transform = 'translateX(-50%) translateY(-120%)';
         setTimeout(() => toast.remove(), 400);
-    }, 3500);
+    }, 4000);
 }
 
 // ============================================================
@@ -802,15 +793,11 @@ function buildCalendar() {
         if (status === 'today') badge = `<div class="day-status">🔥 TODAY</div>`;
         else badge = `<div class="day-status">🔒 লক</div>`;
 
-        const dayNumBn = toBnNum(dayNum);
-        const dayNameBn = formatDayNameBn(d);
-        const dateBn = formatDateBn(d);
-
         card.innerHTML = `
             ${badge}
-            <div class="day-date">Day ${dayNumBn}</div>
-            <div class="day-dayname">${dayNameBn}</div>
-            <div class="day-meta">📅 ${dateBn}</div>
+            <div class="day-date">Day ${toBnNum(dayNum)}</div>
+            <div class="day-dayname">${formatDayNameBn(d)}</div>
+            <div class="day-meta">📅 ${formatDateBn(d)}</div>
         `;
 
         if (status === 'today') {
@@ -820,7 +807,7 @@ function buildCalendar() {
                 card.onclick = () => { window.location.href = filePath; };
             }
         } else {
-            card.onclick = () => showSMS("🔒 এই পরীক্ষাটি এখনো লক করা আছে।\n\n" + dateBn + " তারিখে এটি খুলবে।");
+            card.onclick = () => showSMS("🔒 এই পরীক্ষাটি এখনো লক করা আছে।\n\n" + formatDateBn(d) + " তারিখে এটি খুলবে।");
         }
 
         upcomingGrid.appendChild(card);
@@ -873,7 +860,7 @@ function startTodayQuiz() {
         const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn");
         if (isLoggedIn !== "true") {
             closeModal('calendarModal');
-            openLoginModal('mock', todayKey);
+            showSMS("🔒 Mock Test দিতে লগইন করুন।");
             return;
         }
     }

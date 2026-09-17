@@ -38,6 +38,10 @@ a { text-decoration: none; }
 .navbar { background: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
 .logo { font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
 .logo span { color: var(--accent); }
+.user-badge { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 50px; color: white; font-weight: 700; display: none; align-items: center; gap: 6px; }
+.user-badge.show { display: inline-flex; }
+.user-badge .logout-btn { background: rgba(255,255,255,0.2); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+.user-badge .logout-btn:hover { background: var(--danger); }
 .admin-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 8px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; }
 .admin-btn:hover { background: var(--accent); color: var(--primary); border-color: var(--accent); transform: rotate(15deg); }
 
@@ -110,6 +114,7 @@ a { text-decoration: none; }
 .set-btn.free { border-left: 4px solid #10b981; }
 .set-btn.locked-out { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.7); }
 .set-btn.locked-out:hover { transform: none; box-shadow: none; border-color: var(--border-color); }
+.set-btn.in-progress { border-left: 4px solid #f9a825; }
 .set-badge { font-family: 'Tiro Bangla', serif; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
 .set-badge.free-tag { background: #d1fae5; color: #065f46; }
 .set-badge.locked-tag { background: #fee2e2; color: #991b1b; }
@@ -164,10 +169,6 @@ a { text-decoration: none; }
 .day-card.missed { background: #fef2f2; border-color: #fca5a5; }
 .day-card.missed .day-status { background: var(--danger); color: white; }
 
-/* ================= RESULT ================= */
-.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid var(--border-color); display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-.result-wrap.show { display: block; }
-
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
 .navbar { padding: 1rem; }
@@ -178,6 +179,7 @@ a { text-decoration: none; }
 .today-banner { padding: 1.2rem; }
 .today-banner-left h2 { font-size: 1.2rem; }
 .today-banner-btn { padding: 12px 20px; font-size: 1rem; }
+.user-badge { font-size: 0.75rem; padding: 4px 10px; }
 }
 </style>
 </head>
@@ -191,7 +193,13 @@ a { text-decoration: none; }
 <!-- NAVBAR -->
 <nav class="navbar">
 <div class="logo" onclick="window.location.reload()">Test<span>Bazar</span></div>
-<button class="admin-btn" onclick="alert('Admin Panel Access Restricted!')">⚙️ Admin</button>
+<div style="display: flex; align-items: center; gap: 10px;">
+    <div class="user-badge" id="userBadge">
+        <span>👤 <b id="userBadgeName">User</b></span>
+        <button class="logout-btn" onclick="logoutUser()" title="লগআউট">×</button>
+    </div>
+    <button class="admin-btn" onclick="alert('Admin Panel Access Restricted!')">⚙️ Admin</button>
+</div>
 </nav>
 
 <!-- MAIN CONTAINER -->
@@ -411,46 +419,29 @@ let targetSubjectCode = "";
 let targetSetNum = 0;
 let calendarMode = "";
 const LABELS = ['A', 'B', 'C', 'D'];
-const PER_SET_LIMIT = 5; // ★ প্রতি সেটে ৫ বার
+const PER_SET_LIMIT = 5;
 
-// ============================================================
-// ★ ATTEMPT TRACKING (প্রতি সেটে আলাদা, প্রতি মাসে রিসেট)
-// ============================================================
-// Key format: "attempts_<username>_<subjectCode>_set<num>_<YYYY-MM>"
-// এভাবে প্রতিটি সেটের কাউন্ট আলাদা থাকবে এবং প্রতি মাসে রিসেট হবে
-
-function getMonthKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-}
-
-function getAttemptStorageKey(username, subjectCode, setNum) {
-    return `attempts_${username}_${subjectCode}_set${setNum}_${getMonthKey()}`;
-}
-
-// ★ নির্দিষ্ট সেটে ইউজার কতবার দিয়েছে
-function getSetAttempts(username, subjectCode, setNum) {
-    if (!username || !subjectCode) return 0;
-    const raw = localStorage.getItem(getAttemptStorageKey(username, subjectCode, setNum));
-    return raw ? parseInt(raw) : 0;
-}
-
-// ★ নির্দিষ্ট সেটে ইউজারের attempt বাড়ানো
-function incrementSetAttempts(username, subjectCode, setNum) {
-    if (!username || !subjectCode) return;
-    const current = getSetAttempts(username, subjectCode, setNum);
-    localStorage.setItem(getAttemptStorageKey(username, subjectCode, setNum), current + 1);
-}
-
-// ★ নির্দিষ্ট সেটে বাকি কতবার
-function getSetRemaining(username, subjectCode, setNum) {
-    return Math.max(0, PER_SET_LIMIT - getSetAttempts(username, subjectCode, setNum));
-}
-
-// ============================================================
-// ★ SAVED CREDENTIALS
-// ============================================================
+// ★★★ FIXED: ইউজার সবসময় localStorage থেকে নেওয়া হবে ★★★
+// এভাবে ট্যাব বন্ধ করলেও ইউজারনেম মুছবে না
 const SAVED_CRED_KEY = "testBazarSavedCredentials";
+
+function getActiveUser() {
+    // ১. sessionStorage-এ লগইন করা আছে কিনা
+    const sessionUser = sessionStorage.getItem("currentStudent");
+    if (sessionUser) return sessionUser;
+
+    // ২. না থাকলে localStorage-এর saved credentials দেখো
+    const saved = getSavedCredentials();
+    if (saved && saved.username) return saved.username;
+
+    return "";
+}
+
+function getSavedCredentials() {
+    const raw = localStorage.getItem(SAVED_CRED_KEY);
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch(e) { return null; }
+}
 
 function saveCredentials(username, password) {
     localStorage.setItem(SAVED_CRED_KEY, JSON.stringify({
@@ -460,10 +451,53 @@ function saveCredentials(username, password) {
     }));
 }
 
-function getSavedCredentials() {
-    const raw = localStorage.getItem(SAVED_CRED_KEY);
-    if (!raw) return null;
-    try { return JSON.parse(raw); } catch(e) { return null; }
+function logoutUser() {
+    if (!confirm("আপনি কি লগআউট করতে চান?")) return;
+    sessionStorage.removeItem("testBazarUserLoggedIn");
+    sessionStorage.removeItem("currentStudent");
+    localStorage.removeItem(SAVED_CRED_KEY);
+    location.reload();
+}
+
+// ★ নাম দেখানোর জন্য navbar badge
+function updateUserBadge() {
+    const user = getActiveUser();
+    const badge = document.getElementById('userBadge');
+    const nameEl = document.getElementById('userBadgeName');
+    if (user) {
+        nameEl.innerText = user;
+        badge.classList.add('show');
+    } else {
+        badge.classList.remove('show');
+    }
+}
+
+// ============================================================
+// ATTEMPT TRACKING (প্রতি সেটে আলাদা, প্রতি মাসে রিসেট)
+// ============================================================
+function getMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+
+function getAttemptStorageKey(username, subjectCode, setNum) {
+    return `attempts_${username}_${subjectCode}_set${setNum}_${getMonthKey()}`;
+}
+
+function getSetAttempts(username, subjectCode, setNum) {
+    if (!username || !subjectCode) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username, subjectCode, setNum));
+    return raw ? parseInt(raw) : 0;
+}
+
+function incrementSetAttempts(username, subjectCode, setNum) {
+    if (!username || !subjectCode) return;
+    const current = getSetAttempts(username, subjectCode, setNum);
+    localStorage.setItem(getAttemptStorageKey(username, subjectCode, setNum), current + 1);
+}
+
+function getSetRemaining(username, subjectCode, setNum) {
+    return Math.max(0, PER_SET_LIMIT - getSetAttempts(username, subjectCode, setNum));
 }
 
 // ============================================================
@@ -502,7 +536,9 @@ function openSets(subjectCode, subjectName) {
     targetSubjectCode = subjectCode;
     document.getElementById('modalSubjectTitle').innerHTML = `📖 ${subjectName} - সেটসমূহ`;
 
-    const loggedInUser = sessionStorage.getItem("currentStudent") || "";
+    // ★★★ FIXED: getActiveUser() দিয়ে ইউজার নাও ★★★
+    const loggedInUser = getActiveUser();
+
     document.getElementById('modalSetSub').innerHTML =
         `৩০টি সেট · ১ম ২টি ফ্রি · প্রতি সেটে <b style="color:var(--primary);">${toBnNum(PER_SET_LIMIT)}</b> বার`;
 
@@ -515,7 +551,6 @@ function openSets(subjectCode, subjectName) {
         setBtn.className = `set-btn ${isFree ? 'free' : ''}`;
 
         if (isFree) {
-            // ★ ফ্রি সেট — লিমিট নেই
             setBtn.onclick = () => {
                 window.location.href = `practice/${subjectCode}-test${i}.html`;
             };
@@ -524,17 +559,16 @@ function openSets(subjectCode, subjectName) {
                 <span class="set-badge free-tag">🆓 ফ্রি</span>
             `;
         } else {
-            // ★ লক করা সেট — লগইন লাগবে, প্রতি সেটে ৫ বার
             let attemptsLeft = PER_SET_LIMIT;
             let attemptsUsed = 0;
 
+            // ★★★ FIXED: loggedInUser এখন localStorage থেকেও আসবে ★★★
             if (loggedInUser) {
                 attemptsUsed = getSetAttempts(loggedInUser, subjectCode, i);
                 attemptsLeft = Math.max(0, PER_SET_LIMIT - attemptsUsed);
             }
 
             if (loggedInUser && attemptsLeft === 0) {
-                // ★ এই সেটে এই মাসে ৫ বার শেষ
                 setBtn.classList.add('locked-out');
                 setBtn.innerHTML = `
                     <span class="bn-font" style="font-size: 1.1rem; color: var(--text-meta);">সেট - ${toBnNum(i)}</span>
@@ -544,6 +578,15 @@ function openSets(subjectCode, subjectName) {
                 setBtn.onclick = () => {
                     showSMS(`⚠️ এই মাসে Set ${toBnNum(i)} এ আপনার ${toBnNum(PER_SET_LIMIT)} বার টেস্ট দেওয়ার সীমা শেষ!\n📅 পরের মাসে আবার ${toBnNum(PER_SET_LIMIT)} বার পাবেন।`);
                 };
+            } else if (loggedInUser && attemptsUsed > 0) {
+                // ব্যবহার হয়েছে কিন্তু বাকি আছে
+                setBtn.classList.add('in-progress');
+                setBtn.innerHTML = `
+                    <span class="bn-font" style="font-size: 1.1rem; color: var(--primary);">সেট - ${toBnNum(i)}</span>
+                    <span class="set-badge used-tag">🔓 ${toBnNum(attemptsLeft)} বার বাকি</span>
+                    <span class="set-attempts-info">${toBnNum(attemptsUsed)}/${toBnNum(PER_SET_LIMIT)}</span>
+                `;
+                setBtn.onclick = () => handleSetClick(subjectCode, i);
             } else {
                 setBtn.innerHTML = `
                     <span class="bn-font" style="font-size: 1.1rem; color: var(--primary);">সেট - ${toBnNum(i)}</span>
@@ -565,15 +608,13 @@ function handleSetClick(subjectCode, setNum) {
 }
 
 // ============================================================
-// ★ LOGIN MODAL (Saved credentials সহ)
+// LOGIN MODAL (Saved credentials সহ)
 // ============================================================
 function openLoginModal(subjectCode, setNum) {
-    // Modal-এ subject/set info দেখাও
     document.getElementById('loginTitle').innerText = `🔒 Set ${toBnNum(setNum)} আনলক করুন`;
     document.getElementById('loginSubtitle').innerText =
         `প্রতিবার টেস্ট দেওয়ার আগে ইউজারনেম ও পাসওয়ার্ড দিতে হবে।`;
 
-    // Saved credentials চেক করো
     const saved = getSavedCredentials();
     const savedInfo = document.getElementById('loginSavedInfo');
     const userInput = document.getElementById('usernameInput');
@@ -590,7 +631,6 @@ function openLoginModal(subjectCode, setNum) {
         savedInfo.classList.remove('show');
     }
 
-    // Attempt info for this set
     const attemptInfo = document.getElementById('loginAttemptInfo');
     const checkUser = userInput.value || saved?.username || "";
     if (checkUser) {
@@ -601,10 +641,8 @@ function openLoginModal(subjectCode, setNum) {
         attemptInfo.classList.remove('show');
     }
 
-    // Error hide
     document.getElementById('loginErrorMsg').style.display = 'none';
 
-    // Focus
     setTimeout(() => {
         if (userInput.value) passInput.focus();
         else userInput.focus();
@@ -612,7 +650,6 @@ function openLoginModal(subjectCode, setNum) {
 
     openModal('loginModal');
 
-    // Enter key handler
     passInput.onkeydown = (e) => {
         if (e.key === 'Enter') attemptLogin();
     };
@@ -622,28 +659,25 @@ function openLoginModal(subjectCode, setNum) {
 }
 
 // ============================================================
-// ★ ATTEMPT LOGIN
+// ATTEMPT LOGIN
 // ============================================================
 function attemptLogin() {
     const uName = document.getElementById('usernameInput').value.trim();
     const pWord = document.getElementById('passwordInput').value.trim();
     const errorMsg = document.getElementById('loginErrorMsg');
 
-    // Validation
     if (!uName || !pWord) {
         errorMsg.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দুটোই দিন!";
         errorMsg.style.display = 'block';
         return;
     }
 
-    // Check credentials
     if (!GLOBAL_USERS[uName] || GLOBAL_USERS[uName] !== pWord) {
         errorMsg.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড!";
         errorMsg.style.display = 'block';
         return;
     }
 
-    // ★ Check THIS SET's monthly limit for this user
     const remaining = getSetRemaining(uName, targetSubjectCode, targetSetNum);
     if (remaining <= 0) {
         errorMsg.innerText = `⚠️ এই মাসে Set ${toBnNum(targetSetNum)} এ আপনার ${toBnNum(PER_SET_LIMIT)} বার টেস্ট দেওয়ার সীমা শেষ! পরের মাসে আবার চেষ্টা করুন।`;
@@ -651,28 +685,26 @@ function attemptLogin() {
         return;
     }
 
-    // ★ Save credentials for next time
+    // ★ Save credentials
     saveCredentials(uName, pWord);
-
-    // ★ Increment THIS SET's attempt count
+    // ★ Increment attempt
     incrementSetAttempts(uName, targetSubjectCode, targetSetNum);
-
-    // ★ Set session
+    // ★ Session set
     sessionStorage.setItem("testBazarUserLoggedIn", "true");
     sessionStorage.setItem("currentStudent", uName);
+    // ★ Badge আপডেট
+    updateUserBadge();
 
-    // ★ Calculate new remaining and show SMS
     const newRemaining = getSetRemaining(uName, targetSubjectCode, targetSetNum);
     showSMS(`✅ লগইন সফল! Set ${toBnNum(targetSetNum)} শুরু হচ্ছে...\n📊 এই সেটে বাকি: ${toBnNum(newRemaining)} বার`);
 
-    // Redirect to test page
     setTimeout(() => {
         window.location.href = `practice/${targetSubjectCode}-test${targetSetNum}.html`;
     }, 900);
 }
 
 // ============================================================
-// ★ SMS / TOAST NOTIFICATION
+// SMS / TOAST NOTIFICATION
 // ============================================================
 function showSMS(message) {
     const oldToast = document.getElementById('smsToastGlobal');
@@ -703,7 +735,7 @@ function showSMS(message) {
 }
 
 // ============================================================
-// ★ BANGLA NUMBER
+// BANGLA NUMBER
 // ============================================================
 function toBnNum(num) {
     const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
@@ -857,8 +889,8 @@ function startTodayQuiz() {
     const filePath = `${folder}/${prefix}-${todayKey}.html`;
 
     if (calendarMode === 'mock') {
-        const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn");
-        if (isLoggedIn !== "true") {
+        const user = getActiveUser();
+        if (!user) {
             closeModal('calendarModal');
             showSMS("🔒 Mock Test দিতে লগইন করুন।");
             return;
@@ -943,6 +975,7 @@ window.onclick = function(event) {
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
     renderSubjects();
+    updateUserBadge();  // ★ ইউজার badge দেখাও
 });
 </script>
 </body>

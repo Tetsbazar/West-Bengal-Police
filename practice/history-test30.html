@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — History | Set 30</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; margin-bottom: 6px; }
+.explanation .special-note { background: #ffffff; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 0.85rem; border: 1px dashed #c5dccb; font-family: 'Tiro Bangla', serif; line-height: 1.65; color: #2c4035; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+.result-wrap { display: none; max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
+.result-wrap.show { display: block; }
+.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: #1c2e24; margin-bottom: 18px; }
+.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 8px; }
+.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: #f9a825; margin-bottom: 25px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.result-stat-box { background: #f0faf4; border: 2px solid #c5dccb; border-radius: 16px; padding: 20px 10px; }
+.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.result-stat-num.correct { color: #1a7a4a; }
+.result-stat-num.wrong { color: #e63946; }
+.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: #5a7a66; }
+.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: #1c2e24; line-height: 1.5; margin-bottom: 25px; }
+.result-attempt-info .num { color: #1a7a4a; font-weight: 800; }
+.result-buttons { display: flex; flex-direction: column; gap: 12px; }
+.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
+.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.result-btn.green { background: #2e9e4f; }
+.result-btn.blue { background: #1a9bb8; }
+.result-btn.gray { background: #6b7a72; }
+
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+.hidden { display: none !important; }
+.toast-sms { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; text-align: center; border-left: 5px solid #f9a825; white-space: pre-line; }
+.toast-sms.show { transform: translateX(-50%) translateY(0); }
+.toast-sms .sms-title { font-size: 0.8rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 1px; }
+
+@media (max-width: 480px) {
+.main { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; }
+.q-text { font-size: 0.95rem; }
+.opt-text { font-size: 0.85rem; }
+.explanation p { font-size: 0.82rem; }
+.explanation .special-note { font-size: 0.78rem; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast-sms" id="smsToast">
+    <div class="sms-title">📩 TEST BAZAR</div>
+    <div id="smsText">আপনার বার্তা এখানে</div>
+</div>
+
+<div class="top-bar">
+<div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+<div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+<div class="login-overlay" id="loginOverlay">
+<div class="login-modal">
+<h2>🔐 লগইন করুন</h2>
+<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div class="set-name-display">🏛️ History Set 30</div>
+<div class="input-group">
+<label>ইউজারনেম</label>
+<input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+</div>
+<div class="input-group">
+<label>পাসওয়ার্ড</label>
+<input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+</div>
+<button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+<button class="cancel-btn" onclick="goToHub()">বাতিল</button>
+<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+</div>
+</div>
+
+<div id="testArea" class="hidden">
+<div class="quiz-info">
+<div class="info-item">🎓 <strong>ইতিহাস</strong> — Set 30</div>
+<div class="info-item">📝 <span>জাতীয়তাবাদী আন্দোলন, সংবাদপত্র ও গুরুত্বপূর্ণ সংগঠন</span></div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="q-card" id="qCard">
+<div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+<div class="q-text" id="qText"></div>
+<div class="opts" id="qOpts"></div>
+<div class="explanation" id="explanation">
+    <p id="expMain"></p>
+    <div class="special-note" id="expSpecial"></div>
+</div>
+<div class="nav-row">
+<div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+<button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+</div>
+</div>
+</div>
+
+<div class="result-wrap" id="resultWrap">
+    <div class="result-emoji" id="resultEmoji">💪</div>
+    <div class="result-heading">আপনার ফলাফল</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
+
+    <div class="result-stats">
+        <div class="result-stat-box">
+            <div class="result-stat-num correct" id="resultCorrect">0</div>
+            <div class="result-stat-label">সঠিক</div>
+        </div>
+        <div class="result-stat-box">
+            <div class="result-stat-num wrong" id="resultWrong">0</div>
+            <div class="result-stat-label">ভুল / স্কিপ</div>
+        </div>
+    </div>
+
+    <div class="result-attempt-info" id="resultAttemptInfo">
+        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ৫ বার)
+    </div>
+
+    <div class="result-buttons">
+        <button class="result-btn green" onclick="showReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+        <button class="result-btn blue" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+        <button class="result-btn gray" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+const MAX_ATTEMPTS = 5;
+const TIME_LIMIT = 10 * 60; // ★ ১০ মিনিট
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+const GLOBAL_USERS = {
+"demo1": "1234", "demo2": "1234", "demo3": "1234", "demo4": "1234", "mali": "1234", "sagun": "1234", "dhiren": "1234",
+"ajay": "7251", "anita": "1234", "jaba": "1234", "student100": "pass001", "rohit2027": "abc456"
+};
+
+let currentUser = sessionStorage.getItem("currentStudent") || "";
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+
+// ★ সঠিক উত্তর A, B, C, D-তে সমানভাবে ছড়ানো (৪, ৪, ৪, ৩)
+const questions = [
+{
+q: "১৭৮৪ খ্রিস্টাব্দে কলকাতার এশিয়াটিক সোসাইটি (Asiatic Society) কার উদ্যোগে প্রতিষ্ঠিত হয়েছিল, যা ভারতে নিয়মতান্ত্রিক প্রত্নতাত্ত্বিক গবেষণার পথ খুলে দেয়?",
+opts: ["স্যার উইলিয়াম জোনস", "ওয়ারেন হেস্টিংস", "ডেভিড হেয়ার", "দেবেন্দ্রনাথ ঠাকুর"],
+ans: 0,
+exp: "১৭৮৪ খ্রিস্টাব্দে কলকাতায় বিখ্যাত ভারততত্ত্ববিদ স্যার উইলিয়াম জোনস এশিয়াটিক সোসাইটি প্রতিষ্ঠা করেন।",
+special: "💡 এই ঐতিহাসিক সংগঠনটি প্রতিষ্ঠার সময়ে বাংলার গভর্নর জেনারেল ছিলেন ওয়ারেন হেস্টিংস।"
+},
+{
+q: "রাজা রামমোহন রায় কত খ্রিস্টাব্দে কলকাতায় তাঁর একেশ্বরবাদী আদর্শ প্রচারের উদ্দেশ্যে 'আত্মীয় সভা' (Atmiya Sabha) প্রতিষ্ঠা করেছিলেন?",
+opts: ["১৮১৭ খ্রিস্টাব্দে", "১৮১৫ খ্রিস্টাব্দে", "১৮২৮ খ্রিস্টাব্দে", "১৮৩৯ খ্রিস্টাব্দে"],
+ans: 1,
+exp: "রাজা রামমোহন রায় ১৮১৫ খ্রিস্টাব্দে কলকাতায় 'আত্মীয় সভা' প্রতিষ্ঠা করেন।",
+special: "💡 এটি ছিল মূলত ধর্মীয় ও সামাজিক গোঁড়ামির বিরুদ্ধে আলোচনার একটি গুরুত্বপূর্ণ প্রগতিশীল মঞ্চ।"
+},
+{
+q: "১৮২৮ খ্রিস্টাব্দে রাজা রামমোহন রায় কর্তৃক প্রতিষ্ঠিত ব্রাহ্ম সমাজ (Brahmo Samaj)-এর প্রথম প্রধানাচার্য কে ছিলেন?",
+opts: ["দেবেন্দ্রনাথ ঠাকুর", "কেশবচন্দ্র সেন", "রাজা রামমোহন রায়", "শিবনাথ শাস্ত্রী"],
+ans: 2,
+exp: "১৮২৮ খ্রিস্টাব্দে রাজা রামমোহন রায় ব্রাহ্ম সমাজ প্রতিষ্ঠা করেন এবং তিনিই ছিলেন এই সমাজের প্রথম প্রধানাচার্য।",
+special: "💡 তাঁর মৃত্যুর পর দেবেন্দ্রনাথ ঠাকুর ও কেশবচন্দ্র সেন এই আন্দোলনকে আরও এগিয়ে নিয়ে যান।"
+},
+{
+q: "রামমোহন রায়ের আদর্শের সফল প্রচার ও প্রসারের উদ্দেশ্যে ১৮৩৯ খ্রিস্টাব্দে কে কলকাতায় 'তত্ত্ববোধিনী সভা' (Tattvabodhini Sabha) প্রতিষ্ঠা করেছিলেন?",
+opts: ["দ্বারকানাথ ঠাকুর", "অক্ষয়কুমার দত্ত", "কেশবচন্দ্র সেন", "দেবেন্দ্রনাথ ঠাকুর"],
+ans: 3,
+exp: "১৮৩৯ খ্রিস্টাব্দে মহর্ষি দেবেন্দ্রনাথ ঠাকুর কলকাতায় তত্ত্ববোধিনী সভা প্রতিষ্ঠা করেন।",
+special: "💡 পরবর্তীতে ১৮৪৩ খ্রিস্টাব্দে দেবেন্দ্রনাথ ঠাকুরের উদ্যোগেই বিখ্যাত 'তত্ত্ববোধিনী পত্রিকা' প্রথম প্রকাশিত হয়।"
+},
+{
+q: "১৮৭৫ খ্রিস্টাব্দে কলকাতায় শিশির কুমার ঘোষ দ্বারা প্রতিষ্ঠিত 'ইন্ডিয়ান লিগ' এবং ১৮৭৬ খ্রিস্টাব্দে প্রতিষ্ঠিত 'ভারত সভা' (Indian Association)-এর প্রধান প্রতিষ্ঠাতা কে ছিলেন?",
+opts: ["সুরেন্দ্রনাথ বন্দ্যোপাধ্যায়", "আনন্দমোহন বসু", "উমেশচন্দ্র বন্দ্যোপাধ্যায়", "দ্বারকানাথ বিদ্যাভূষণ"],
+ans: 0,
+exp: "১৮৭৫ খ্রিস্টাব্দে শিশির কুমার ঘোষ ইন্ডিয়ান লিগ প্রতিষ্ঠা করেন এবং ১৮৭৬ খ্রিস্টাব্দে সুরেন্দ্রনাথ বন্দ্যোপাধ্যায় কলকাতায় বিখ্যাত 'ভারত সভা' বা 'ইন্ডিয়ান ন্যাশনাল অ্যাসোসিয়েশন' গড়ে তোলেন।",
+special: "💡 সুরেন্দ্রনাথ বন্দ্যোপাধ্যায়কে ভারতের অন্যতম শ্রেষ্ঠ জাতীয়তাবাদী নেতা হিসেবে বিবেচনা করা হয় এবং তিনি 'বাংলার মুকুটহীন রাজা' নামেও অভিহিত হন।"
+},
+{
+q: "১৮৮৫ খ্রিস্টাব্দে বোম্বাইয়ের গোকুলদাস তেজপাল সংস্কৃত কলেজে কার সভাপতিত্বে ভারতীয় জাতীয় কংগ্রেস (INC)-এর প্রথম ঐতিহাসিক অধিবেশন অনুষ্ঠিত হয়েছিল?",
+opts: ["অ্যালান অক্টাভিয়ান হিউম", "দাদাভাই নৌরজি", "সুরেন্দ্রনাথ বন্দ্যোপাধ্যায়", "উমেশচন্দ্র বন্দ্যোপাধ্যায়"],
+ans: 3,
+exp: "১৮৮৫ খ্রিস্টাব্দের ডিসেম্বরে বোম্বাইয়ের গোকুলদাস তেজপাল সংস্কৃত কলেজে উমেশচন্দ্র বন্দ্যোপাধ্যায়ের সভাপতিত্বে জাতীয় কংগ্রেসের প্রথম অধিবেশন বসে। এর প্রতিষ্ঠাতা ছিলেন অ্যালান অক্টাভিয়ান হিউম।",
+special: "💡 এই প্রথম অধিবেশনে সমগ্র ভারত থেকে মোট ৭২ জন যোগ্য প্রতিনিধি অংশগ্রহণ করেছিলেন এবং তৎকালীন সময়ে ভারতের ভাইসরয় ছিলেন লর্ড ডাফরিন।"
+},
+{
+q: "মহারাষ্ট্রে সামাজিক কুপ্রথা ও ধর্মীয় শোষণের বিরুদ্ধে লড়াই করতে ১৮৭৩ খ্রিস্টাব্দে বিখ্যাত 'সত্যশোধক সমাজ' (Satyashodhak Samaj) কে প্রতিষ্ঠা করেছিলেন?",
+opts: ["আত্মারাম পান্ডুরঙ্গ", "স্বামী দয়ানন্দ সরস্বতী", "গোপালকৃষ্ণ গোখলে", "জ্যোতিবা ফুলে (জ্যোতিরাও ফুলে)"],
+ans: 3,
+exp: "১৮৭৩ খ্রিস্টাব্দে মহারাষ্ট্রে দলিত ও অনগ্রসর মানুষের অধিকার আদায়ের লড়াইয়ে জ্যোতিবা ফুলে 'সত্যশোধক সমাজ' প্রতিষ্ঠা করেন।",
+special: "💡 অন্যদিকে, ১৮৬৭ সালে বোম্বেতে আত্মারাম পান্ডুরঙ্গ 'প্রার্থনা সমাজ' এবং ১৮৭৫ সালে বোম্বেতে স্বামী দয়ানন্দ সরস্বতী 'আর্য সমাজ' প্রতিষ্ঠা করেছিলেন।"
+},
+{
+q: "১৯০৫ খ্রিস্টাব্দে পুনেতে দেশসেবা ও যুবকদের জাতীয়তাবাদে উদ্বুদ্ধ করতে 'সারভেন্টস অব ইন্ডিয়া সোসাইটি' (Servants of India Society) কে প্রতিষ্ঠা করেছিলেন?",
+opts: ["বাল গঙ্গাধর তিলক", "সুরেন্দ্রনাথ বন্দ্যোপাধ্যায়", "গোপালকৃষ্ণ গোখলে", "বিপিনচন্দ্র পাল"],
+ans: 2,
+exp: "১৯০৫ খ্রিস্টাব্দে পুনেতে উদারপন্থী জাতীয়তাবাদী নেতা গোপালকৃষ্ণ গোখলে 'সারভেন্টস অব ইন্ডিয়া সোসাইটি' প্রতিষ্ঠা করেন।",
+special: "💡 গোপালকৃষ্ণ গোখলে ছিলেন মহাত্মা গান্ধীর অত্যন্ত শ্রদ্ধেয় রাজনৈতিক পরামর্শদাতা।"
+},
+{
+q: "বাংলার প্রথম সফল বৈপ্লবিক ও গোপন জাতীয়তাবাদী সংগঠন 'অনুশীলন সমিতি' (Anushilan Samiti) ১৯০২ খ্রিস্টাব্দে কলকাতায় কার নেতৃত্বে গড়ে উঠেছিল?",
+opts: ["বারীন্দ্র কুমার ঘোষ", "পুলিনবিহারী দাস", "যতীন্দ্রনাথ মুখোপাধ্যায়", "প্রমথনাথ মিত্র ও সতীশচন্দ্র বসু"],
+ans: 3,
+exp: "১৯০২ খ্রিস্টাব্দে কলকাতায় প্রমথনাথ মিত্র (পি. মিত্র) ও সতীশচন্দ্র বসুর নেতৃত্বে অনুশীলন সমিতি গঠিত হয়।",
+special: "💡 পরবর্তীতে ১৯০৫ খ্রিস্টাব্দে ঢাকায় পুলিনবিহারী দাসের নেতৃত্বে অত্যন্ত প্রভাবশালী 'ঢাকা অনুশীলন সমিতি' প্রতিষ্ঠিত হয়েছিল।"
+},
+{
+q: "১৯১৩ খ্রিস্টাব্দে আমেরিকার সানফ্রান্সিসকো শহরে লালা হরদয়াল ও রাসবিহারী বসু কোন ঐতিহাসিক বিপ্লবী দল বা সংগঠন গড়ে তুলেছিলেন?",
+opts: ["অভিনব ভারত", "অনুশীলন সমিতি", "গদর পার্টি (Ghadar Party)", "হিন্দুস্তান রিপাবলিকান অ্যাসোসিয়েশন"],
+ans: 2,
+exp: "১৯১৩ খ্রিস্টাব্দে সানফ্রান্সিসকোয় লালা হরদয়াল এবং রাসবিহারী বসুর নেতৃত্বে 'গদর পার্টি' বা গদর দল প্রতিষ্ঠিত হয়।",
+special: "💡 'গদর' শব্দটির আক্ষরিক অর্থ হলো 'বিপ্লব' বা 'বিদ্রোহ'।"
+},
+{
+q: "১৯২২ সালের অসহযোগ আন্দোলন প্রত্যাহারের পর ক্ষুব্ধ হয়ে ১৯২৩ খ্রিস্টাব্দে চিত্তরঞ্জন দাশ ও মোতিলাল নেহরু কোন রাজনৈতিক দল গঠন করেছিলেন?",
+opts: ["ফরওয়ার্ড ব্লক", "নওজোয়ান ভারত সভা", "হিন্দুস্তান সোশ্যালিস্ট রিপাবলিকান অ্যাসোসিয়েশন", "স্বরাজ পার্টি বা স্বরাজ্য দল"],
+ans: 3,
+exp: "১৯২৩ খ্রিস্টাব্দে চিত্তরঞ্জন দাশ এবং মোতিলাল নেহরু মিলে 'স্বরাজ পার্টি' বা স্বরাজ্য দল গঠন করেন।",
+special: "💡 চিত্তরঞ্জন দাশ ইতিহাসে 'দেশবন্ধু' নামে সুপরিচিত ছিলেন।"
+},
+{
+q: "১৯২৬ খ্রিস্টাব্দে লাহোরে যুবকদের মধ্যে বৈপ্লবিক দেশপ্রেম জাগ্রত করতে বীর বিপ্লবী ভগৎ সিং কোন সংগঠনটি প্রতিষ্ঠা করেছিলেন?",
+opts: ["অভিনব ভারত", "নওজোয়ান ভারত সভা", "স্বরাজ্য দল", "মিত্র মেলা"],
+ans: 1,
+exp: "১৯২৬ খ্রিস্টাব্দে লাহোরে ভগৎ সিং 'নওজোয়ান ভারত সভা' গঠন করেন।",
+special: "💡 পরবর্তীতে ১৯২৮ খ্রিস্টাব্দে ভগৎ সিং, সুখদেব এবং চন্দ্রশেখর আজাদ দিল্লিতে 'হিন্দুস্তান সোশ্যালিস্ট রিপাবলিকান অ্যাসোসিয়েশন' (HSRA) গড়ে তোলেন।"
+},
+{
+q: "১৯৩৯ খ্রিস্টাব্দে কংগ্রেসের অভ্যন্তরীণ মতবিরোধের জেরে ত্রিপুরি অধিবেশনের পর পদত্যাগ করে নেতাজি সুভাষচন্দ্র বসু কোন নতুন দল গঠন করেন?",
+opts: ["স্বরাজ পার্টি", "ইন্ডিয়ান ইন্ডিপেন্ডেন্স লিগ", "আজাদ হিন্দ ফৌজ", "ফরওয়ার্ড ব্লক (Forward Bloc)"],
+ans: 3,
+exp: "১৯৩৯ খ্রিস্টাব্দে সুভাষচন্দ্র বসু কংগ্রেসের সভাপতি পদ থেকে পদত্যাগ করার পর কলকাতায় 'ফরওয়ার্ড ব্লক' নামক নতুন রাজনৈতিক মঞ্চ গড়ে তোলেন।",
+special: "💡 সুভাষচন্দ্র বসুর পদত্যাগের পর রাজেন্দ্র প্রসাদ কংগ্রেসের নতুন সভাপতি মনোনীত হয়েছিলেন।"
+},
+{
+q: "১৯৪২ খ্রিস্টাব্দে জাপানের টোকিও শহরে রাজকীয়ভাবে 'ইন্ডিয়ান ইন্ডিপেন্ডেন্স লিগ' কে প্রতিষ্ঠা করেছিলেন, যা পরবর্তীতে আজাদ হিন্দ ফৌজের সহায়ক হয়েছিল?",
+opts: ["ক্যাপ্টেন মোহন সিং", "সুভাষচন্দ্র বসু", "রাসবিহারী বসু", "লালা হরদয়াল"],
+ans: 2,
+exp: "১৯৪২ খ্রিস্টাব্দে জাপানের টোকিওতে নির্বাসিত ভারতীয় বিপ্লবী রাসবিহারী বসু 'ইন্ডিয়ান ইন্ডিপেন্ডেন্স লিগ' প্রতিষ্ঠা করেন।",
+special: "💡 ১৯৪২ সালেই সিঙ্গাপুরে ক্যাপ্টেন মোহন সিংয়ের নেতৃত্বে প্রথম 'ইন্ডিয়ান ন্যাশনাল আর্মি' (INA) গঠিত হওয়ার পথ উন্মোচিত হয়।"
+},
+{
+q: "১৯৪৩ খ্রিস্টাব্দে সিঙ্গাপুরে নেতাজি সুভাষচন্দ্র বসু কার কাছ থেকে নেতৃত্ব গ্রহণ করে আনুষ্ঠানিকভাবে 'আজাদ হিন্দ ফৌজ' পুনর্গঠন করেছিলেন?",
+opts: ["রাসবিহারী বসু", "ক্যাপ্টেন মোহন সিং", "বারীন্দ্র কুমার ঘোষ", "যতীন্দ্রনাথ মুখোপাধ্যায়"],
+ans: 0,
+exp: "১৯৪৩ খ্রিস্টাব্দে সিঙ্গাপুরে সুভাষচন্দ্র বসু রাসবিহারী বসুর কাছ থেকে ইন্ডিয়ান ইন্ডিপেন্ডেন্স লিগের দায়িত্ব গ্রহণ করেন এবং অত্যন্ত সফলভাবে 'আজাদ হিন্দ ফৌজ' ও আজাদ হিন্দ সরকার গঠন করেন।",
+special: "💡 আজাদ হিন্দ ফৌজের বীর সেনানিদের উদ্দীপিত করতে নেতাজি বিখ্যাত 'জয় হিন্দ' স্লোগান ও সম্ভাষণ প্রথার সূচনা করেছিলেন।"
+}
+];
+
+const TOTAL_QS = questions.length;
+
+function getMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function getAttemptStorageKey(username) {
+    return `attempts_${username}_history_set30_${getMonthKey()}`;
+}
+function getMonthlyAttempts(username) {
+    if (!username) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username));
+    return raw ? parseInt(raw) : 0;
+}
+function incrementMonthlyAttempts(username) {
+    if (!username) return;
+    const current = getMonthlyAttempts(username);
+    localStorage.setItem(getAttemptStorageKey(username), current + 1);
+}
+function getRemainingAttempts(username) {
+    return Math.max(0, MAX_ATTEMPTS - getMonthlyAttempts(username));
+}
+
+function showSMS(message) {
+    const toast = document.getElementById('smsToast');
+    document.getElementById('smsText').innerText = message;
+    toast.classList.add('show');
+    clearTimeout(window.smsTimeout);
+    window.smsTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function initPage() {
+    const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
+    if (isLoggedIn && currentUser) {
+        checkAttemptAndStart();
+    } else {
+        document.getElementById('loginOverlay').classList.add('active');
+    }
+}
+
+function doLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value.trim();
+    const err = document.getElementById('loginError');
+    if (!u || !p) { err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.style.display = 'block'; return; }
+    if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+        currentUser = u;
+        sessionStorage.setItem("testBazarUserLoggedIn", "true");
+        sessionStorage.setItem("currentStudent", u);
+        document.getElementById('loginOverlay').classList.remove('active');
+        checkAttemptAndStart();
+    } else {
+        err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+        err.style.display = 'block';
+    }
+}
+
+function checkAttemptAndStart() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        setTimeout(goToHub, 1800);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`✅ লগইন সফল! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    startQuiz();
+}
+
+function startQuiz() {
+    cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+    timeLeft = TIME_LIMIT;
+    isReviewMode = false;
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('danger');
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[cur];
+    document.getElementById('qNum').innerText = isReviewMode
+        ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}`
+        : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+    const optsContainer = document.getElementById('qOpts');
+    optsContainer.innerHTML = '';
+    q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+        if (isReviewMode) {
+            btn.classList.add('disabled');
+            if (idx === q.ans) btn.classList.add('correct');
+            else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+        } else {
+            btn.onclick = () => selectAnswer(idx, btn);
+        }
+        optsContainer.appendChild(btn);
+    });
+
+    const nextBtn = document.getElementById('nextBtn');
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('scoreShow').innerText = isReviewMode
+        ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর"
+        : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+    if (isReviewMode) {
+        document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+        document.getElementById('expSpecial').innerText = q.special;
+        document.getElementById('explanation').classList.add('show');
+        nextBtn.disabled = false;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+    } else {
+        nextBtn.disabled = true;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+    }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+    if (answered) return;
+    answered = true;
+    const q = questions[cur];
+    userAnswers[cur] = selectedIdx;
+    const allBtns = document.getElementById('qOpts').children;
+    for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.add('disabled');
+        if (i === q.ans) allBtns[i].classList.add('correct');
+    }
+    if (selectedIdx === q.ans) score++;
+    else { btnElement.classList.add('wrong'); wrong++; }
+
+    document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+    document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+    if (cur < TOTAL_QS - 1) { cur++; loadQuestion(); }
+    else {
+        if (isReviewMode) {
+            document.getElementById('testArea').classList.add('hidden');
+            document.getElementById('resultWrap').classList.add('show');
+        } else { clearInterval(timerInterval); showResult(); }
+    }
+}
+
+function showResult() {
+    document.getElementById('testArea').classList.add('hidden');
+    document.getElementById('timerBox').classList.add('hidden');
+    document.getElementById('resultWrap').classList.add('show');
+    const pct = Math.round((score / TOTAL_QS) * 100);
+    const wrongOrSkipped = TOTAL_QS - score;
+    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
+    if (pct >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
+    else if (pct >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
+    else if (pct >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
+    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
+    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultTagline').innerText = tagline;
+    document.getElementById('resultPercent').innerText = pct + '%';
+    document.getElementById('resultCorrect').innerText = score;
+    document.getElementById('resultWrong').innerText = wrongOrSkipped;
+    const remaining = getRemainingAttempts(currentUser);
+    document.getElementById('attemptsLeft').innerText = remaining;
+    showSMS(`📊 ফলাফল: ${pct}% | বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+}
+
+function showReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    isReviewMode = true;
+    cur = 0;
+    loadQuestion();
+}
+
+function restartQuiz() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`🔄 আবার শুরু! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    document.getElementById('resultWrap').classList.remove('show');
+    startQuiz();
+}
+
+function goToHub() {
+    window.location.href = "../index.html";
+}
+
+window.onload = initPage;
+</script>
+</body>
+</html>

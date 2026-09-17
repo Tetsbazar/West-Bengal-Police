@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geography Test 30 - Nuclear Power & Research in India</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ২০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">Geography</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GEOGRAPHY TEST 30 — ভারতের পারমাণবিক বিদ্যুৎ কেন্দ্র ও গবেষণা
+// Source: প্রশ্ন ১ - ২০
+// প্রশ্ন নম্বর বাদ — শুধু প্রশ্ন
+// ইংরেজি বন্ধনী বাদ — শুধু বাংলা
+// ============================================================
+const questions = [
+    {
+        q: "তারাপুর পারমাণবিক বিদ্যুৎ কেন্দ্রটি কোন রাজ্যে অবস্থিত, যা ১৯৬৯ সালে স্থাপিত হয়ে ভারতের প্রথম পারমাণবিক বিদ্যুৎ কেন্দ্রের মর্যাদা পায়?",
+        opts: ["গুজরাত", "মহারাষ্ট্র", "তামিলনাড়ু", "রাজস্থান"],
+        ans: 1,
+        tag: "Geography - তারাপুর",
+        exp: "১৯৬৯ সালে মহারাষ্ট্রের তারাপুরে ভারতের প্রথম বাণিজ্যিক পারমাণবিক বিদ্যুৎ কেন্দ্রটি চালু করা হয়েছিল।",
+        special: "💡 এই কেন্দ্রটি স্থাপনে আমেরিকা যুক্তরাষ্ট্র ভারতকে প্রযুক্তিগত ও আর্থিক সহায়তা প্রদান করেছিল।"
+    },
+    {
+        q: "কর্ণাটকের উত্তর কন্নড় জেলায় অবস্থিত বিখ্যাত পারমাণবিক শক্তি কেন্দ্রটির নাম কী?",
+        opts: ["কৈগা পারমাণবিক শক্তি কেন্দ্র", "রাওয়াতভাটা পারমাণবিক শক্তি কেন্দ্র", "কালপক্কম পারমাণবিক শক্তি কেন্দ্র", "কাকরাপাড় পারমাণবিক শক্তি কেন্দ্র"],
+        ans: 0,
+        tag: "Geography - কৈগা",
+        exp: "কর্ণাটকের কৈগাতে অবস্থিত পারমাণবিক বিদ্যুৎ কেন্দ্রটি সম্পূর্ণ দেশীয় প্রযুক্তিতে নির্মিত এবং ২০০০ সালে এটি বাণিজ্যিকভাবে চালু হয়।",
+        special: "💡 কৈগা পারমাণবিক বিদ্যুৎ কেন্দ্রের রিঅ্যাক্টরটি একটানা দীর্ঘতম সময় (প্রায় ৯৪১ দিন) সচল থেকে এক অনন্য বিশ্বরেকর্ড গড়েছিল।"
+    },
+    {
+        q: "উত্তরপ্রদেশের বুলন্দশহর জেলায় গঙ্গা নদীর তীরে অবস্থিত একমাত্র পারমাণবিক বিদ্যুৎ কেন্দ্রটির নাম কী?",
+        opts: ["কাকরাপাড়", "নারোরা", "জৈতাপুর", "কুদানকুলাম"],
+        ans: 1,
+        tag: "Geography - নারোরা",
+        exp: "উত্তরপ্রদেশের নারোরাতে অবস্থিত এই পারমাণবিক কেন্দ্রটি ১৯৯১ সালে স্থাপিত হয়। এটি গঙ্গার উত্তর সমভূমি অঞ্চলে বিদ্যুৎ সরবরাহের প্রধান অন্যতম উৎস।",
+        special: "💡 এই বিদ্যুৎ কেন্দ্রটি সিসমিক জোন বা ভূমিকম্প প্রবণ অঞ্চলে অবস্থিত হওয়া সত্ত্বেও এটি অত্যন্ত সুরক্ষিত ডাবল কনটেইনমেন্ট প্রযুক্তিতে নির্মিত হয়েছে।"
+    },
+    {
+        q: "গুজরাতের সুরাট শহরের কাছে অবস্থিত কোন বিদ্যুৎ কেন্দ্রটি ভারতের প্রথম সম্পূর্ণ দেশীয় প্রযুক্তিতে তৈরি বৃহৎ নিউক্লীয় পাওয়ার প্লান্ট?",
+        opts: ["তারাপুর", "কালপক্কম", "কাকরাপাড়", "রাওয়াতভাটা"],
+        ans: 2,
+        tag: "Geography - কাকরাপাড়",
+        exp: "গুজরাতের সুরাটের কাছে অবস্থিত কাকরাপাড় পারমাণবিক শক্তি কেন্দ্রটি ভারতের প্রথম সম্পূর্ণ দেশীয় প্রযুক্তিতে তৈরি বৃহৎ নিউক্লীয় পাওয়ার প্লান্ট।",
+        special: "💡 ১৯৯৩ সালে এটি বাণিজ্যিকভাবে উৎপাদনে প্রবেশ করে। এই প্ল্যান্টটি সম্পূর্ণভাবে ভারতীয় প্রকৌশলীদের দ্বারা নকশা করা এবং এর আধুনিকীকরণ অত্যন্ত প্রশংসিত।"
+    },
+    {
+        q: "রাশিয়ার কারিগরি ও প্রযুক্তিগত সহায়তায় নির্মিত তামিলনাড়ুর তিরুনেলভেলি জেলায় অবস্থিত ভারতের সর্ববৃহৎ পারমাণবিক বিদ্যুৎ কেন্দ্র কোনটি?",
+        opts: ["কুদানকুলাম", "কালপক্কম", "তারাপুর", "কৈগা"],
+        ans: 0,
+        tag: "Geography - কুদানকুলাম",
+        exp: "তামিলনাড়ুর কুদানকুলামে অবস্থিত পারমাণবিক বিদ্যুৎ কেন্দ্রটি ২০১৩ সালে রাশিয়ার সহায়তায় নির্মিত হয়ে পথ চলা শুরু করে এবং এটি বর্তমানে ভারতের সর্ববৃহৎ নিউক্লীয় পাওয়ার প্লান্ট।",
+        special: "💡 এই প্রকল্পে ১০০০ মেগাওয়াটের দুটি অত্যন্ত শক্তিশালী প্রেসারাইজড ওয়াটার রিঅ্যাক্টর কাজ করছে।"
+    },
+    {
+        q: "তামিলনাড়ুর কালপক্কমে অবস্থিত 'মাদ্রাজ পারমাণবিক শক্তি কেন্দ্র' অন্য কোন জাতীয় গুরুত্বপূর্ণ নামেও সমধিক পরিচিত?",
+        opts: ["হোমি ভাবা পারমাণবিক গবেষণা কেন্দ্র", "ইন্দিরা গান্ধী অ্যাটমিক পাওয়ার রিসার্চ সেন্টার", "রাজা রামান্না অ্যাডভান্সড টেকনোলজি সেন্টার", "ড. এ পি জে আবদুল কালাম স্পেস রিসার্চ"],
+        ans: 1,
+        tag: "Geography - কালপক্কম",
+        exp: "তামিলনাড়ুর কালপক্কমে অবস্থিত মাদ্রাজ পারমাণবিক শক্তি কেন্দ্রটি ইন্দিরা গান্ধী অ্যাটমিক পাওয়ার রিসার্চ সেন্টার নামেও পরিচিত, যা ১৯৭১ সালে প্রতিষ্ঠিত হয়।",
+        special: "💡 এটি ভারতের অন্যতম প্রধান পারমাণবিক শক্তি গবেষণা কেন্দ্র যেখানে ফাস্ট ব্রিডার টেস্ট রিঅ্যাক্টর প্রযুক্তির ওপর ব্যাপক গবেষণা করা হয়।"
+    },
+    {
+        q: "রাজস্থানের চিতোরগড় জেলার চম্বল নদীর তীরে অবস্থিত 'রাওয়াতভাটা পারমাণবিক শক্তি কেন্দ্র' বা রাজস্থান অ্যাটমিক পাওয়ার স্টেশন কত সালে স্থাপিত হয়েছিল?",
+        opts: ["১৯৬৯ সালে", "১৯৭৩ সালে", "১৯৮৪ সালে", "১৯৯১ সালে"],
+        ans: 1,
+        tag: "Geography - রাওয়াতভাটা",
+        exp: "রাজস্থানের রাওয়াতভাটায় অবস্থিত পারমাণবিক শক্তি কেন্দ্রটি ১৯৭৩ সালে কানাডার কারিগরি সহযোগিতায় প্রথম স্থাপিত হয়েছিল।",
+        special: "💡 এটি ভারতের প্রথম প্রেসারাইজড হেভি ওয়াটার রিঅ্যাক্টর প্রযুক্তির ওপর ভিত্তি করে তৈরি প্রধান কেন্দ্র।"
+    },
+    {
+        q: "মহারাষ্ট্রের রত্নগিরি জেলায় ভারতের প্রস্তাবিত ও অতি সাম্প্রতিক বৃহৎ পারমাণবিক বিদ্যুৎ প্রকল্পটির নাম কী?",
+        opts: ["জৈতাপুর নিউক্লিয়ার পাওয়ার প্রজেক্ট", "ট্রম্বে কেন্দ্র", "চোলা প্রজেক্ট", "পারাস কেন্দ্র"],
+        ans: 0,
+        tag: "Geography - জৈতাপুর",
+        exp: "মহারাষ্ট্রের রত্নগিরি জেলার জৈতাপুরে ফ্রান্সের কারিগরি সহযোগিতায় ভারতের সর্ববৃহৎ ক্ষমতার জৈতাপুর পারমাণবিক বিদ্যুৎ কেন্দ্রটি গড়ে তোলার পরিকল্পনা নেওয়া হয়েছে।",
+        special: "💡 এটি সফলভাবে সম্পন্ন হলে ৯৯০০ মেগাওয়াট ক্ষমতাসম্পন্ন বিশ্বের অন্যতম বৃহত্তম পারমাণবিক বিদ্যুৎ কেন্দ্রে পরিণত হবে।"
+    },
+    {
+        q: "ভারতের পারমাণবিক কর্মসূচির মূল পীঠস্থান তথা বিখ্যাত গবেষণা প্রতিষ্ঠান 'ভাবা অ্যাটমিক রিসার্চ সেন্টার' মহারাষ্ট্রের ট্রম্বেতে কত সালে প্রতিষ্ঠিত হয়েছিল?",
+        opts: ["১৯৪৮ সালে", "১৯৫৪ সালে", "১৯৭১ সালে", "১৯৮৪ সালে"],
+        ans: 1,
+        tag: "Geography - BARC",
+        exp: "বিজ্ঞানী ড. হোমি জাহাঙ্গীর ভাবার নেতৃত্বে ১৯৫৪ সালে মুম্বাইয়ের ট্রম্বেতে ভাবা অ্যাটমিক রিসার্চ সেন্টার প্রতিষ্ঠিত হয়।",
+        special: "💡 এই প্রতিষ্ঠানটি ভারতের পারমাণবিক প্রযুক্তি, কৃষি গবেষণা এবং চিকিৎসার কাজে বিকিরণ ব্যবহারের ওপর মূল কাজ পরিচালনা করে।"
+    },
+    {
+        q: "মধ্যপ্রদেশের ইন্দোরে অবস্থিত কোন বিখ্যাত গবেষণা কেন্দ্রটি ১৯৮৪ সালে লেজার ও পারমাণবিক কণা তরঙ্গের আধুনিকীকরণের উদ্দেশ্যে প্রতিষ্ঠিত হয়?",
+        opts: ["ভাবা অ্যাটমিক রিসার্চ সেন্টার", "রাজা রামান্না সেন্টার ফর অ্যাডভান্সড টেকনোলজি", "ইন্দিরা গান্ধী পারমাণবিক গবেষণা কেন্দ্র", "ভেরিয়েবল এনার্জি সাইক্লোট্রন সেন্টার"],
+        ans: 1,
+        tag: "Geography - RRCAT",
+        exp: "১৯৮৪ সালে মধ্যপ্রদেশের ইন্দোরে রাজা রামান্না সেন্টার ফর অ্যাডভান্সড টেকনোলজি প্রতিষ্ঠিত হয়, যা লেজার ও এক্সিলারেটর প্রযুক্তির প্রধান উৎকর্ষ কেন্দ্র।",
+        special: "💡 বিজ্ঞানী রাজা রামান্নার প্রতি সম্মান জানিয়ে এই গবেষণা কেন্দ্রের নামকরণ করা হয়েছে।"
+    },
+    {
+        q: "পশ্চিমবঙ্গের কলকাতায় অবস্থিত কোন পারমাণবিক কণা গবেষণা প্রতিষ্ঠানটি ১৯৭৭ সালে প্রতিষ্ঠিত হয়ে সাইক্লোট্রন ও পারমাণবিক পদার্থবিদ্যা গবেষণায় নেতৃত্ব দিচ্ছে?",
+        opts: ["সাহা ইনস্টিটিউট অব নিউক্লিয়ার ফিজিক্স", "ভেরিয়েবল এনার্জি সাইক্লোট্রন সেন্টার", "রাজা রামান্না সেন্টার", "বোস ইনস্টিটিউট"],
+        ans: 1,
+        tag: "Geography - VECC",
+        exp: "কলকাতার সল্টলেকে ১৯৭৭ সালে ভেরিয়েবল এনার্জি সাইক্লোট্রন সেন্টার প্রতিষ্ঠিত হয়, যা ভারতের পরমাণু শক্তি বিভাগের অধীনস্থ অন্যতম প্রধান প্রতিষ্ঠান।",
+        special: "💡 এটি ভারতের অন্যতম প্রথম গবেষণাগার যেখানে দেশীয় প্রযুক্তিতে তৈরি সুপারকন্ডাক্টিং সাইক্লোট্রন সফলভাবে কাজ শুরু করে।"
+    },
+    {
+        q: "কাকে ভারতের পারমাণবিক শক্তি ও পরমাণু গবেষণার জনক বলে গণ্য করা হয়ে থাকে?",
+        opts: ["ড. বিক্রম সারাভাই", "ড. এ পি জে আবদুল কালাম", "ড. হোমি জাহাঙ্গীর ভাবা", "ড. মেঘনাদ সাহা"],
+        ans: 2,
+        tag: "Geography - হোমি ভাবা",
+        exp: "ড. হোমি জাহাঙ্গীর ভাবার দূরদর্শী নেতৃত্ব ও পরিকল্পনায় ভারতে স্বাধীন ও শান্তিপূর্ণ পারমাণবিক উন্নয়ন কর্মসূচির সূত্রপাত ঘটে, তাই তাঁকে এদেশের পরমাণু বিজ্ঞানের জনক বলা হয়।",
+        special: "💡 তিনি ভারতের প্রথম পরমাণু শক্তি কমিশনের প্রথম চেয়ারম্যান ছিলেন।"
+    },
+    {
+        q: "১৯৪৮ সালে ড. হোমি ভাবার উদ্যোগে প্রতিষ্ঠিত ভারতের পারমাণবিক নীতি ও গবেষণা কেন্দ্রসমূহ পরিচালনা ও নিয়ন্ত্রণকারী সর্বোচ্চ ক্ষমতার প্রশাসনিক সংস্থাটির নাম কী?",
+        opts: ["ভাবা অ্যাটমিক রিসার্চ সেন্টার", "অ্যাটমিক এনার্জি কমিশন", "ডিফেন্স রিসার্চ অ্যান্ড ডেভেলপমেন্ট অর্গানাইজেশন", "ইন্ডিয়ান স্পেস রিসার্চ অর্গানাইজেশন"],
+        ans: 1,
+        tag: "Geography - AEC",
+        exp: "১৯৪৮ সালের আগস্ট মাসে ভারতের পারমাণবিক নীতি নির্ধারণ ও শান্তিপূর্ণ গবেষণার জন্য 'অ্যাটমিক এনার্জি কমিশন' গঠিত হয়।",
+        special: "💡 এটি সরাসরি ভারতের প্রধানমন্ত্রীর কার্যালয়ের তত্ত্বাবধানে পরমাণু শক্তি বিভাগের মাধ্যমে কাজ করে।"
+    },
+    {
+        q: "পারমাণবিক বিদ্যুৎ কেন্দ্রের নিউক্লীয় চুল্লিতে বা রিঅ্যাক্টরে উৎপন্ন উচ্চ গতিসম্পন্ন নিউট্রনের গতিবেগ হ্রাস বা নিয়ন্ত্রণ করার জন্য 'মডারেটর' হিসেবে প্রধানত কী ব্যবহৃত হয়?",
+        opts: ["বোরন রড ও ক্যাডমিয়াম রড", "গ্রাফাইট ও ভারী জল", "তরল সোডিয়াম ও তরল সোনা", "লঘু নাইট্রিক অ্যাসিড"],
+        ans: 1,
+        tag: "Geography - মডারেটর",
+        exp: "নিউক্লীয় বিভাজন প্রক্রিয়ায় নির্গত তীব্র নিউট্রনের গতিকে কমানোর জন্য গ্রাফাইট ব্লক বা ভারী জলকে অত্যন্ত কার্যকরী মডারেটর হিসেবে ব্যবহার করা হয়।",
+        special: "💡 ভারী জল সাধারণ জলের মতোই কিন্তু এর হাইড্রোজেন পরমাণুটি ডিউটেরিয়াম (একটি নিউট্রন বিশিষ্ট ভারী আইসোটোপ) দ্বারা প্রতিস্থাপিত থাকে।"
+    },
+    {
+        q: "নিউক্লীয় চুল্লিতে ইউরেনিয়াম ও প্লুটোনিয়ামের ভাঙনের হার তথা চেইন বিক্রিয়া বজায় রাখতে ও নিয়ন্ত্রণ করতে 'কন্ট্রোল রড' হিসেবে মূলত কোন ধাতুর সংকর ব্যবহার করা হয়?",
+        opts: ["তামা ও অ্যালুমিনিয়াম", "বোরন, ক্যাডমিয়াম ও সিলভার", "লোহা ও ক্রোমিয়াম", "সোডিয়াম ও পটাশিয়াম"],
+        ans: 1,
+        tag: "Geography - কন্ট্রোল রড",
+        exp: "ক্যাডমিয়াম, বোরন এবং সিলভারের তৈরি কন্ট্রোল রডগুলি অতিরিক্ত নিউট্রন শোষণ করে নিতে অত্যন্ত সক্ষম, যা চেইন বিক্রিয়াকে অনিয়ন্ত্রিত বা বিস্ফোরণ হওয়া থেকে রক্ষা করে।",
+        special: "💡 এই রডগুলিকে চুল্লির ভেতরে প্রবেশ করালে বিক্রিয়ার হার কমে যায় এবং তুলে নিলে বিক্রিয়া পুনরায় বৃদ্ধি পায়।"
+    },
+    {
+        q: "নিউক্লীয় রিঅ্যাক্টরের তীব্র তাপমাত্রাকে নিয়ন্ত্রণে রাখতে এবং উৎপাদিত তাপকে টারবাইনে স্থানান্তরের কাজে ব্যবহৃত 'শীতক বা কুল্যান্ট' হিসেবে সাধারণত কী ব্যবহৃত হয়?",
+        opts: ["সাধারণ জল, ভারী জল বা তরল সোডিয়াম", "গাঢ় সালফিউরিক অ্যাসিড", "তরল নাইট্রোজেন গ্যাস", "হাইড্রোজেন পারক্সাইড"],
+        ans: 0,
+        tag: "Geography - কুল্যান্ট",
+        exp: "চুল্লির মারাত্মক তাপমাত্রা হ্রাস করতে সাধারণত জল, ভারী জল, হিলিয়াম বা তরল সোডিয়ামের মতো উপাদানকে কুল্যান্ট হিসেবে ব্যবহার করা হয়।",
+        special: "💡 ফাস্ট ব্রিডার রিঅ্যাক্টরে (Stage 2) কুল্যান্ট হিসেবে সাধারণত গলিত সোডিয়াম ব্যবহার করা হয়।"
+    },
+    {
+        q: "ড. হোমি জাহাঙ্গীর ভাবার পরিকল্পনা অনুযায়ী ১৯৫৬-৫৭ সালে মুম্বাইয়ের কাছে স্থাপিত ভারতের তথা সমগ্র এশিয়ার প্রথম নিউক্লীয় গবেষণা রিঅ্যাক্টর বা চুল্লিটির নাম কী ছিল?",
+        opts: ["ধ্রুব", "অপ্সরা", "কামিনী", "রোহিণী"],
+        ans: 1,
+        tag: "Geography - অপ্সরা",
+        exp: "ভারতের প্রথম পারমাণবিক রিঅ্যাক্টর হলো 'অপ্সরা'। ১৯৬৭ সালে এটি আনুষ্ঠানিকভাবে উৎসর্গীকৃত হয়েছিল এবং এর রূপরেখা ড. ভাবা নিজেই প্রস্তুত করেছিলেন।",
+        special: "💡 এটি একটি পুল টাইপ লাইট ওয়াটার রিঅ্যাক্টর ছিল, যা জ্বালানি হিসেবে সমৃদ্ধ ইউরেনিয়াম ব্যবহার করত।"
+    },
+    {
+        q: "কেরলের পলক্কড় ও কোল্লাম জেলার সমুদ্র উপকূলবর্তী অত্যন্ত মূল্যবান 'মোনাজাইট বালিতে' কোন পারমাণবিক খনিজের সমৃদ্ধ ভাণ্ডার পাওয়া যায়, যা ভারতের ভবিষ্যতের পারমাণবিক শক্তির প্রধান ভিত্তি?",
+        opts: ["ইউরেনিয়াম", "থোরিয়াম", "রেডিয়াম", "পোলোনিয়াম"],
+        ans: 1,
+        tag: "Geography - থোরিয়াম",
+        exp: "কেরলের মোনাজাইট বালির মধ্যে অত্যন্ত উচ্চমানের থোরিয়াম খনিজ আকরিক পাওয়া যায়। ভারতের থ্রি-স্টেজ নিউক্লীয় পরিকল্পনার তৃতীয় ধাপে এই থোরিয়ামকে জ্বালানি হিসেবে ব্যবহার করে মেগা বিদ্যুৎ শক্তি উৎপাদনের চমৎকার পরিকল্পনা রয়েছে।",
+        special: "💡 থোরিয়ামভিত্তিক নিউক্লীয় চুল্লিগুলি ইউরেনিয়াম চুল্লির চেয়ে অনেক বেশি নিরাপদ, পরিবেশবান্ধব ও টেকসই হয়ে থাকে।"
+    },
+    {
+        q: "ভারতে প্রথম ইউরেনিয়ামের সন্ধান ১৯৫১ সালে এবং পরবর্তীতে ১৯৬৮ সালে প্রথম ইউরেনিয়াম আকরিক উত্তোলন ও পরিশোধন শিল্প ঝাড়খণ্ডের কোন বিখ্যাত খনি অঞ্চলে গড়ে ওঠে?",
+        opts: ["তুম্মালাপল্লি", "যদুগোডা", "রানীগঞ্জ", "ঝরিয়া"],
+        ans: 1,
+        tag: "Geography - যদুগোডা",
+        exp: "ঝাড়খণ্ডের পূর্ব সিংভূম জেলার 'যদুগোডা' খনি অঞ্চলটি ভারতের প্রাচীনতম ও প্রথম বাণিজ্যিক ইউরেনিয়াম খনি ও পরিশোধন কেন্দ্র।",
+        special: "💡 এটি পরিচালনার দায়িত্ব রয়েছে রাষ্ট্রায়ত্ত সংস্থা ইউরেনিয়াম কর্পোরেশন অব ইন্ডিয়া লিমিটেড-এর ওপর।"
+    },
+    {
+        q: "ভারতের ক্রমবর্ধমান শক্তির চাহিদা ও পরিবেশের ভারসাম্য মেটাতে ভারত সরকার কত সালের মধ্যে ১০০ গিগাওয়াট পারমাণবিক শক্তি উৎপাদনের এক উচ্চাভিলাষী লক্ষ্যমাত্রা গ্রহণ করেছে?",
+        opts: ["২০৩৫ সালের মধ্যে", "২০৪০ সালের মধ্যে", "২০৪৭ সালের মধ্যে", "২০৫০ সালের মধ্যে"],
+        ans: 2,
+        tag: "Geography - ২০৪৭",
+        exp: "ভারত সরকার সম্প্রতি ২০৪৭ সালের মধ্যে পারমাণবিক শক্তি উৎপাদন ক্ষমতাকে ১০০ গিগাওয়াটে উন্নীত করার মেগা লক্ষ্যমাত্রা ঘোষণা করেছে।",
+        special: "💡 বর্তমানে ভারতের মোট বিদ্যুৎ উৎপাদন ক্ষমতার মাত্র ২-৩ শতাংশ আসে পারমাণবিক শক্তি থেকে। এই অংশকে বহুগুণ বাড়াতে ছোট ছোট মডুলার রিঅ্যাক্টর ও থোরিয়াম রিঅ্যাক্টরের উন্নয়ন করা হচ্ছে।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (২০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

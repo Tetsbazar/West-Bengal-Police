@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History Test 8 - Mahavira & Jainism</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ২০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">History</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// HISTORY TEST 8 — মহাবীর ও জৈন ধর্ম
+// Source: প্রশ্ন ১ - ২০
+// প্রশ্ন নম্বর বাদ — শুধু প্রশ্ন
+// ইংরেজি বন্ধনী বাদ — শুধু বাংলা
+// ============================================================
+const questions = [
+    {
+        q: "জৈন ধর্মের ২৪তম তথা শেষ তীর্থংকর মহাবীর আনুমানিক কত খ্রিস্টপূর্বাব্দে এবং কোথায় জন্মগ্রহণ করেছিলেন?",
+        opts: ["৫৬৩ খ্রি. পূ., লুম্বিনী", "৫৪০ খ্রি. পূ., উত্তর বিহারের বৈশালির কুন্দপুর বা কুন্দগ্রাম", "৪৬৮ খ্রি. পূ., পাবাপুরী", "৩২০ খ্রি. পূ., পাটলিপুত্র"],
+        ans: 1,
+        tag: "History - মহাবীরের জন্ম",
+        exp: "জৈন ধর্মের শেষ তীর্থংকর মহাবীর আনুমানিক ৫৪০ খ্রিস্টপূর্বাব্দে উত্তর বিহারের বৈশালির কুন্দপুরে (যা বর্তমানে মজফফরপুর জেলার বাসাড় গ্রাম নামে পরিচিত) জন্মগ্রহণ করেন।",
+        special: "💡 তাঁর এই ঐতিহাসিক জন্মস্থানটি বৈশালি নামক প্রাচীন প্রজাতান্ত্রিক মহাজনপদের অত্যন্ত কাছাকাছি অবস্থিত ছিল।"
+    },
+    {
+        q: "জৈন ধর্মের মহান প্রচারক মহাবীরের বাল্যকাল বা শৈশবের পূর্বনাম কী ছিল?",
+        opts: ["সিদ্ধার্থ", "বর্ধমান", "তথাগত", "রাহুল"],
+        ans: 1,
+        tag: "History - বর্ধমান",
+        exp: "মহাবীরের পারিবারিক বা শৈশবের আসল নাম ছিল 'বর্ধমান'। পরবর্তীতে ইন্দ্রিয় জয় ও কঠোর সাধনার পর তিনি 'মহাবীর' নামে বিশ্বজুড়ে খ্যাতি লাভ করেন।",
+        special: "💡 বর্ধমান শব্দের অর্থ হলো \"যিনি ক্রমাগত বৃদ্ধি পাচ্ছেন বা সমৃদ্ধ হচ্ছেন\"।"
+    },
+    {
+        q: "বর্ধমান বা মহাবীরের পিতা সিদ্ধার্থ কোন বিখ্যাত ক্ষত্রিয় বংশ বা গোষ্ঠীর সম্মানিত প্রধান বা নেতা ছিলেন?",
+        opts: ["শাক্য গোষ্ঠী", "জ্ঞাতৃক বা জ্ঞাত্রিক গোষ্ঠী", "কোলীয় গোষ্ঠী", "মৌর্য বংশ"],
+        ans: 1,
+        tag: "History - জ্ঞাতৃক গোষ্ঠী",
+        exp: "মহাবীরের পিতা সিদ্ধার্থ ছিলেন প্রাচীন ক্ষত্রিয় বংশের 'জ্ঞাত্রিক' গোষ্ঠীর অত্যন্ত সম্মানিত নেতা।",
+        special: "💡 অন্যদিকে, বৌদ্ধ ধর্মের প্রবক্তা গৌতম বুদ্ধের পিতা শুদ্ধোধন ছিলেন শাক্য বংশের রাজা।"
+    },
+    {
+        q: "মহাবীরের মাতার নাম কী ছিল, যিনি তৎকালীন বিখ্যাত বৈশালির লিচ্ছবি রাজবংশের সাথে সম্পর্কযুক্ত ছিলেন?",
+        opts: ["যশোদা", "মায়াদেবী", "ত্রিশলা দেবী", "গৌতমী"],
+        ans: 2,
+        tag: "History - ত্রিশলা দেবী",
+        exp: "মহাবীরের জননী বা মাতার নাম ছিল 'ত্রিশলা দেবী'।",
+        special: "💡 ত্রিশলা দেবী ছিলেন বৈশালির অত্যন্ত শক্তিশালী লিচ্ছবি বংশের প্রধান রাজা চেতকের বোন।"
+    },
+    {
+        q: "মহাবীরের স্ত্রীর নাম কী ছিল এবং তাঁর কন্যার নাম কী ছিল?",
+        opts: ["যশোধরা এবং অনজ্জা বা প্রিয়দর্শনা", "যশোদা এবং অনজ্জা বা প্রিয়দর্শনা", "ত্রিশলা এবং প্রিয়দর্শনা", "গোপা এবং মহামায়া"],
+        ans: 1,
+        tag: "History - যশোদা",
+        exp: "মহাবীরের স্ত্রীর নাম ছিল 'যশোদা' এবং তাঁদের একমাত্র কন্যার নাম ছিল 'অনজ্জা' বা 'প্রিয়দর্শনা'।",
+        special: "💡 কন্যার সাথে জামাতা হিসেবে জামিল বা জামালি নামক এক যুবকের বিয়ে হয়েছিল, যিনি পরবর্তীতে মহাবীরের প্রথম শিষ্যদের অন্যতম একজন হন।"
+    },
+    {
+        q: "বর্ধমান কত বছর বয়সে সমস্ত জাগতিক সুখ-স্বাচ্ছন্দ্য ত্যাগ করে সত্যের সন্ধানে গৃহত্যাগ করেছিলেন?",
+        opts: ["২৫ বছর বয়সে", "২৯ বছর বয়সে", "৩০ বছর বয়সে", "৩৫ বছর বয়সে"],
+        ans: 2,
+        tag: "History - গৃহত্যাগ",
+        exp: "মহাবীর তাঁর জীবনের সমস্ত সাংসারিক বন্ধন ছিন্ন করে মাত্র ৩০ বছর বয়সে কঠোর তপস্যা ও সন্ন্যাস জীবন গ্রহণের উদ্দেশ্যে গৃহত্যাগ করেন।",
+        special: "💡 অন্যদিকে, বৌদ্ধ ধর্মের প্রবক্তা গৌতম বুদ্ধ মাত্র ২৯ বছর বয়সে তাঁর গৃহত্যাগ বা 'মহাভিনিষ্ক্রমণ' ঘটিয়েছিলেন।"
+    },
+    {
+        q: "কত বছর কঠোর তপস্যা করার পর মহাবীর পরম জ্ঞান বা 'কৈবল্য' লাভ করে 'জিন' বা জিতেন্দ্রিয় উপাধি পান?",
+        opts: ["৬ বছর", "১০ বছর", "১২ বছর", "১৫ বছর"],
+        ans: 2,
+        tag: "History - কৈবল্য",
+        exp: "দীর্ঘ ১২ বছর কঠোর কৃচ্ছসাধন ও তপস্যার পর ঋজুপালিকা নদীর তীরে মহাবীর সর্বোচ্চ জ্ঞান বা 'কৈবল্য' লাভ করেন এবং ইন্দ্রিয় জয় করার কারণে তাঁকে 'জিন' বা জিতেন্দ্রিয় বলা হয়।",
+        special: "💡 কৈবল্য লাভের পর তিনি তাঁর সমস্ত ষড়রিপু ও সুখ-দুঃখকে জয় করতে পেরেছিলেন বলেই ভক্তরা তাঁকে পরম শ্রদ্ধায় 'মহাবীর' নামে ডাকতে শুরু করেন।"
+    },
+    {
+        q: "জৈন ধর্মে কঠোর তপস্যা ও সাধনার মাধ্যমে সমস্ত জাগতিক বন্ধন থেকে মুক্তি লাভকারী ব্যক্তিদের কী বলা হয়ে থাকে?",
+        opts: ["জিন", "নিগ্রন্থ", "অরাহন্ত", "তীর্থংকর"],
+        ans: 1,
+        tag: "History - নিগ্রন্থ",
+        exp: "জৈনধর্মে কঠোর তপস্যার দ্বারা যাদের সব ধরনের জাগতিক বন্ধন ও মোহ থেকে চিরমুক্তি বা মোক্ষ ঘটে, তাঁদের 'নিগ্রন্থ' (যার অর্থ গ্রন্থিহীন বা বন্ধনহীন) বলা হয়।",
+        special: "💡 মহাবীর নিজেও সব বন্ধনমুক্ত হয়ে একজন মহান নিগ্রন্থ হিসেবে আত্মপ্রকাশ করেছিলেন।"
+    },
+    {
+        q: "পার্শ্বনাথ প্রবর্তিত 'চতুর্যাম' নীতির সাথে মহাবীর কোন পঞ্চম নীতিটি যুক্ত করায় তা 'পঞ্চমহাব্রত' নামে পরিচিত হয়?",
+        opts: ["অহিংসা", "অপরিগ্রহ", "ব্রহ্মচর্য", "অচৌর্য"],
+        ans: 2,
+        tag: "History - পঞ্চমহাব্রত",
+        exp: "মহাবীরের পূর্ববর্তী তীর্থংকর পার্শ্বনাথ ৪টি মূল নীতি (অহিংসা, সত্য, অচৌর্য ও অপরিগ্রহ) প্রচার করেছিলেন। এর সাথে মহাবীর পঞ্চম নীতি হিসেবে 'ব্রহ্মচর্য' যোগ করেন, যা একত্রে 'পঞ্চমহাব্রত' নামে পরিচিত।",
+        special: "💡 চতুর্যামের চারটি নীতি ছিল— প্রাণিহত্যা না করা (অহিংসা), অসত্য কথা না বলা (সত্য), চুরি না করা (অচৌর্য) এবং পরদ্রব্য গ্রহণ বা সঞ্চয় না করা (অপরিগ্রহ)।"
+    },
+    {
+        q: "মহাবীরের ঠিক পূর্ববর্তী ২৩তম তীর্থংকরের নাম কী ছিল, যাঁর নীতিকে মহাবীর পরিমার্জিত করেছিলেন?",
+        opts: ["ঋষভনাথ", "পার্শ্বনাথ", "নেমিনাথ", "আদিনাথ"],
+        ans: 1,
+        tag: "History - পার্শ্বনাথ",
+        exp: "মহাবীরের ঠিক পূর্ববর্তী বা ২৩তম ঐতিহাসিক তীর্থংকরের নাম ছিল 'পার্শ্বনাথ'।",
+        special: "💡 পার্শ্বনাথ ছিলেন বারাণসীর রাজপুত্র এবং ঐতিহাসিকদের মতে তিনি মহাবীরের জন্মের প্রায় ২৫০ বছর আগে তাঁর ধর্মমত বা চতুর্যাম প্রচার করেছিলেন।"
+    },
+    {
+        q: "জৈন ধর্মে কর্মের বন্ধন থেকে আত্মাকে মুক্ত করে পরম নির্বাণ বা মুক্তি লাভের উপায় হিসেবে ঘোষিত 'ত্রিরত্ন' আসলে কী কী?",
+        opts: ["বুদ্ধ, ধর্ম ও সংঘ", "সৎ বিশ্বাস, সৎ জ্ঞান এবং সৎ আচরণ", "অহিংসা, সত্য ও ব্রহ্মচর্য", "ধ্যান, জ্ঞান ও কৃচ্ছসাধন"],
+        ans: 1,
+        tag: "History - ত্রিরত্ন",
+        exp: "জৈন মতে পরম শুদ্ধ আনন্দ বা আত্মার মুক্তি লাভের তিনটি প্রধান উপায় হলো— ① সৎ বিশ্বাস, ② সৎ জ্ঞান এবং ③ সৎ আচরণ। এই তিনটিকে একত্রে 'ত্রিরত্ন' বলা হয়।",
+        special: "💡 এই ত্রিরত্ন অনুশীলনের মাধ্যমেই একজন সাধারণ মানুষ নিজের জীবনের চরম লক্ষ্য বা মোক্ষ অর্জন করতে পারে।"
+    },
+    {
+        q: "জৈন মতবাদ অনুসারে মানুষের কর্মের ক্ষয় ও সংসারের সুদীর্ঘ জন্মচক্র থেকে চিরমুক্তি পাওয়ার আসল পথ কোনটি?",
+        opts: ["বহু যাগযজ্ঞ করা", "পঞ্চমহাব্রত পালন ও কঠোর কৃচ্ছসাধন", "তীর্থভ্রমণ ও দান ধ্যান", "উপনিষদ পাঠ ও মন্ত্র জপ"],
+        ans: 1,
+        tag: "History - কৃচ্ছসাধন",
+        exp: "জৈন ধর্মে বিশ্বাস করা হয় যে কর্মের বন্ধন থেকে মুক্তির একমাত্র পথ হলো অত্যন্ত কঠোরভাবে 'পঞ্চমহাব্রত' পালন করা এবং তজ্জন্য চরম শরীরপীড়ন বা কৃচ্ছসাধন করা।",
+        special: "💡 জৈনরা ঈশ্বরকে জগতের স্রষ্টা হিসেবে স্বীকার করে না; তাদের মতে কঠোর তপস্যার মাধ্যমেই নিজের আত্মাকে পরম আত্মায় উন্নীত করা সম্ভব।"
+    },
+    {
+        q: "জৈন সম্প্রদায়ের প্রখ্যাত শ্রমণ ভদ্রবাহু কর্তৃক রচিত প্রথম জৈন ধর্মগ্রন্থটির নাম কী?",
+        opts: ["জৈন আগম", "কল্পসূত্র", "পরিশিষ্টপার্বণ", "দ্বাদশ অঙ্গ"],
+        ans: 1,
+        tag: "History - কল্পসূত্র",
+        exp: "জৈনদের বিখ্যাত পণ্ডিত ও শ্রমণ ভদ্রবাহু কর্তৃক সংস্কৃত ভাষায় রচিত 'কল্পসূত্র' হলো প্রথম প্রামাণ্য জৈন গ্রন্থ।",
+        special: "💡 এই গ্রন্থে ২৪ জন তীর্থংকরের জীবনী এবং বিশেষ করে মহাবীরের সাধনার জীবন অত্যন্ত চমৎকারভাবে বর্ণিত হয়েছে।"
+    },
+    {
+        q: "অধিকাংশ জৈন পবিত্র সাহিত্য ও উপদেশাবলী মূলত কোন প্রাচীন সাধারণ ভাষার মাধ্যমে লিপিবদ্ধ বা রচিত হয়েছিল?",
+        opts: ["পালি ভাষা", "দেবনাগরী সংস্কৃত", "প্রাকৃত ভাষা", "খরোষ্ঠী লিপি"],
+        ans: 2,
+        tag: "History - প্রাকৃত",
+        exp: "তৎকালীন সময়ে সাধারণ মানুষের কথ্য ভাষা হিসেবে পরিচিত 'প্রাকৃত' বা অর্ধ-মাগধী প্রাকৃত ভাষার মাধ্যমে অধিকাংশ জৈন ধর্মগ্রন্থ ও সাহিত্য রচিত হয়েছিল।",
+        special: "💡 অন্যদিকে, গৌতম বুদ্ধ তাঁর উপদেশাবলী প্রচারের জন্য মূলত 'পালি ভাষা' ব্যবহার করেছিলেন।"
+    },
+    {
+        q: "প্রথম জৈন সংগীতির ঐতিহাসিক বাদানুবাদ ও মতভেদের পর জৈন সমাজ কোন প্রধান দুটি সম্প্রদায়ে বিভক্ত হয়ে যায়?",
+        opts: ["হীনযান ও মহাযান", "শ্বেতাম্বর ও দিগম্বর", "স্থবিরবাদী ও মহাসংঘিকা", "বজ্রযান ও সহজযান"],
+        ans: 1,
+        tag: "History - শ্বেতাম্বর ও দিগম্বর",
+        exp: "প্রথম জৈন সংগীতির সময়কালে জৈন সমাজ দুটি প্রধান ধারায় বিভক্ত হয়ে যায়— শ্বেত বা সাদা বস্ত্র পরিধানকারী 'শ্বেতাম্বর' এবং কোনো প্রকার বস্ত্র পরিধান না করা কঠোরপন্থী 'দিগম্বর'।",
+        special: "💡 দিগম্বরদের মূল নেতা ছিলেন ভদ্রবাহু এবং শ্বেতাম্বরদের মূল নেতা ছিলেন স্থূলভদ্র।"
+    },
+    {
+        q: "আনুমানিক ৩০০ খ্রিস্টপূর্বাব্দে চন্দ্রগুপ্ত মৌর্যের আমলে প্রথম জৈন সংগীতি কোথায় এবং কার সভাপতিত্বে অনুষ্ঠিত হয়েছিল?",
+        opts: ["বলভী, ক্ষমাশ্রমণ", "পাটলিপুত্র, স্থূলভদ্র", "রাজগৃহ, মহাকাশ্যপ", "বৈশালি, সাবাকামি"],
+        ans: 1,
+        tag: "History - প্রথম জৈন সংগীতি",
+        exp: "আনুমানিক ৩০০ খ্রিস্টপূর্বাব্দে মগধের রাজধানী পাটলিপুত্রে প্রথম জৈন সংগীতি বা সম্মেলন অনুষ্ঠিত হয় এবং এর সভাপতিত্ব করেছিলেন স্থূলভদ্র।",
+        special: "💡 এই অধিবেশনেই প্রথম মহাবীরের সমস্ত উপদেশ বারোটি খণ্ডে সংকলিত করা হয়, যা ইতিহাসে 'দ্বাদশ অঙ্গ' নামে সুপরিচিত।"
+    },
+    {
+        q: "৫১২ খ্রিস্টাব্দে গুজরাতের বলভী নামক স্থানে কার সভাপতিত্বে দ্বিতীয় জৈন সংগীতি বা সম্মেলন আয়োজিত হয়েছিল?",
+        opts: ["ভদ্রবাহু", "স্থূলভদ্র", "দেবর্ষি ক্ষমাশ্রমণ", "হরিবিজয় সুরি"],
+        ans: 2,
+        tag: "History - দ্বিতীয় জৈন সংগীতি",
+        exp: "৫১২ খ্রিস্টাব্দে গুজরাতের বলভী নামক স্থানে দ্বিতীয় জৈন সংগীতি অনুষ্ঠিত হয় এবং এর সভাপতিত্ব করেন ক্ষমাশ্রমণ বা দেবর্ষি ক্ষমাশ্রমণ।",
+        special: "💡 এই অধিবেশনে দ্বাদশ অঙ্গের সাথে আরও ১২টি নতুন অনুশাসন যোগ করা হয়, যা 'দ্বাদশ উপাঙ্গ' নামে পরিচিত লাভ করে।"
+    },
+    {
+        q: "জৈন ধর্মের প্রথম তীর্থংকর ঋষভনাথ এবং ২৪তম তীর্থংকর মহাবীরের ধর্মীয় প্রতীক বা চিহ্ন যথাক্রমে কী কী ছিল?",
+        opts: ["পদ্ম ও সিংহ", "ঘোড়া ও ষাঁড়", "ষাঁড় ও সিংহ", "হাতি ও ছাগল"],
+        ans: 2,
+        tag: "History - তীর্থংকর প্রতীক",
+        exp: "জৈন ধর্মের প্রথম তীর্থংকর আদিনাথ বা ঋষভনাথের প্রতীক ছিল 'ষাঁড়' এবং শেষ তীর্থংকর মহাবীরের রাজকীয় প্রতীক ছিল 'সিংহ'।",
+        special: "💡 এই প্রতীকগুলির মাধ্যমে সমকালীন শিল্প ও স্থাপত্যে বিভিন্ন তীর্থংকরদের মূর্তিকে সহজেই চেনা ও চিহ্নিত করা যেত।"
+    },
+    {
+        q: "রাজকীয় পৃষ্ঠপোষকতার বিচারে নিচের কোন কোন পরাক্রমশালী প্রাচীন ভারতীয় শাসক জৈন ধর্মের অনুসারী ছিলেন?",
+        opts: ["বিম্বিসার ও অজাতশত্রু", "চন্দ্রগুপ্ত মৌর্য ও কলিঙ্গরাজ খারবেল", "কণিষ্ক ও হর্ষবর্ধন", "উপরের সবকটিই"],
+        ans: 3,
+        tag: "History - জৈন পৃষ্ঠপোষক",
+        exp: "মগধের হর্যঙ্ক বংশের রাজা বিম্বিসার ও অজাতশত্রু, মৌর্য বংশের প্রতিষ্ঠাতা চন্দ্রগুপ্ত মৌর্য এবং ওডিশার চেদি বংশের মহান রাজা কলিঙ্গরাজ খারবেল প্রত্যেকেই জৈন ধর্মের একনিষ্ঠ অনুসারী ও পৃষ্ঠপোষক ছিলেন।",
+        special: "💡 চন্দ্রগুপ্ত মৌর্য তাঁর জীবনের শেষভাগে শ্রবণবেলগোলায় জৈন সন্ন্যাসী ভদ্রবাহুর সাথে চলে যান এবং জৈন প্রথা অনুযায়ী অনশন করে দেহত্যাগ করেছিলেন।"
+    },
+    {
+        q: "খ্রি. পূ. ৪৬৮ অব্দে আনুমানিক ৭২ বছর বয়সে মহাবীর কোথায় অনশনের মাধ্যমে স্বেচ্ছামৃত্যু বা দেহত্যাগ বরণ করেছিলেন?",
+        opts: ["কুশিনগর", "রাজগৃহের নিকটবর্তী পাবা নগরী বা পাবাপুরী", "সারনাথ", "কপিলাবস্তু"],
+        ans: 1,
+        tag: "History - মহাবীরের মৃত্যু",
+        exp: "আনুমানিক খ্রি. পূ. ৪৬৮ অব্দে ৭২ বছর বয়সে মহাবীর রাজগৃহের কাছে অবস্থিত মল্লদের রাজধানী পাবা নগরীতে (পাবাপুরী) জৈনদের সর্বোচ্চ আত্মত্যাগ প্রথা অনুযায়ী অনশন করে স্বেচ্ছায় দেহত্যাগ করেন।",
+        special: "💡 এই পাবাপুরী বর্তমানে বিহারের নালন্দা জেলার অন্তর্গত একটি অত্যন্ত গুরুত্বপূর্ণ ও পবিত্র জৈন তীর্থক্ষেত্র হিসেবে সমাদৃত।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (২০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

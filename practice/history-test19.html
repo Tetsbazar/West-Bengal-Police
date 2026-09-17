@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — History | Set 19</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; margin-bottom: 6px; }
+.explanation .special-note { background: #ffffff; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 0.85rem; border: 1px dashed #c5dccb; font-family: 'Tiro Bangla', serif; line-height: 1.65; color: #2c4035; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+.result-wrap { display: none; max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
+.result-wrap.show { display: block; }
+.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: #1c2e24; margin-bottom: 18px; }
+.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 8px; }
+.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: #f9a825; margin-bottom: 25px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.result-stat-box { background: #f0faf4; border: 2px solid #c5dccb; border-radius: 16px; padding: 20px 10px; }
+.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.result-stat-num.correct { color: #1a7a4a; }
+.result-stat-num.wrong { color: #e63946; }
+.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: #5a7a66; }
+.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: #1c2e24; line-height: 1.5; margin-bottom: 25px; }
+.result-attempt-info .num { color: #1a7a4a; font-weight: 800; }
+.result-buttons { display: flex; flex-direction: column; gap: 12px; }
+.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
+.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.result-btn.green { background: #2e9e4f; }
+.result-btn.blue { background: #1a9bb8; }
+.result-btn.gray { background: #6b7a72; }
+
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+.hidden { display: none !important; }
+.toast-sms { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; text-align: center; border-left: 5px solid #f9a825; white-space: pre-line; }
+.toast-sms.show { transform: translateX(-50%) translateY(0); }
+.toast-sms .sms-title { font-size: 0.8rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 1px; }
+
+@media (max-width: 480px) {
+.main { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; }
+.q-text { font-size: 0.95rem; }
+.opt-text { font-size: 0.85rem; }
+.explanation p { font-size: 0.82rem; }
+.explanation .special-note { font-size: 0.78rem; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast-sms" id="smsToast">
+    <div class="sms-title">📩 TEST BAZAR</div>
+    <div id="smsText">আপনার বার্তা এখানে</div>
+</div>
+
+<div class="top-bar">
+<div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+<div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</div>
+
+<div class="main">
+
+<div class="login-overlay" id="loginOverlay">
+<div class="login-modal">
+<h2>🔐 লগইন করুন</h2>
+<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div class="set-name-display">🏛️ History Set 19</div>
+<div class="input-group">
+<label>ইউজারনেম</label>
+<input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+</div>
+<div class="input-group">
+<label>পাসওয়ার্ড</label>
+<input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+</div>
+<button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+<button class="cancel-btn" onclick="goToHub()">বাতিল</button>
+<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+</div>
+</div>
+
+<div id="testArea" class="hidden">
+<div class="quiz-info">
+<div class="info-item">🎓 <strong>ইতিহাস</strong> — Set 19</div>
+<div class="info-item">📝 <span>মুঘল সাম্রাজ্য — আকবর, জাহাঙ্গির, শাহজাহান ও ঔরঙ্গজেব</span></div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="q-card" id="qCard">
+<div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+<div class="q-text" id="qText"></div>
+<div class="opts" id="qOpts"></div>
+<div class="explanation" id="explanation">
+    <p id="expMain"></p>
+    <div class="special-note" id="expSpecial"></div>
+</div>
+<div class="nav-row">
+<div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+<button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+</div>
+</div>
+</div>
+
+<div class="result-wrap" id="resultWrap">
+    <div class="result-emoji" id="resultEmoji">💪</div>
+    <div class="result-heading">আপনার ফলাফল</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
+
+    <div class="result-stats">
+        <div class="result-stat-box">
+            <div class="result-stat-num correct" id="resultCorrect">0</div>
+            <div class="result-stat-label">সঠিক</div>
+        </div>
+        <div class="result-stat-box">
+            <div class="result-stat-num wrong" id="resultWrong">0</div>
+            <div class="result-stat-label">ভুল / স্কিপ</div>
+        </div>
+    </div>
+
+    <div class="result-attempt-info" id="resultAttemptInfo">
+        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ৫ বার)
+    </div>
+
+    <div class="result-buttons">
+        <button class="result-btn green" onclick="showReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+        <button class="result-btn blue" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+        <button class="result-btn gray" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+const MAX_ATTEMPTS = 5;
+const TIME_LIMIT = 15 * 60;
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+const GLOBAL_USERS = {
+"demo1": "1234", "demo2": "1234", "demo3": "1234", "demo4": "1234", "mali": "1234", "sagun": "1234", "dhiren": "1234",
+"ajay": "7251", "anita": "1234", "jaba": "1234", "student100": "pass001", "rohit2027": "abc456"
+};
+
+let currentUser = sessionStorage.getItem("currentStudent") || "";
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+
+// ★ সঠিক উত্তর A, B, C, D-তে সত্যিকারের ছড়ানো
+const questions = [
+{
+q: "আকবরের শাসন সংস্কারের অন্যতম স্তম্ভ 'জাবতি প্রথা' বা ভূমি রাজস্ব ব্যবস্থার দায়িত্বে থাকা তাঁর বিখ্যাত হিন্দু অর্থমন্ত্রী কে ছিলেন?",
+opts: ["রাজা মানসিংহ", "রাজা টোডরমল", "বীরবল", "ভগবান দাস"],
+ans: 1,
+exp: "আকবরের নবরত্নের অন্যতম সদস্য এবং বিখ্যাত অর্থমন্ত্রী রাজা টোডরমল জাবতি প্রথার প্রবর্তন ও পরিচালনা করেছিলেন।",
+special: "💡 টোডরমল শেরশাহের রাজত্বকালেও তাঁর রাজস্ব বিভাগের সাথে যুক্ত ছিলেন।"
+},
+{
+q: "আকবরের নবরত্ন সভার বিখ্যাত গায়ক তানসেনের আসল বা শৈশবের নাম কী ছিল?",
+opts: ["রামচন্দ্র তোপি", "মহেশ দাস", "রামতনু পান্ডে", "গোবিন্দ ধন্দুপন্থ"],
+ans: 2,
+exp: "আকবরের নবরত্ন সভার সর্বশ্রেষ্ঠ সঙ্গীতজ্ঞ মিঞা তানসেনের আসল নাম ছিল 'রামতনু পান্ডে'।",
+special: "💡 তানসেনের অসাধারণ রাগ সঙ্গীত বা ধ্রুপদ পরিবেশন মুঘল দরবারকে এক অনন্য উচ্চতায় নিয়ে গিয়েছিল।"
+},
+{
+q: "আকবরের রাজত্বকালে ইংল্যান্ড থেকে আগত প্রথম কোন ইংরেজ ঐতিহাসিক বা পর্যটক মুঘল দরবার পরিদর্শন করেছিলেন?",
+opts: ["স্যার টমাস রো", "র‍্যালফ ফিচ", "উইলিয়াম হকিন্স", "পিটার মান্ডি"],
+ans: 1,
+exp: "আকবরের রাজত্বকালে ইংল্যান্ডের প্রথম পর্যটক হিসেবে বিখ্যাত 'র‍্যালফ ফিচ' ভারতে এসেছিলেন।",
+special: "💡 তাঁর বিবরণী থেকে সমকালীন উত্তর ভারতের সমাজ ও বাণিজ্য ব্যবস্থা সম্পর্কে অতি গুরুত্বপূর্ণ তথ্য জানা যায়।"
+},
+{
+q: "মুঘল চিত্রকলা বা অঙ্কন শিল্পে উজ্জ্বল রং ও আলোর ব্যবহার কার আমলে বিকাশ লাভ করেছিল এবং যিনি নিজেও প্রতিকৃতি অঙ্কনে অত্যন্ত দক্ষ ছিলেন?",
+opts: ["আকবর", "শাহজাহান", "বাবর", "জাহাঙ্গির"],
+ans: 3,
+exp: "মুঘল চিত্রকলার স্বর্ণযুগ বলা হয় সম্রাট জাহাঙ্গিরের শাসনকালকে। তাঁর সময়ে চিত্রকলায় উজ্জ্বল রং ও আলোর ব্যবহারে এক নাটকীয় পরিবর্তন আসে এবং সম্রাট নিজে প্রতিকৃতি বা পোর্ট্রেট আঁকাতে অত্যন্ত দক্ষ ছিলেন।",
+special: "💡 জাহাঙ্গিরের রাজত্বকাল চিত্রকলা চর্চার চরম উৎকর্ষের জন্য ইতিহাসে বিখ্যাত।"
+},
+{
+q: "বিদ্রোহী মুঘল শাহজাদা খুসরুকে আশ্রয় বা সাহায্য দেওয়ার অপরাধে কোন মুঘল সম্রাট পঞ্চম শিখগুরু অর্জুন সিংকে হত্যা করেছিলেন?",
+opts: ["আকবর", "ঔরঙ্গজেব", "শাহজাহান", "জাহাঙ্গির"],
+ans: 3,
+exp: "সম্রাট জাহাঙ্গিরের আদেশে বিদ্রোহী পুত্র খুসরুকে নৈতিক সাহায্য দেওয়ার অপরাধে পঞ্চম শিখগুরু অর্জুন দেব বা অর্জুন সিংকে ১৬০৬ সালে নির্মমভাবে হত্যা করা হয়।",
+special: "💡 এই ঘটনার পর থেকে মুঘল ও শিখদের মধ্যে দীর্ঘস্থায়ী রক্তক্ষয়ী সংঘাতের সূচনা ঘটে।"
+},
+{
+q: "ব্রিটিশ ইস্ট ইন্ডিয়া কোম্পানির প্রথম রাজদূত উইলিয়াম হকিন্স কার রাজসভায় এসেছিলেন এবং সম্রাট তাঁকে কত পদের মনসব দিয়ে সম্মানিত করেছিলেন?",
+opts: ["আকবর, ৫০০ পদের", "শাহজাহান, ৪০০ পদের", "জাহাঙ্গির, ৪০০ পদের", "ঔরঙ্গজেব, ৩০০ পদের"],
+ans: 2,
+exp: "১৬০৮ সালে ব্রিটিশ দূত উইলিয়াম হকিন্স সম্রাট জাহাঙ্গিরের দরবারে আসেন এবং তুর্কি ভাষার ওপর তাঁর দক্ষতার কারণে সম্রাট তাঁকে '৪০০ পদের মনসব' প্রদান করেছিলেন।",
+special: "💡 হকিন্সকে মুঘল দরবারে 'ইংলিশ খাঁ' উপাধিতেও ভূষিত করা হয়েছিল।"
+},
+{
+q: "ইংল্যান্ডের রাজা প্রথম জেমসের আনুষ্ঠানিক দূত হয়ে কে জাহাঙ্গিরের দরবারে এসে ব্রিটিশদের সুরাটে বাণিজ্য কুঠি বা কারখানা স্থাপনের অনুমতি এনেছিলেন?",
+opts: ["র‍্যালফ ফিচ", "উইলিয়াম নরিস", "স্যার টমাস রো", "পিটার মান্ডি"],
+ans: 2,
+exp: "১৬১৫ খ্রিস্টাব্দে বিখ্যাত ব্রিটিশ রাজদূত স্যার টমাস রো জাহাঙ্গিরের দরবারে আসেন এবং বাণিজ্যের অধিকার ও কুঠি স্থাপনের রাজকীয় ফরমান বা অনুমতি আদায় করেন।",
+special: "💡 এর ফলে ভারতের সুরাটে ইংরেজরা তাদের প্রথম স্থায়ী কুঠি নির্মাণ করতে সক্ষম হয়েছিল।"
+},
+{
+q: "১৬০১/১৬০২ খ্রিস্টাব্দে জাহাঙ্গিরের চক্রান্তে এবং বীর সিংহ বুন্দেলার হাতে কোন বিখ্যাত মুঘল ঐতিহাসিক ও আকবরের ঘনিষ্ঠ মন্ত্রী নিহত হন?",
+opts: ["ফৈজি", "বদাউনি", "টোডরমল", "আবুল ফজল"],
+ans: 3,
+exp: "১৬০১ খ্রিস্টাব্দে (মতান্তরে ১৬০২) শাহজাদা সেলিমের (জাহাঙ্গির) প্ররোচনায় বীর সিংহ বুন্দেলা বিখ্যাত ঐতিহাসিক আবুল ফজলকে নির্মমভাবে হত্যা করেন।",
+special: "💡 আবুল ফজল আকবরের অতি বিশ্বস্ত বন্ধু ও বিখ্যাত গ্রন্থ 'আইন-ই-আকবরি'-র রচয়িতা ছিলেন।"
+},
+{
+q: "প্রজাদের সুবিচার বা অভিযোগ জানানোর জন্য কোন মুঘল সম্রাট আগ্রা দুর্গে বিখ্যাত সোনার ঘণ্টা বা 'জঞ্জির-ই-আদল' (Chain of Justice) স্থাপন করেছিলেন?",
+opts: ["আকবর", "শাহজাহান", "জাহাঙ্গির", "বাবর"],
+ans: 2,
+exp: "সম্রাট জাহাঙ্গির আগ্রা দুর্গে যমুনা নদীর তীর সংলগ্ন প্রাচীরে রাজকীয় সুবিচারের প্রতীক হিসেবে 'জঞ্জির-ই-আদল' বা ন্যায়ের শিকল স্থাপন করেছিলেন।",
+special: "💡 যেকোনো সাধারণ মানুষ অভিযোগ জানাতে এই শিকলটি টেনে সরাসরি সম্রাটের দৃষ্টি আকর্ষণ করতে পারত।"
+},
+{
+q: "চতুর্থ মুঘল সম্রাট জাহাঙ্গির বা সেলিম-এর সমাধি বর্তমানে ভারতের বাইরে কোথায় অবস্থিত?",
+opts: ["কাবুল", "রেঙ্গুন", "করাচি", "লাহোর"],
+ans: 3,
+exp: "সম্রাট জাহাঙ্গিরের সমাধি বর্তমানে পাকিস্তানের লাহোরে (শাদরা বাগিচায়) অবস্থিত।",
+special: "💡 জাহাঙ্গিরের মৃত্যুর পর তাঁর মহিষী নূরজাহান এই সুন্দর সমাধিটি নির্মাণ করিয়েছিলেন।"
+},
+{
+q: "মুঘল স্থাপত্যের রাজকুমার বা 'Prince of Builders' নামে কে পরিচিত ছিলেন এবং তাজমহল ও লালকেল্লা কার কীর্তি?",
+opts: ["আকবর", "জাহাঙ্গির", "শাহজাহান", "ঔরঙ্গজেব"],
+ans: 2,
+exp: "শাহজাহানের আমলে মুঘল স্থাপত্য শিল্প চরম সমৃদ্ধিতে পৌঁছানোয় তাঁকে 'Prince of Builders' বা স্থাপত্যের রাজকুমার বলা হয়। তাজমহল, ময়ূর সিংহাসন, লালকেল্লা তাঁর অমর সৃষ্টি।",
+special: "💡 তাঁর প্রধান স্থপতির নাম ছিল ওস্তাদ ইশা।"
+},
+{
+q: "কোন ইংরেজ পর্যটকের বিবরণে শাহজাহানের রাজত্বকালে সংঘটিত হওয়া উত্তর ও দক্ষিণ ভারতের ভয়াবহ দুর্ভিক্ষের মর্মস্পর্শী বর্ণনা পাওয়া যায়?",
+opts: ["উইলিয়াম হকিন্স", "স্যার টমাস রো", "পিটার মান্ডি", "ফাহিয়েন"],
+ans: 2,
+exp: "শাহজাহানের শাসনকালের এক চরম দুর্যোগ বা ভয়াবহ দুর্ভিক্ষের বাস্তব ও হৃদয়বিদারক চিত্র ইংরেজ পর্যটক পিটার মান্ডির লেখা বা ডায়েরি থেকে পাওয়া যায়।",
+special: "💡 এই দুর্ভিক্ষে সমকালীন ভারতের কোটি কোটি মানুষ খাদ্য সংকটে পড়েছিলেন।"
+},
+{
+q: "১৬৩২ খ্রিস্টাব্দে হুগলি থেকে ওলন্দাজ বা পোর্তুগিজদের বিতাড়িত করার কৃতিত্ব কোন মুঘল সম্রাটের ছিল?",
+opts: ["আকবর", "জাহাঙ্গির", "ঔরঙ্গজেব", "শাহজাহান"],
+ans: 3,
+exp: "১৬৩২ খ্রিস্টাব্দে বাংলার হুগলি অঞ্চল থেকে পর্তুগিজদের জলদস্যুতা ও ঔদ্ধত্যের কারণে তাদের ঘাঁটি ধ্বংস ও বিতাড়িত করেন মুঘল সম্রাট শাহজাহান।",
+special: "💡 এর ফলে বাংলায় মুঘলদের অভ্যন্তরীণ নৌ-বাণিজ্য অনেকটাই নিরাপদ হয়েছিল।"
+},
+{
+q: "সম্রাট ঔরঙ্গজেব ১৬৫৮ খ্রিস্টাব্দে আগ্রার সিংহাসন দখলের লড়াইয়ে তাঁর জ্যেষ্ঠ ভ্রাতা দারা শিকোহকে কোন দুটি বিখ্যাত যুদ্ধে পরাজিত করেছিলেন?",
+opts: ["চৌসা ও কনৌজের যুদ্ধ", "পানিপথ ও হলদিঘাটের যুদ্ধ", "ধর্মাত ও সামুগড়ের যুদ্ধ", "তালিকোটা ও কার্নালের যুদ্ধ"],
+ans: 2,
+exp: "১৬৫৮ খ্রিস্টাব্দে ঔরঙ্গজেব তাঁর ভাই দারা শিকোহকে প্রথমে ধর্মাত এবং পরে সামুগড়ের যুদ্ধে পরাজিত করেন এবং রাজমুকুট দখল করেন।",
+special: "💡 ১৬৫৯ খ্রিস্টাব্দে দেওরাই-এর যুদ্ধে দারাকে শেষবারের মতো হারিয়ে ঔরঙ্গজেব দারা শিকোহকে হত্যা করেন।"
+},
+{
+q: "কোন শিখ গুরুকে ১৬৭৫ খ্রিস্টাব্দে মুঘল সম্রাট ঔরঙ্গজেবের আদেশে দিল্লির চাঁদনি চকে ইসলাম ধর্ম গ্রহণ না করার কারণে হত্যা করা হয়েছিল?",
+opts: ["গুরু অর্জুন সিং", "গুরু গোবিন্দ সিং", "গুরু তেগ বাহাদুর", "গুরু রামদাস"],
+ans: 2,
+exp: "নবম শিখ গুরু তেগ বাহাদুরকে ১৬৭৫ খ্রিস্টাব্দে সম্রাট ঔরঙ্গজেবের আদেশে বন্দি ও হত্যা করা হয়।",
+special: "💡 এই নিষ্ঠুর ঘটনার পর শিখদের সাথে মুঘলদের ধর্মীয় ও রাজনৈতিক বৈরিতা চরম আকার ধারণ করে।"
+}
+];
+
+const TOTAL_QS = questions.length;
+
+function getMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function getAttemptStorageKey(username) {
+    return `attempts_${username}_history_set19_${getMonthKey()}`;
+}
+function getMonthlyAttempts(username) {
+    if (!username) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username));
+    return raw ? parseInt(raw) : 0;
+}
+function incrementMonthlyAttempts(username) {
+    if (!username) return;
+    const current = getMonthlyAttempts(username);
+    localStorage.setItem(getAttemptStorageKey(username), current + 1);
+}
+function getRemainingAttempts(username) {
+    return Math.max(0, MAX_ATTEMPTS - getMonthlyAttempts(username));
+}
+
+function showSMS(message) {
+    const toast = document.getElementById('smsToast');
+    document.getElementById('smsText').innerText = message;
+    toast.classList.add('show');
+    clearTimeout(window.smsTimeout);
+    window.smsTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function initPage() {
+    const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
+    if (isLoggedIn && currentUser) {
+        checkAttemptAndStart();
+    } else {
+        document.getElementById('loginOverlay').classList.add('active');
+    }
+}
+
+function doLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value.trim();
+    const err = document.getElementById('loginError');
+    if (!u || !p) { err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.style.display = 'block'; return; }
+    if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+        currentUser = u;
+        sessionStorage.setItem("testBazarUserLoggedIn", "true");
+        sessionStorage.setItem("currentStudent", u);
+        document.getElementById('loginOverlay').classList.remove('active');
+        checkAttemptAndStart();
+    } else {
+        err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+        err.style.display = 'block';
+    }
+}
+
+function checkAttemptAndStart() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        setTimeout(goToHub, 1800);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`✅ লগইন সফল! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    startQuiz();
+}
+
+function startQuiz() {
+    cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+    timeLeft = TIME_LIMIT;
+    isReviewMode = false;
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('danger');
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[cur];
+    document.getElementById('qNum').innerText = isReviewMode
+        ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}`
+        : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+    const optsContainer = document.getElementById('qOpts');
+    optsContainer.innerHTML = '';
+    q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+        if (isReviewMode) {
+            btn.classList.add('disabled');
+            if (idx === q.ans) btn.classList.add('correct');
+            else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+        } else {
+            btn.onclick = () => selectAnswer(idx, btn);
+        }
+        optsContainer.appendChild(btn);
+    });
+
+    const nextBtn = document.getElementById('nextBtn');
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('scoreShow').innerText = isReviewMode
+        ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর"
+        : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+    if (isReviewMode) {
+        document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+        document.getElementById('expSpecial').innerText = q.special;
+        document.getElementById('explanation').classList.add('show');
+        nextBtn.disabled = false;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+    } else {
+        nextBtn.disabled = true;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+    }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+    if (answered) return;
+    answered = true;
+    const q = questions[cur];
+    userAnswers[cur] = selectedIdx;
+    const allBtns = document.getElementById('qOpts').children;
+    for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.add('disabled');
+        if (i === q.ans) allBtns[i].classList.add('correct');
+    }
+    if (selectedIdx === q.ans) score++;
+    else { btnElement.classList.add('wrong'); wrong++; }
+
+    document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+    document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+    if (cur < TOTAL_QS - 1) { cur++; loadQuestion(); }
+    else {
+        if (isReviewMode) {
+            document.getElementById('testArea').classList.add('hidden');
+            document.getElementById('resultWrap').classList.add('show');
+        } else { clearInterval(timerInterval); showResult(); }
+    }
+}
+
+function showResult() {
+    document.getElementById('testArea').classList.add('hidden');
+    document.getElementById('timerBox').classList.add('hidden');
+    document.getElementById('resultWrap').classList.add('show');
+    const pct = Math.round((score / TOTAL_QS) * 100);
+    const wrongOrSkipped = TOTAL_QS - score;
+    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
+    if (pct >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
+    else if (pct >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
+    else if (pct >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
+    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
+    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultTagline').innerText = tagline;
+    document.getElementById('resultPercent').innerText = pct + '%';
+    document.getElementById('resultCorrect').innerText = score;
+    document.getElementById('resultWrong').innerText = wrongOrSkipped;
+    const remaining = getRemainingAttempts(currentUser);
+    document.getElementById('attemptsLeft').innerText = remaining;
+    showSMS(`📊 ফলাফল: ${pct}% | বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+}
+
+function showReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    isReviewMode = true;
+    cur = 0;
+    loadQuestion();
+}
+
+function restartQuiz() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`🔄 আবার শুরু! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    document.getElementById('resultWrap').classList.remove('show');
+    startQuiz();
+}
+
+function goToHub() {
+    window.location.href = "../index.html";
+}
+
+window.onload = initPage;
+</script>
+</body>
+</html>

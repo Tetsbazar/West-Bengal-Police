@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — History | Set 21</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; margin-bottom: 6px; }
+.explanation .special-note { background: #ffffff; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 0.85rem; border: 1px dashed #c5dccb; font-family: 'Tiro Bangla', serif; line-height: 1.65; color: #2c4035; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+.result-wrap { display: none; max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
+.result-wrap.show { display: block; }
+.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: #1c2e24; margin-bottom: 18px; }
+.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 8px; }
+.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: #f9a825; margin-bottom: 25px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.result-stat-box { background: #f0faf4; border: 2px solid #c5dccb; border-radius: 16px; padding: 20px 10px; }
+.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.result-stat-num.correct { color: #1a7a4a; }
+.result-stat-num.wrong { color: #e63946; }
+.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: #5a7a66; }
+.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: #1c2e24; line-height: 1.5; margin-bottom: 25px; }
+.result-attempt-info .num { color: #1a7a4a; font-weight: 800; }
+.result-buttons { display: flex; flex-direction: column; gap: 12px; }
+.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
+.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.result-btn.green { background: #2e9e4f; }
+.result-btn.blue { background: #1a9bb8; }
+.result-btn.gray { background: #6b7a72; }
+
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+.hidden { display: none !important; }
+.toast-sms { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; text-align: center; border-left: 5px solid #f9a825; white-space: pre-line; }
+.toast-sms.show { transform: translateX(-50%) translateY(0); }
+.toast-sms .sms-title { font-size: 0.8rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 1px; }
+
+@media (max-width: 480px) {
+.main { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; }
+.q-text { font-size: 0.95rem; }
+.opt-text { font-size: 0.85rem; }
+.explanation p { font-size: 0.82rem; }
+.explanation .special-note { font-size: 0.78rem; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast-sms" id="smsToast">
+    <div class="sms-title">📩 TEST BAZAR</div>
+    <div id="smsText">আপনার বার্তা এখানে</div>
+</div>
+
+<div class="top-bar">
+<div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+<div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</div>
+
+<div class="main">
+
+<div class="login-overlay" id="loginOverlay">
+<div class="login-modal">
+<h2>🔐 লগইন করুন</h2>
+<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div class="set-name-display">🏛️ History Set 21</div>
+<div class="input-group">
+<label>ইউজারনেম</label>
+<input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+</div>
+<div class="input-group">
+<label>পাসওয়ার্ড</label>
+<input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+</div>
+<button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+<button class="cancel-btn" onclick="goToHub()">বাতিল</button>
+<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+</div>
+</div>
+
+<div id="testArea" class="hidden">
+<div class="quiz-info">
+<div class="info-item">🎓 <strong>ইতিহাস</strong> — Set 21</div>
+<div class="info-item">📝 <span>আঞ্চলিক শক্তির উত্থান, বাংলার নবাব, অযোধ্যা, মহীশূর ও মারাঠা</span></div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="q-card" id="qCard">
+<div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+<div class="q-text" id="qText"></div>
+<div class="opts" id="qOpts"></div>
+<div class="explanation" id="explanation">
+    <p id="expMain"></p>
+    <div class="special-note" id="expSpecial"></div>
+</div>
+<div class="nav-row">
+<div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+<button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+</div>
+</div>
+</div>
+
+<div class="result-wrap" id="resultWrap">
+    <div class="result-emoji" id="resultEmoji">💪</div>
+    <div class="result-heading">আপনার ফলাফল</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
+
+    <div class="result-stats">
+        <div class="result-stat-box">
+            <div class="result-stat-num correct" id="resultCorrect">0</div>
+            <div class="result-stat-label">সঠিক</div>
+        </div>
+        <div class="result-stat-box">
+            <div class="result-stat-num wrong" id="resultWrong">0</div>
+            <div class="result-stat-label">ভুল / স্কিপ</div>
+        </div>
+    </div>
+
+    <div class="result-attempt-info" id="resultAttemptInfo">
+        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ৫ বার)
+    </div>
+
+    <div class="result-buttons">
+        <button class="result-btn green" onclick="showReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+        <button class="result-btn blue" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+        <button class="result-btn gray" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+const MAX_ATTEMPTS = 5;
+const TIME_LIMIT = 15 * 60;
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+const GLOBAL_USERS = {
+"demo1": "1234", "demo2": "1234", "demo3": "1234", "demo4": "1234", "mali": "1234", "sagun": "1234", "dhiren": "1234",
+"ajay": "7251", "anita": "1234", "jaba": "1234", "student100": "pass001", "rohit2027": "abc456"
+};
+
+let currentUser = sessionStorage.getItem("currentStudent") || "";
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+
+// ★ সঠিক উত্তর A, B, C, D-তে সত্যিকারের ব্যালান্সড (প্রায় সমান)
+const questions = [
+{
+q: "বাংলার কোন সুবেদার বা নবাব ১৭১৭ খ্রিস্টাব্দে আনুষ্ঠানিকভাবে তাঁর শাসনকাল শুরু করে বাংলার রাজধানী ঢাকা থেকে মুর্শিদাবাদে স্থানান্তরিত করেছিলেন?",
+opts: ["আলিবর্দি খাঁ", "সিরাজ-উদ-দৌল্লা", "মুর্শিদকুলি খাঁ", "সুজাউদ্দিন মহম্মদ খাঁ"],
+ans: 2,
+exp: "১৭১৭ খ্রিস্টাব্দে সম্রাট ঔরঙ্গজেবের নির্দেশে সুবেদার বা দেওয়ান মুর্শিদকুলি খাঁ বাংলার রাজধানী ঢাকা থেকে সরিয়ে তাঁর নিজের নামে নামাঙ্কিত নতুন শহর 'মুর্শিদাবাদ'-এ নিয়ে আসেন।",
+special: "💡 নবাব মুর্শিদকুলি খাঁর আসল নাম ছিল মহম্মদ হাদি বা মির্জা হাদি, এবং ঔরঙ্গজেব তাঁর রাজস্ব পরিচালনায় মুগ্ধ হয়ে তাঁকে 'মুর্শিদকুলি খাঁ' উপাধিতে ভূষিত করেছিলেন।"
+},
+{
+q: "১৭১৭ খ্রিস্টাব্দ থেকে ১৭৫৭ খ্রিস্টাব্দ পর্যন্ত আলিবর্দি খাঁ ও তাঁর উত্তরসূরিদের রাজত্বকাল অনুযায়ী বাংলার নবাবদের সঠিক ঐতিহাসিক ক্রমটি নিচের কোনটি?",
+opts: ["মুর্শিদকুলি খাঁ ➔ সুজাউদ্দিন মহম্মদ খাঁ ➔ সরফরাজ খাঁ ➔ আলিবর্দি খাঁ ➔ সিরাজ-উদ-দৌল্লা", "মুর্শিদকুলি খাঁ ➔ সিরাজ-উদ-দৌল্লা ➔ আলিবর্দি খাঁ ➔ মিরজাফর", "আলিবর্দি খাঁ ➔ সরফরাজ খাঁ ➔ মিরকাশিম ➔ নজম-উদ-দৌল্লা", "সুজাউদ্দিন মহম্মদ খাঁ ➔ আলিবর্দি খাঁ ➔ মিরকাশিম ➔ সিরাজ-উদ-দৌল্লা"],
+ans: 0,
+exp: "বাংলার নবাবদের সঠিক কালানুক্রমিক ইতিহাস হলো— মুর্শিদকুলি খাঁ (১৭১৭-১৭২৭ খ্রি.), সুজাউদ্দিন মহম্মদ খাঁ (১৭২৭-১৭৩৯ খ্রি.), সরফরাজ খাঁ (১৭৩৯-১৭৪০ খ্রি.), আলিবর্দি খাঁ (১৭৪০-১৭৫৬ খ্রি.) এবং সিরাজ-উদ-দৌল্লা (১৭৫৬-১৭৫৭ খ্রি.)।",
+special: "💡 আলিবর্দি খাঁ ১৭৪০ সালের গিরিয়ার যুদ্ধে সরফরাজ খাঁকে পরাজিত করে বাংলার মসনদ দখল করেছিলেন।"
+},
+{
+q: "১৭৫৭ সালের ২৩ জুন সংগঠিত ঐতিহাসিক 'পলাশির যুদ্ধ'-এ ইংরেজ সেনাপতি রবার্ট ক্লাইভের মুখোমুখি হওয়া বাংলার শেষ স্বাধীন নবাব কে ছিলেন?",
+opts: ["মিরজাফর", "মিরকাশিম", "নজম-উদ-দৌল্লা", "সিরাজ-উদ-দৌল্লা"],
+ans: 3,
+exp: "১৭৫৭ সালের ২৩ জুন পলাশির আম্রকাননে ইংরেজ সেনাপতি রবার্ট ক্লাইভের কাছে বাংলার শেষ স্বাধীন নবাব মির্জা মহম্মদ সিরাজউদ্দৌলা পরাজিত হন।",
+special: "💡 এই পরাজয়ের পেছনে নবাবের প্রধান সেনাপতি মিরজাফরের বিশ্বাসঘাতকতা মূল কারণ ছিল এবং যুদ্ধে নবাবের পক্ষে মীর মদন ও মোহন লাল অসামান্য বীরত্বের সাথে যুদ্ধ করেছিলেন।"
+},
+{
+q: "পলাশির যুদ্ধের ঠিক প্রাক্কালে ১৭৫৭ খ্রিস্টাব্দে নবাব সিরাজ-উদ-দৌল্লা এবং ইংরেজদের রবার্ট ক্লাইভের মধ্যে কোন ঐতিহাসিক চুক্তি বা সন্ধি স্বাক্ষরিত হয়েছিল?",
+opts: ["সুরাটের সন্ধি", "সলবাই-এর সন্ধি", "আলিনগরের সন্ধি", "পুরন্দরের সন্ধি"],
+ans: 2,
+exp: "১৭৫৭ খ্রিস্টাব্দে নবাব সিরাজ-উদ-দৌল্লা এবং ইংরেজ ইস্ট ইন্ডিয়া কোম্পানির রবার্ট ক্লাইভের মধ্যে বিখ্যাত 'আলিনগরের সন্ধি' স্বাক্ষরিত হয়।",
+special: "💡 নবাব সিরাজ-উদ-দৌল্লা কলকাতা অধিকার করার পর তাঁর দাদু আলিবর্দি খাঁর সরণে কলকাতার নামকরণ করেছিলেন 'আলিনগর'।"
+},
+{
+q: "১৭৬৪ খ্রিস্টাব্দে সংগঠিত বিখ্যাত 'বক্সারের যুদ্ধ'-এ ইংরেজ সেনাপতি মেজর হেক্টর মনরোর বিরুদ্ধে যে সম্মিলিত ভারতীয় শক্তি লড়াই করেছিল, তাতে বাংলার কোন নবাব যুক্ত ছিলেন?",
+opts: ["সিরাজ-উদ-দৌল্লা", "মিরজাফর", "আলিবর্দি খাঁ", "মিরকাশিম"],
+ans: 3,
+exp: "১৭৬৪ খ্রিস্টাব্দে বক্সারের যুদ্ধে ইংরেজ সেনাপতি হেক্টর মনরোর মুখোমুখি হয়েছিল সম্মিলিত জোট, যার মধ্যে অন্যতম প্রধান ছিলেন বাংলার নবাব মিরকাশিম।",
+special: "💡 এই সম্মিলিত জোটে মিরকাশিমের সাথে আরও যুক্ত ছিলেন অযোধ্যার নবাব সুজা-উদ-দৌল্লা এবং মুঘল সম্রাট দ্বিতীয় শাহ আলম। এই যুদ্ধে ইংরেজ সেনাপতি চূড়ান্ত জয়লাভ করেন।"
+},
+{
+q: "১৭৫৭ সালের পলাশির যুদ্ধের পর ইংরেজদের দ্বারা বাংলার সিংহাসনে বসা নবাব মিরজাফরের রাজত্বকালের দুটি পর্যায় নিচের কোনটি ছিল?",
+opts: ["১৭৫৭-১৭৬০ খ্রি. এবং ১৭৬৩-১৭৬৫ খ্রি.", "১৭৫৬-১৭৫৭ খ্রি. এবং ১৭৬০-১৭৬৩ খ্রি.", "১৭৫৭-১৭৬০ খ্রি. এবং ১৭৬০-১৭৬৩ খ্রি.", "১৭৪০-১৭৫৬ খ্রি. এবং ১৭৬৫-১৭৭০ খ্রি."],
+ans: 0,
+exp: "পলাশির যুদ্ধের পর মিরজাফর ১৭৫৭-১৭৬০ খ্রিস্টাব্দ পর্যন্ত প্রথমবার নবাব হন এবং পরে মিরকাশিমের পদচ্যুতির পর পুনরায় ১৭৬৩-১৭৬৫ খ্রিস্টাব্দ পর্যন্ত দ্বিতীয় দফায় শাসনভার লাভ করেন।",
+special: "💡 ১৭৬০ থেকে ১৭৬৩ খ্রিস্টাব্দ পর্যন্ত মাঝের সময়টিতে মিরজাফরের জামাতা মিরকাশিম বাংলার নবাব ছিলেন।"
+},
+{
+q: "১৭২২ খ্রিস্টাব্দে অযোধ্যায় স্বাধীন নবাবী শাসনের ভিত্তি কে স্থাপন করেছিলেন এবং তাঁর উপাধি ও প্রতিষ্ঠিত শহরটি কী ছিল?",
+opts: ["সফদর জঙ্গ, কানপুর", "সাদাত আলি খাঁ, ফৈজাবাদ", "সুজা-উদ-দৌল্লা, লখনউ", "ওয়াজিদ আলি শাহ, অযোধ্যা"],
+ans: 1,
+exp: "১৭২২ খ্রিস্টাব্দে সাদাত আলি খাঁ অযোধ্যায় স্বাধীন নবাবী শাসনের সূচনা করেন এবং ফৈজাবাদে তাঁর রাজকীয় কেন্দ্র স্থাপন করেন।",
+special: "💡 সাদাত আলি খাঁর উত্তরসূরি আবুল মনসুর খাঁ 'সফদরজঙ্গ' উপাধিতে ইতিহাসে অত্যন্ত সমাদৃত ছিলেন।"
+},
+{
+q: "বক্সারের যুদ্ধে মীরকাশিমের সহযোগী এবং ১৭৫৪ থেকে ১৭৭৫ খ্রিস্টাব্দ পর্যন্ত শাসন করা অযোধ্যার অত্যন্ত প্রভাবশালী নবাব কে ছিলেন?",
+opts: ["সাদাত আলি খাঁ", "সফদর জঙ্গ", "সুজা-উদ-দৌলা", "ওয়াজিদ আলি শাহ"],
+ans: 2,
+exp: "অযোধ্যার অত্যন্ত পরাক্রমশালী নবাব সুজা-উদ-দৌলা ১৭৫৪ থেকে ১৭৭৫ খ্রিস্টাব্দ পর্যন্ত অযোধ্যা শাসন করেছিলেন এবং তিনি ১৭৬৪ খ্রিস্টাব্দের বক্সারের যুদ্ধে ইংরেজদের বিরুদ্ধে অবতীর্ণ হয়েছিলেন।",
+special: "💡 এই সুজা-উদ-দৌলা ১৭৬১ সালের পানিপথের তৃতীয় যুদ্ধে আফগান প্রধান আহমদ শাহ আবদালির সাথে মিত্রতা করেছিলেন।"
+},
+{
+q: "অযোধ্যার ইতিহাসের সর্বশেষ নবাব কে ছিলেন, যাঁর শাসনকালে ডালহৌসি অপশাসনের অভিযোগে অযোধ্যা গ্রাস করেছিলেন?",
+opts: ["সুজা-উদ-দৌলা", "সফদর জঙ্গ", "সাদাত আলি খাঁ", "ওয়াজিদ আলি শাহ"],
+ans: 3,
+exp: "অযোধ্যার সর্বশেষ নবাব ছিলেন বিখ্যাত সঙ্গীত ও শিল্পানুরাগী ব্যক্তিত্ব ওয়াজিদ আলি শাহ।",
+special: "💡 ১৮৫৬ খ্রিস্টাব্দে লর্ড ডালহৌসি কুশাসনের অভিযোগ এনে ওয়াজিদ আলি শাহকে সিংহাসনচ্যুত করেন এবং অযোধ্যা অধিগ্রহণ করেন।"
+},
+{
+q: "মহীশূরে ১৭৬১ খ্রিস্টাব্দে সিংহাসন দখলকারী বিখ্যাত শাসক হায়দার আলির সুযোগ্য পুত্র টিপু সুলতানের শাসনকাল কত বছর পর্যন্ত স্থায়ী ছিল?",
+opts: ["১৭৬১-১৭৮২ খ্রিস্টাব্দ", "১৭৮২-১৭৯৯ খ্রিস্টাব্দ", "১৭৮৯-১৭৯২ খ্রিস্টাব্দ", "১৭৭৫-১৭৮২ খ্রিস্টাব্দ"],
+ans: 1,
+exp: "মহীশূরের স্বাধীন সত্তার ধারক হায়দার আলির মৃত্যুর পর ১৭৮২ খ্রিস্টাব্দে টিপু সুলতান সিংহাসনে বসেন এবং ১৭৯৯ খ্রিস্টাব্দে মৃত্যুর পূর্ব পর্যন্ত রাজত্ব করেন।",
+special: "💡 হায়দার আলি ১৭৬১ থেকে ১৭৮২ খ্রিস্টাব্দ পর্যন্ত শাসন করেছিলেন এবং তিনি প্রথম ইঙ্গ-মহীশূর যুদ্ধে ইংরেজদের শোচনীয়ভাবে পরাজিত করেন।"
+},
+{
+q: "১৭৮৪ খ্রিস্টাব্দের 'ম্যাঙ্গালোরের সন্ধি' এবং ১৭৯২ খ্রিস্টাব্দের 'শ্রীরঙ্গপত্তনমের সন্ধি' কোন দুটি ঐতিহাসিক যুদ্ধের সমাপ্তি ঘটিয়েছিল?",
+opts: ["প্রথম ও দ্বিতীয় ইঙ্গ-মহীশূর যুদ্ধ", "দ্বিতীয় ও তৃতীয় ইঙ্গ-মহীশূর যুদ্ধ", "তৃতীয় ও চতুর্থ ইঙ্গ-মহীশূর যুদ্ধ", "প্রথম ও তৃতীয় ইঙ্গ-মহীশূর যুদ্ধ"],
+ans: 1,
+exp: "১৭৮৪ সালের ম্যাঙ্গালোরের সন্ধির মাধ্যমে দ্বিতীয় ইঙ্গ-মহীশূর যুদ্ধের সমাপ্তি ঘটে এবং ১৭৯২ সালের শ্রীরঙ্গপত্তনমের সন্ধির মাধ্যমে তৃতীয় ইঙ্গ-মহীশূর যুদ্ধের সমাপ্তি ঘটে।",
+special: "💡 লর্ড কর্নওয়ালিসের শাসনকালে ১৭৮৯-৯২ খ্রিস্টাব্দে তৃতীয় ইঙ্গ-মহীশূর যুদ্ধ সংঘটিত হয়েছিল যাতে টিপু সুলতান নিজের অর্ধেক রাজ্য হারাতে বাধ্য হন।"
+},
+{
+q: "১৭৯৯ খ্রিস্টাব্দের চতুর্থ ইঙ্গ-মহীশূর যুদ্ধে লর্ড ওয়েলেসলির বিরুদ্ধে তাঁর রাজধানী রক্ষা করতে গিয়ে টিপু সুলতান কোথায় বীরগতি লাভ করেন?",
+opts: ["তাঞ্জাভুর", "মহীশূর", "শ্রীরঙ্গপত্তনম", "ম্যাঙ্গালোর"],
+ans: 2,
+exp: "১৭৯৯ খ্রিস্টাব্দে লর্ড ওয়েলেসলি প্রবর্তিত অধীনতামূলক মিত্রতা নীতি গ্রহণে অস্বীকার করায় চতুর্থ ইঙ্গ-মহীশূর যুদ্ধ বাধে এবং শ্রীরঙ্গপত্তনমে যুদ্ধরত অবস্থায় টিপু সুলতানের মৃত্যু হয়।",
+special: "💡 টিপু সুলতানের মৃত্যুর পর মহীশূরের বিশাল রাজ্য ব্রিটিশরা জবরদখল করে তাদের নিজেদের অনুগত হিন্দু ওদেয়ার রাজবংশের হাতে সমর্পণ করে।"
+},
+{
+q: "মারাঠা সাম্রাজ্যের বীর প্রতিষ্ঠাতা ছত্রপতি শিবাজির জন্ম ও রায়গড় দুর্গে তাঁর গৌরবময় রাজ্যাভিষেক যথাক্রমে কোন কোন খ্রিস্টাব্দে সংঘটিত হয়েছিল?",
+opts: ["১৬২৭/১৬৩০ খ্রিস্টাব্দ এবং ১৬৭৪ খ্রিস্টাব্দ", "১৬২৭ খ্রিস্টাব্দ এবং ১৬৮০ খ্রিস্টাব্দ", "১৬৫৮ খ্রিস্টাব্দ এবং ১৬৬৫ খ্রিস্টাব্দ", "১৬৩০ খ্রিস্টাব্দ এবং ১৬৫৯ খ্রিস্টাব্দ"],
+ans: 0,
+exp: "শিবাজির জন্ম ১৬২৭ বা ১৬৩০ খ্রিস্টাব্দে এবং ১৬৭৪ খ্রিস্টাব্দে রায়গড় দুর্গে হিন্দু শাস্ত্রীয় প্রথা অনুযায়ী মহাসমারোহে তাঁর রাজ্যাভিষেক সম্পন্ন হয়।",
+special: "💡 রাজ্যাভিষেকের পর তিনি 'ছত্রপতি' ও 'গো-ব্রাহ্মণ প্রজাপালক' উপাধি ধারণ করেন এবং শিবাজির ঐতিহাসিক মৃত্যু ঘটে ১৬৮০ খ্রিস্টাব্দে।"
+},
+{
+q: "১৬৬৫ খ্রিস্টাব্দে মুঘল সেনাপতি মির্জা রাজা জয়সিংহের কূটকৌশলে পরাজিত হয়ে শিবাজি কোন ঐতিহাসিক চুক্তি স্বাক্ষর করতে বাধ্য হয়েছিলেন?",
+opts: ["বেসিনের সন্ধি", "সলবাই-এর সন্ধি", "পুরন্দরের সন্ধি", "সুরাটের সন্ধি"],
+ans: 2,
+exp: "ঔরঙ্গজেবের পাঠানো দক্ষ সেনাপতি মির্জা রাজা জয়সিংহের সাথে কড়া শর্তে ১৬৬৫ খ্রিস্টাব্দে শিবাজির বিখ্যাত 'পুরন্দরের সন্ধি' স্বাক্ষরিত হয়।",
+special: "💡 এই সন্ধির শর্তানুযায়ী শিবাজিকে তাঁর বিজিত ৩৫টি দুর্গের মধ্যে ২৩টি দুর্গ মুঘলদের হাতে তুলে দিতে হয়েছিল।"
+},
+{
+q: "শিবাজির শাসনকালে ও মারাঠা সাম্রাজ্যে প্রচলিত অত্যন্ত সুপরিচিত দুই প্রকার রাজস্ব বা কর ব্যবস্থার নাম কী ছিল?",
+opts: ["কবুলিয়ত ও পাট্টা", "জাবতি ও দহশালা", "রায়তওয়ারি ও মহলওয়ারি", "চৌথ ও সরদেশমুখী"],
+ans: 3,
+exp: "মারাঠা সাম্রাজ্যের সুরক্ষাদানের প্রতিশ্রুতি এবং সম্রাটের সার্বভৌম অধিকারের স্বার্থে প্রজাদের থেকে 'চৌথ' এবং 'সরদেশমুখী' নামক দুটি বিশেষ রাজস্ব আদায় করা হতো।",
+special: "💡 প্রতিবেশী রাজ্যগুলির মোট আয়ের এক-দশমাংশ (১০%) কর হিসেবে আদায় করাকে সরদেশমুখী বলা হতো।"
+}
+];
+
+const TOTAL_QS = questions.length;
+
+function getMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function getAttemptStorageKey(username) {
+    return `attempts_${username}_history_set21_${getMonthKey()}`;
+}
+function getMonthlyAttempts(username) {
+    if (!username) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username));
+    return raw ? parseInt(raw) : 0;
+}
+function incrementMonthlyAttempts(username) {
+    if (!username) return;
+    const current = getMonthlyAttempts(username);
+    localStorage.setItem(getAttemptStorageKey(username), current + 1);
+}
+function getRemainingAttempts(username) {
+    return Math.max(0, MAX_ATTEMPTS - getMonthlyAttempts(username));
+}
+
+function showSMS(message) {
+    const toast = document.getElementById('smsToast');
+    document.getElementById('smsText').innerText = message;
+    toast.classList.add('show');
+    clearTimeout(window.smsTimeout);
+    window.smsTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function initPage() {
+    const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
+    if (isLoggedIn && currentUser) {
+        checkAttemptAndStart();
+    } else {
+        document.getElementById('loginOverlay').classList.add('active');
+    }
+}
+
+function doLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value.trim();
+    const err = document.getElementById('loginError');
+    if (!u || !p) { err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.style.display = 'block'; return; }
+    if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+        currentUser = u;
+        sessionStorage.setItem("testBazarUserLoggedIn", "true");
+        sessionStorage.setItem("currentStudent", u);
+        document.getElementById('loginOverlay').classList.remove('active');
+        checkAttemptAndStart();
+    } else {
+        err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+        err.style.display = 'block';
+    }
+}
+
+function checkAttemptAndStart() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        setTimeout(goToHub, 1800);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`✅ লগইন সফল! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    startQuiz();
+}
+
+function startQuiz() {
+    cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+    timeLeft = TIME_LIMIT;
+    isReviewMode = false;
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('danger');
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[cur];
+    document.getElementById('qNum').innerText = isReviewMode
+        ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}`
+        : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+    const optsContainer = document.getElementById('qOpts');
+    optsContainer.innerHTML = '';
+    q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+        if (isReviewMode) {
+            btn.classList.add('disabled');
+            if (idx === q.ans) btn.classList.add('correct');
+            else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+        } else {
+            btn.onclick = () => selectAnswer(idx, btn);
+        }
+        optsContainer.appendChild(btn);
+    });
+
+    const nextBtn = document.getElementById('nextBtn');
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('scoreShow').innerText = isReviewMode
+        ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর"
+        : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+    if (isReviewMode) {
+        document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+        document.getElementById('expSpecial').innerText = q.special;
+        document.getElementById('explanation').classList.add('show');
+        nextBtn.disabled = false;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+    } else {
+        nextBtn.disabled = true;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+    }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+    if (answered) return;
+    answered = true;
+    const q = questions[cur];
+    userAnswers[cur] = selectedIdx;
+    const allBtns = document.getElementById('qOpts').children;
+    for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.add('disabled');
+        if (i === q.ans) allBtns[i].classList.add('correct');
+    }
+    if (selectedIdx === q.ans) score++;
+    else { btnElement.classList.add('wrong'); wrong++; }
+
+    document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+    document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+    if (cur < TOTAL_QS - 1) { cur++; loadQuestion(); }
+    else {
+        if (isReviewMode) {
+            document.getElementById('testArea').classList.add('hidden');
+            document.getElementById('resultWrap').classList.add('show');
+        } else { clearInterval(timerInterval); showResult(); }
+    }
+}
+
+function showResult() {
+    document.getElementById('testArea').classList.add('hidden');
+    document.getElementById('timerBox').classList.add('hidden');
+    document.getElementById('resultWrap').classList.add('show');
+    const pct = Math.round((score / TOTAL_QS) * 100);
+    const wrongOrSkipped = TOTAL_QS - score;
+    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
+    if (pct >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
+    else if (pct >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
+    else if (pct >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
+    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
+    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultTagline').innerText = tagline;
+    document.getElementById('resultPercent').innerText = pct + '%';
+    document.getElementById('resultCorrect').innerText = score;
+    document.getElementById('resultWrong').innerText = wrongOrSkipped;
+    const remaining = getRemainingAttempts(currentUser);
+    document.getElementById('attemptsLeft').innerText = remaining;
+    showSMS(`📊 ফলাফল: ${pct}% | বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+}
+
+function showReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    isReviewMode = true;
+    cur = 0;
+    loadQuestion();
+}
+
+function restartQuiz() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`🔄 আবার শুরু! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    document.getElementById('resultWrap').classList.remove('show');
+    startQuiz();
+}
+
+function goToHub() {
+    window.location.href = "../index.html";
+}
+
+window.onload = initPage;
+</script>
+</body>
+</html>

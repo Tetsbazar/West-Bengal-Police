@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Art, Culture & Literature | Set 8</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; margin-bottom: 6px; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+.result-wrap { display: none; max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
+.result-wrap.show { display: block; }
+.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: #1c2e24; margin-bottom: 18px; }
+.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 8px; }
+.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: #f9a825; margin-bottom: 25px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.result-stat-box { background: #f0faf4; border: 2px solid #c5dccb; border-radius: 16px; padding: 20px 10px; }
+.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.result-stat-num.correct { color: #1a7a4a; }
+.result-stat-num.wrong { color: #e63946; }
+.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: #5a7a66; }
+.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: #1c2e24; line-height: 1.5; margin-bottom: 25px; }
+.result-attempt-info .num { color: #1a7a4a; font-weight: 800; }
+.result-buttons { display: flex; flex-direction: column; gap: 12px; }
+.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
+.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.result-btn.green { background: #2e9e4f; }
+.result-btn.blue { background: #1a9bb8; }
+.result-btn.gray { background: #6b7a72; }
+
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+.hidden { display: none !important; }
+.toast-sms { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; text-align: center; border-left: 5px solid #f9a825; white-space: pre-line; }
+.toast-sms.show { transform: translateX(-50%) translateY(0); }
+.toast-sms .sms-title { font-size: 0.8rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 1px; }
+
+@media (max-width: 480px) {
+.main { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; }
+.q-text { font-size: 0.95rem; }
+.opt-text { font-size: 0.85rem; }
+.explanation p { font-size: 0.82rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast-sms" id="smsToast">
+    <div class="sms-title">📩 TEST BAZAR</div>
+    <div id="smsText">আপনার বার্তা এখানে</div>
+</div>
+
+<div class="top-bar">
+<div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+<div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+<div class="login-overlay" id="loginOverlay">
+<div class="login-modal">
+<h2>🔐 লগইন করুন</h2>
+<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div class="set-name-display">🎭 Art, Culture & Literature — Test 8</div>
+<div class="input-group">
+<label>ইউজারনেম</label>
+<input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+</div>
+<div class="input-group">
+<label>পাসওয়ার্ড</label>
+<input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+</div>
+<button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+<button class="cancel-btn" onclick="goToHub()">বাতিল</button>
+<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+</div>
+</div>
+
+<div id="testArea" class="hidden">
+<div class="quiz-info">
+<div class="info-item">🎭 <strong>শিল্প, সংস্কৃতি ও সাহিত্য</strong> — Test 8</div>
+<div class="info-item">📝 <span>বিখ্যাত ব্যক্তিদের আত্মজীবনী ও জীবনী</span></div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="q-card" id="qCard">
+<div class="q-num" id="qNum">প্রশ্ন ১ / ২০</div>
+<div class="q-text" id="qText"></div>
+<div class="opts" id="qOpts"></div>
+<div class="explanation" id="explanation">
+    <p id="expMain"></p>
+</div>
+<div class="nav-row">
+<div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+<button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+</div>
+</div>
+</div>
+
+<div class="result-wrap" id="resultWrap">
+    <div class="result-emoji" id="resultEmoji">💪</div>
+    <div class="result-heading">আপনার ফলাফল</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
+
+    <div class="result-stats">
+        <div class="result-stat-box">
+            <div class="result-stat-num correct" id="resultCorrect">0</div>
+            <div class="result-stat-label">সঠিক</div>
+        </div>
+        <div class="result-stat-box">
+            <div class="result-stat-num wrong" id="resultWrong">0</div>
+            <div class="result-stat-label">ভুল / স্কিপ</div>
+        </div>
+    </div>
+
+    <div class="result-attempt-info" id="resultAttemptInfo">
+        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ৫ বার)
+    </div>
+
+    <div class="result-buttons">
+        <button class="result-btn green" onclick="showReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+        <button class="result-btn blue" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+        <button class="result-btn gray" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+const MAX_ATTEMPTS = 5;
+const TIME_LIMIT = 10 * 60; // ★ ১০ মিনিট
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+const GLOBAL_USERS = {
+"demo1": "1234", "demo2": "1234", "demo3": "1234", "demo4": "1234", "mali": "1234", "sagun": "1234", "dhiren": "1234",
+"ajay": "7251", "anita": "1234", "jaba": "1234", "student100": "pass001", "rohit2027": "abc456"
+};
+
+let currentUser = sessionStorage.getItem("currentStudent") || "";
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+
+// ★ সঠিক উত্তর A, B, C, D-তে সমানভাবে ছড়ানো (৫, ৫, ৫, ৫)
+const questions = [
+{
+q: "ভারতের স্বাধীনতা আন্দোলনের পুরোধা ব্যক্তিত্ব মহাত্মা গান্ধীর বিশ্বখ্যাত আত্মজীবনীর নাম কী?",
+opts: ["মাই এক্সপেরিমেন্টস উইথ ট্রুথ (My Experiments with Truth)", "পাথওয়ে টু গড", "হিন্দ স্বরাজ", "কনকোয়েস্ট অব সেলফ"],
+ans: 0,
+exp: "মহাত্মা গান্ধীর বিশ্ববিখ্যাত ও অত্যন্ত প্রভাব বিস্তারকারী আত্মজীবনীর নাম হলো 'My Experiments with Truth'। এটি মূলত গুজরাতি ভাষায় লেখা হয়েছিল এবং পরে মহাদেব দেশাই এটি ইংরেজিতে অনুবাদ করেন।"
+},
+{
+q: "ভারতের অবিসংবাদিত মিসাইল ম্যান ও প্রাক্তন রাষ্ট্রপতি ড. এ পি জে আবদুল কালামের অনুপ্রেরণামূলক আত্মজীবনীর নাম কী?",
+opts: ["ইগনাইটেড মাইন্ডস", "উইংস অব ফায়ার (Wings of Fire)", "টার্নিং পয়েন্ট", "ইনডমিটেবল স্পিরিট"],
+ans: 1,
+exp: "ড. এ পি জে আবদুল কালামের অসামান্য জীবনসংগ্রাম এবং ভারতের মহাকাশ ও প্রতিরক্ষা প্রযুক্তির অগ্রযাত্রার কাহিনী নিয়ে রচিত তাঁর বিখ্যাত আত্মজীবনীর নাম হলো 'Wings of Fire'।"
+},
+{
+q: "ক্রিকেটের ঈশ্বর হিসেবে খ্যাত সচিন তেন্ডুলকরের রেকর্ড সৃষ্টিকারী খেলোয়াড়ি জীবনের আত্মজীবনীর নাম কী?",
+opts: ["সেঞ্চুরি ইজ নট এনাফ", "বিলিভ", "প্লেয়িং ইট মাই ওয়ে (Playing It My Way)", "স্ট্রেইট ফ্রম দ্য হার্ট"],
+ans: 2,
+exp: "মাস্টার ব্লাস্টার সচিন তেন্ডুলকরের বিখ্যাত আত্মজীবনীর নাম হলো 'Playing It My Way', যা যৌথভাবে রচনা করেছেন সচিন ও প্রখ্যাত ক্রীড়া সাংবাদিক বোরিয়া মজুমদার।"
+},
+{
+q: "ভারতের প্রাক্তন কিংবদন্তি ওপেনার সুনীল গাভাসকারের বর্ণিল ক্রিকেট ক্যারিয়ারের অভিজ্ঞতার ওপর লেখা বিখ্যাত প্রথম বইটির নাম কী?",
+opts: ["ওয়ান ডে ওয়ান্ডার্স", "রানস অ্যান্ড রুইনস", "আইডলস", "সানি ডেজ (Sunny Days)"],
+ans: 3,
+exp: "ভারতের সর্বকালের অন্যতম সেরা টেস্ট ওপেনার সুনীল গাভাসকারের বিখ্যাত ও পাঠকপ্রিয় আত্মজীবনীর নাম হলো 'Sunny Days'।"
+},
+{
+q: "জার্মান একনায়ক ও নাৎসি বাহিনীর প্রধান অ্যাডলফ হিটলারের কুখ্যাত ও বিতর্কিত আত্মজীবনীর নাম কী?",
+opts: ["মেইন ক্যাম্পফ (Mein Kampf)", "মাই ব্যাটল", "দ্য থার্ড রাইখ", "ডিক্টেটরশিপ"],
+ans: 0,
+exp: "দ্বিতীয় বিশ্বযুদ্ধের অন্যতম কারিগর হিটলারের কারাগারে বন্দিদশায় লেখা কুখ্যাত আত্মজীবনীর নাম হলো 'Mein Kampf', যার বাংলা অর্থ হলো 'আমার সংগ্রাম'।"
+},
+{
+q: "বাংলা সংগীতের কিংবদন্তি কণ্ঠশিল্পী মান্না দের স্মৃতিচারণমূলক অনবদ্য আত্মজীবনীটির নাম কী?",
+opts: ["সুরের ভুবনে", "জীবনের জলসাঘরে", "কফি হাউসের আড্ডা", "স্মৃতিটুকু থাক"],
+ans: 1,
+exp: "মান্না দের স্মৃতিবিজড়িত সংগীত ও ব্যক্তিজীবনের অসাধারণ ইতিহাসের রূপদানকারী আত্মজীবনীর নাম হলো 'জীবনের জলসাঘরে'।"
+},
+{
+q: "অলিম্পিক ট্র্যাক অ্যান্ড ফিল্ডের ফাইনালে ওঠা ভারতের কিংবদন্তি দৌড়বিদ মিলখা সিং-এর রোমহর্ষক জীবনীভিত্তিক আত্মজীবনীর নাম কী?",
+opts: ["গোল্ডেন রান", "ফ্লাইং শিখ", "দ্য রেস অব মাই লাইফ (The Race of My Life)", "ফাস্টার দ্যান লাইট"],
+ans: 2,
+exp: "'ফ্লাইং শিখ' নামে পরিচিত মিলখা সিং-এর জীবন ও সংগ্রামের ওপর ভিত্তি করে রচিত তাঁর আত্মজীবনীমূলক গ্রন্থটির নাম হলো 'The Race of My Life'। এটি অবলম্বনে 'ভাগ মিলখা ভাগ' চলচ্চিত্রটি নির্মিত হয়েছে।"
+},
+{
+q: "ভারতের ছয় বারের বিশ্ব চ্যাম্পিয়ন মহিলা বক্সার এম সি মেরি কম-এর অদম্য জীবনযুদ্ধের আত্মজীবনীর নাম কী?",
+opts: ["গোল্ডেন গ্লাভস", "পাঞ্চিং হার্ড", "মেরি কম স্টোরি", "আনব্রেকেবল (Unbreakable)"],
+ans: 3,
+exp: "মণিপুরের এক সাধারণ পরিবার থেকে উঠে এসে বিশ্ব বক্সিংয়ে রাজত্ব করা মেরি কম-এর অসাধারণ অনুপ্রেরণামূলক আত্মজীবনীর নাম হলো 'Unbreakable'।"
+},
+{
+q: "ক্যান্সারকে জয় করে পুনরায় ক্রিকেট মাঠে ফিরে আসা ভারতের বিশ্বকাপ জয়ী অলরাউন্ডার যুবরাজ সিং-এর আত্মজীবনীর নাম কী?",
+opts: ["দ্য টেস্ট অব মাই লাইফ (The Test of My Life)", "নো স্পিন", "সেঞ্চুরি ইজ নট এনাফ", "বিলিভ"],
+ans: 0,
+exp: "যুবরাজ সিং-এর মারণ রোগ ক্যান্সারের সাথে কঠিন লড়াই ও মাঠের জীবনের কাহিনী নিয়ে রচিত বিখ্যাত আত্মজীবনীর নাম হলো 'The Test of My Life'।"
+},
+{
+q: "১৯৮৩ সালের বিশ্বকাপ জয়ী ভারতের প্রথম অধিনায়ক কপিল দেবের হৃদয়ছোঁয়া আত্মজীবনীর নাম কী?",
+opts: ["বাই গডস ডিক্রি", "ক্রিকেট মাই স্টাইল", "স্ট্রেইট ফ্রম দ্য হার্ট, বাই গডস ডিক্রি ও ক্রিকেট মাই স্টাইল — সবকটিই", "শুধু স্ট্রেইট ফ্রম দ্য হার্ট"],
+ans: 2,
+exp: "'হরিয়ানা হারিকেন' নামে পরিচিত কপিল দেবের অন্যতম বিখ্যাত তিনটি আত্মজীবনীমূলক বইয়ের নাম হলো 'Straight from the Heart', 'By God's Decree' এবং 'Cricket My Style'।"
+},
+{
+q: "ভারতের অন্যতম সেরা সফল মহিলা টেনিস তারকা সানিয়া মির্জার বর্ণিল ক্যারিয়ার ও বিতর্কের প্রেক্ষাপটে লেখা আত্মজীবনীর নাম কী?",
+opts: ["সার্ভিং টু উইন", "টেনিস অ্যান্ড ট্রুথ", "আনস্টপেবল", "এস এগেইনস্ট অডস (Ace Against Odds)"],
+ans: 3,
+exp: "সানিয়া মির্জার খেলোয়াড়ি জীবন, ব্যক্তিগত লড়াই ও অর্জনের চমৎকার চালচিত্র নিয়ে রচিত আত্মজীবনীর নাম হলো 'Ace Against Odds'।"
+},
+{
+q: "ভারতের প্রথম ব্যক্তিগত অলিম্পিক সোনা জয়ী শুটার অভিনব বিন্দ্রার নিখুঁত লক্ষ্যের লড়াই নিয়ে রচিত আত্মজীবনীর নাম কী?",
+opts: ["এ শট অ্যাট হিস্ট্রি (A Shot at History)", "গোল্ডেন টার্গেট", "গোল্ডেন আই", "দ্য পারফেক্ট শট"],
+ans: 0,
+exp: "২০০৮ সালের বেইজিং অলিম্পিকে অভিনব বিন্দ্রার ১০ মিটার এয়ার রাইফেল ইভেন্টে সোনা জয়ের মহাকাব্যিক গল্প নিয়ে রচিত আত্মজীবনীর নাম হলো 'A Shot at History'।"
+},
+{
+q: "'পায়েলি এক্সপ্রেস' নামে পরিচিত ভারতের কিংবদন্তি মহিলা অ্যাথলেট পি টি ঊষার চমৎকার সফল জীবন নিয়ে রচিত আত্মজীবনীর নাম কী?",
+opts: ["কুইন অব ট্র্যাক", "গোল্ডেন গার্ল (Golden Girl)", "ফ্লাইং ওম্যান", "রানিং হাই"],
+ans: 1,
+exp: "পি টি ঊষার অলিম্পিক লড়াই ও এশিয়ান গেমসে আধিপত্যের স্বর্ণালী ইতিহাস তুলে ধরা তাঁর বিখ্যাত আত্মজীবনীর নাম হলো 'Golden Girl'।"
+},
+{
+q: "অস্ট্রেলিয়ার কিংবদন্তি লেগ স্পিনার প্রয়াত শেন ওয়ার্নের রোমাঞ্চকর জীবনের একমাত্র সেরা আত্মজীবনীর নাম কী?",
+opts: ["স্পিন কিং", "কন্ট্রোভার্সিয়ালি ইয়োরস", "নো স্পিন (No Spin)", "বোল্ড আউট"],
+ans: 2,
+exp: "শেন ওয়ার্নের মাঠ ও মাঠের বাইরের বর্ণিল ও বিতর্কিত জীবন নিয়ে রচিত তাঁর চমৎকার আত্মজীবনীর নাম হলো 'No Spin'।"
+},
+{
+q: "বিশ্বের সর্বকালের দ্রুততম মানব এবং আটবারের অলিম্পিক স্বর্ণপদক বিজয়ী উসেইন বোল্টের গতিময় আত্মজীবনীর নাম কী?",
+opts: ["দ্য স্পিড কিং", "রানিং ফাস্ট", "গোল্ডেন ট্র্যাকস", "ফাস্টার দ্যান লাইটনিং (Faster than Lightning)"],
+ans: 3,
+exp: "জ্যামাইকান কিংবদন্তি স্প্রিন্টার উসেইন বোল্টের বিশ্বমঞ্চে ঝড় তোলার কাহিনী নিয়ে রচিত তাঁর আত্মজীবনীর নাম হলো 'Faster than Lightning'।"
+},
+{
+q: "বিশ্ব বক্সিংয়ের সর্বকালের সর্বশ্রেষ্ঠ তারকা মুহাম্মদ আলীর চমৎকার আত্মজীবনীটির নাম কী?",
+opts: ["দ্য গ্রেটেস্ট: মাই ওন স্টোরি (The Greatest: My Own Story)", "আই অ্যাম দ্য বেস্ট", "দ্য গ্রেটেস্ট ফাইট", "ব্ল্যাক পাওয়ার"],
+ans: 0,
+exp: "বক্সিং রিংয়ের অবিসংবাদিত সম্রাট মুহাম্মদ আলীর বিশ্ববিখ্যাত ও কালজয়ী আত্মজীবনীর নাম হলো 'The Greatest: My Own Story'।"
+},
+{
+q: "বিশ্ব লন টেনিসের অসামান্য বিদ্রোহী তারকা আন্দ্রে আগাসির বিশ্বখ্যাত খোলামেলা ও বেস্টসেলার আত্মজীবনীর নাম কী?",
+opts: ["ক্লোজড", "ওপেন (Open)", "সার্ভিস", "কোর্ট কিং"],
+ans: 1,
+exp: "মার্কিন টেনিস তারকা আন্দ্রে আগাসির তাঁর খেলোয়াড়ি জীবনের টানাপোড়েন ও নির্মম সত্য উন্মোচনকারী দুনিয়া কাঁপানো আত্মজীবনীর নাম হলো 'Open'।"
+},
+{
+q: "ভারতের প্রাক্তন বিশ্বখ্যাত নির্ভরযোগ্য টেস্ট ব্যাটার ভি ভি এস লক্ষ্মণের মহাকাব্যিক ক্রিকেটিং ক্যারিয়ারের আত্মজীবনীর নাম কী?",
+opts: ["সেঞ্চুরি ইজ নট এনাফ", "টেস্ট অফ মাই স্পিরিট", "২৮১ অ্যান্ড বিয়ন্ড (281 and Beyond)", "ইডেন গার্ডেনস মেমোরিস"],
+ans: 2,
+exp: "২০০১ সালের ইডেন টেস্টে অস্ট্রেলিয়ার বিরুদ্ধে খেলা লক্ষ্মণের কালজয়ী ২৮১ রানের ইনিংসের স্মরণে তাঁর আত্মজীবনীর নামকরণ করা হয়েছে '281 and Beyond'।"
+},
+{
+q: "পাকিস্তানের বিতর্কিত ও দ্রুততম ফাস্ট বোলার শোয়েব আখতারের ঝড় তোলা গতি ও ক্যারিয়ার নিয়ে লেখা আত্মজীবনীর নাম কী?",
+opts: ["রাওয়ালপিন্ডি এক্সপ্রেস", "স্পিড অ্যান্ড ফায়ার", "নো স্পিন", "কন্ট্রোভার্সিয়ালি ইয়োরস (Controversially Yours)"],
+ans: 3,
+exp: "রাওয়ালপিন্ডি এক্সপ্রেস খ্যাত শোয়েব আখতারের বিতর্কিত ক্রিকেট ক্যারিয়ারের বাস্তব সত্য উন্মোচনকারী বইটির নাম হলো 'Controversially Yours'।"
+},
+{
+q: "ভারতের প্রথম প্রধানমন্ত্রী জওহরলাল নেহরুর চমৎকার রাজনৈতিক ও কারাগার জীবনের দিনলিপি সমৃদ্ধ আত্মজীবনীর নাম কী?",
+opts: ["শুধু Toward Freedom", "শুধু An Autobiography", "Toward Freedom ও An Autobiography উভয়ই", "দ্য ডিসকভারি অব ইন্ডিয়া"],
+ans: 2,
+exp: "জওহরলাল নেহরুর ১৯৩৬ সালে প্রকাশিত বিখ্যাত আত্মজীবনীর নাম হলো 'An Autobiography', যা পরবর্তীতে মার্কিন যুক্তরাষ্ট্রে 'Toward Freedom' নামেও প্রকাশিত হয়েছিল।"
+}
+];
+
+const TOTAL_QS = questions.length;
+
+function getMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function getAttemptStorageKey(username) {
+    return `attempts_${username}_artculture_test8_${getMonthKey()}`;
+}
+function getMonthlyAttempts(username) {
+    if (!username) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username));
+    return raw ? parseInt(raw) : 0;
+}
+function incrementMonthlyAttempts(username) {
+    if (!username) return;
+    const current = getMonthlyAttempts(username);
+    localStorage.setItem(getAttemptStorageKey(username), current + 1);
+}
+function getRemainingAttempts(username) {
+    return Math.max(0, MAX_ATTEMPTS - getMonthlyAttempts(username));
+}
+
+function showSMS(message) {
+    const toast = document.getElementById('smsToast');
+    document.getElementById('smsText').innerText = message;
+    toast.classList.add('show');
+    clearTimeout(window.smsTimeout);
+    window.smsTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function initPage() {
+    const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
+    if (isLoggedIn && currentUser) {
+        checkAttemptAndStart();
+    } else {
+        document.getElementById('loginOverlay').classList.add('active');
+    }
+}
+
+function doLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value.trim();
+    const err = document.getElementById('loginError');
+    if (!u || !p) { err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.style.display = 'block'; return; }
+    if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+        currentUser = u;
+        sessionStorage.setItem("testBazarUserLoggedIn", "true");
+        sessionStorage.setItem("currentStudent", u);
+        document.getElementById('loginOverlay').classList.remove('active');
+        checkAttemptAndStart();
+    } else {
+        err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+        err.style.display = 'block';
+    }
+}
+
+function checkAttemptAndStart() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        setTimeout(goToHub, 1800);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`✅ লগইন সফল! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    startQuiz();
+}
+
+function startQuiz() {
+    cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+    timeLeft = TIME_LIMIT;
+    isReviewMode = false;
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('danger');
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[cur];
+    document.getElementById('qNum').innerText = isReviewMode
+        ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}`
+        : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+    const optsContainer = document.getElementById('qOpts');
+    optsContainer.innerHTML = '';
+    q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+        if (isReviewMode) {
+            btn.classList.add('disabled');
+            if (idx === q.ans) btn.classList.add('correct');
+            else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+        } else {
+            btn.onclick = () => selectAnswer(idx, btn);
+        }
+        optsContainer.appendChild(btn);
+    });
+
+    const nextBtn = document.getElementById('nextBtn');
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('scoreShow').innerText = isReviewMode
+        ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর"
+        : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+    if (isReviewMode) {
+        document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+        document.getElementById('explanation').classList.add('show');
+        nextBtn.disabled = false;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+    } else {
+        nextBtn.disabled = true;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+    }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+    if (answered) return;
+    answered = true;
+    const q = questions[cur];
+    userAnswers[cur] = selectedIdx;
+    const allBtns = document.getElementById('qOpts').children;
+    for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.add('disabled');
+        if (i === q.ans) allBtns[i].classList.add('correct');
+    }
+    if (selectedIdx === q.ans) score++;
+    else { btnElement.classList.add('wrong'); wrong++; }
+
+    document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+    document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+    if (cur < TOTAL_QS - 1) { cur++; loadQuestion(); }
+    else {
+        if (isReviewMode) {
+            document.getElementById('testArea').classList.add('hidden');
+            document.getElementById('resultWrap').classList.add('show');
+        } else { clearInterval(timerInterval); showResult(); }
+    }
+}
+
+function showResult() {
+    document.getElementById('testArea').classList.add('hidden');
+    document.getElementById('timerBox').classList.add('hidden');
+    document.getElementById('resultWrap').classList.add('show');
+    const pct = Math.round((score / TOTAL_QS) * 100);
+    const wrongOrSkipped = TOTAL_QS - score;
+    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
+    if (pct >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
+    else if (pct >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
+    else if (pct >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
+    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
+    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultTagline').innerText = tagline;
+    document.getElementById('resultPercent').innerText = pct + '%';
+    document.getElementById('resultCorrect').innerText = score;
+    document.getElementById('resultWrong').innerText = wrongOrSkipped;
+    const remaining = getRemainingAttempts(currentUser);
+    document.getElementById('attemptsLeft').innerText = remaining;
+    showSMS(`📊 ফলাফল: ${pct}% | বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+}
+
+function showReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    isReviewMode = true;
+    cur = 0;
+    loadQuestion();
+}
+
+function restartQuiz() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`🔄 আবার শুরু! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    document.getElementById('resultWrap').classList.remove('show');
+    startQuiz();
+}
+
+function goToHub() {
+    window.location.href = "../index.html";
+}
+
+window.onload = initPage;
+</script>
+</body>
+</html>

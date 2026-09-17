@@ -46,28 +46,27 @@ body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; 
 .next-btn:hover:not(:disabled) { background: #2aad68; }
 .next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
 
-/* RESULT AREA */
-.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid #c5dccb; display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+/* ================== RESULT AREA (IMAGE-STYLE) ================== */
+.result-wrap { display: none; max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
 .result-wrap.show { display: block; }
-.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1; }
-.result-score { font-size: 3.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 5px; }
-.result-total { font-size: 1rem; color: #5a7a66; margin-bottom: 0.5rem; font-family: 'Tiro Bangla', serif; font-weight: bold;}
-.result-grade { font-size: 1.2rem; font-weight: 700; color: #1c2e24; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e8730a; }
-.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-.result-bar { background: #f0faf4; border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid #c5dccb; }
-.rb-num { font-size: 1.8rem; font-weight: 800; }
-.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; margin-top: 0.2rem; font-weight: bold;}
-.attempt-info { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #1a7a4a; font-weight: bold; margin-bottom: 1.5rem; background: #e8f7ef; padding: 10px; border-radius: 8px; }
-
-/* ACTION BUTTONS */
-.result-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-.result-actions button { width: 100%; padding: 14px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; }
-.btn-retry { background: #17a2b8; color: white; }
-.btn-retry:hover { background: #138496; }
-.btn-review { background: #28a745; color: white; }
-.btn-review:hover { background: #218838; }
-.btn-home { background: transparent; color: #5a7a66; border: 2px solid #c5dccb !important; }
-.btn-home:hover { background: #f0faf4; }
+.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: #1c2e24; margin-bottom: 18px; }
+.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 8px; }
+.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: #f9a825; margin-bottom: 25px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.result-stat-box { background: #f0faf4; border: 2px solid #c5dccb; border-radius: 16px; padding: 20px 10px; }
+.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.result-stat-num.correct { color: #1a7a4a; }
+.result-stat-num.wrong { color: #e63946; }
+.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: #5a7a66; }
+.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: #1c2e24; line-height: 1.5; margin-bottom: 25px; }
+.result-attempt-info .num { color: #1a7a4a; font-weight: 800; }
+.result-buttons { display: flex; flex-direction: column; gap: 12px; }
+.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
+.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.result-btn.green { background: #2e9e4f; }
+.result-btn.blue { background: #1a9bb8; }
+.result-btn.gray { background: #6b7a72; }
 
 /* LOGIN MODAL */
 .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
@@ -84,9 +83,20 @@ body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; 
 .error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
 .set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
 .hidden { display: none !important; }
+
+/* Toast notification (SMS-style alert) */
+.toast-sms { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; text-align: center; border-left: 5px solid #f9a825; }
+.toast-sms.show { transform: translateX(-50%) translateY(0); }
+.toast-sms .sms-title { font-size: 0.8rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 1px; }
 </style>
 </head>
 <body>
+
+<!-- ===== SMS TOAST ===== -->
+<div class="toast-sms" id="smsToast">
+    <div class="sms-title">📩 TEST BAZAR</div>
+    <div id="smsText">আপনার বার্তা এখানে</div>
+</div>
 
 <div class="top-bar">
 <div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
@@ -134,28 +144,33 @@ body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; 
 </div>
 </div>
 
-<!-- ===== RESULT AREA ===== -->
+<!-- ===== RESULT AREA (IMAGE-STYLE) ===== -->
 <div class="result-wrap" id="resultWrap">
-<div class="result-icon" id="resultIcon">🏆</div>
-<div class="result-score en-font" id="finalScore">100%</div>
-<div class="result-total">স্কোর</div>
-<div class="result-grade" id="resultGrade">অসাধারণ!</div>
-<div class="result-bars">
-<div class="result-bar">
-<div class="rb-num en-font" id="rbCorrect" style="color:#1a7a4a">0</div>
-<div class="rb-label">সঠিক</div>
-</div>
-<div class="result-bar">
-<div class="rb-num en-font" id="rbWrong" style="color:#dc3545">0</div>
-<div class="rb-label">ভুল/স্কিপ</div>
-</div>
-</div>
-<div class="attempt-info" id="attemptInfo">👤 user — Set 1: বাকি আছে 9 বার Test দেওয়ার সুযোগ</div>
-<div class="result-actions">
-<button class="btn-retry" onclick="restartQuiz()">🔄 আবার চেষ্টা করো</button>
-<button class="btn-review" onclick="showReview()">👀 উত্তর দেখো</button>
-<button class="btn-home" onclick="goToHub()">🏠 ← Hub এ ফিরে যাও</button>
-</div>
+    <div class="result-emoji" id="resultEmoji">💪</div>
+    <div class="result-heading">আপনার ফলাফল</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
+
+    <div class="result-stats">
+        <div class="result-stat-box">
+            <div class="result-stat-num correct" id="resultCorrect">0</div>
+            <div class="result-stat-label">সঠিক</div>
+        </div>
+        <div class="result-stat-box">
+            <div class="result-stat-num wrong" id="resultWrong">0</div>
+            <div class="result-stat-label">ভুল / স্কিপ</div>
+        </div>
+    </div>
+
+    <div class="result-attempt-info" id="resultAttemptInfo">
+        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ১০ বার)
+    </div>
+
+    <div class="result-buttons">
+        <button class="result-btn green" onclick="showReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+        <button class="result-btn blue" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+        <button class="result-btn gray" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+    </div>
 </div>
 
 </div>
@@ -180,114 +195,49 @@ let timerInterval, timeLeft = TIME_LIMIT;
 let userAnswers = [];
 let isReviewMode = false;
 
-// ১৫টি ভূগোল প্রশ্নাবলি (Groundes in "সৌরজগৎ ও পৃথিবীর গতিপ্রকৃতি")
+// ১৫টি ভূগোল প্রশ্নাবলি
 const questions = [
-{
-q: "১. আমাদের সৌরজগতের সবচেয়ে নিকটতম নক্ষত্র কোনটি?",
-opts: ["আলফা সেন্টাউরি", "প্রক্সিমা সেন্টাউরি", "সিরিয়াস", "বার্নার্ডস স্টার"],
-ans: 1,
-exp: "আমাদের সৌরজগতের সবচেয়ে কাছে অবস্থিত নক্ষত্র বা তারাটি হলো প্রক্সিমা সেন্টাউরি।"
-},
-{
-q: "২. সৌরজগতের বাইরে রাতের আকাশে উজ্জ্বলতম নক্ষত্র কোনটি?",
-opts: ["প্রক্সিমা সেন্টাউরি", "সিরিয়াস", "স্পাইকা", "ভেগা"],
-ans: 1,
-exp: "সৌরজগতের বাইরে সবচেয়ে উজ্জ্বল নক্ষত্রটির নাম হলো সিরিয়াস, যাকে 'ডগ স্টার' (Dog Star) নামেও ডাকা হয়।"
-},
-{
-q: "৩. নিচের কোন গ্রহটিকে \"পৃথিবীর যমজ গ্রহ\" বলা হয়?",
-opts: ["বুধ", "মঙ্গল", "শুক্র", "ইউরেনাস"],
-ans: 2,
-exp: "আকার, ভর ও ঘনত্বের দিক দিয়ে পৃথিবীর সাথে অনেক মিল থাকায় শুক্র গ্রহকে পৃথিবীর যমজ বা বোন গ্রহ বলা হয়।"
-},
-{
-q: "৪. সৌরজগতের কোন গ্রহে বিখ্যাত 'গ্রেট রেড স্পট' (Great Red Spot) বা বিশাল লাল বিন্দুটি দেখা যায়?",
-opts: ["শনি", "বৃহস্পতি", "ইউরেনাস", "নেপচুন"],
-ans: 1,
-exp: "সৌরজগতের বৃহত্তম গ্রহ বৃহস্পতিতে একটি অতি শক্তিশালী ঝড় লক্ষ্য করা যায়, যা দূর থেকে দেখতে লাল বিন্দুর মতো লাগে। এটিই হলো 'গ্রেট রেড স্পট'।"
-},
-{
-q: "৫. সৌরজগতের কোন কোন গ্রহের চারপাশে গ্যাসীয় ও ধূলিকণার বলয় (Ring) দেখা যায়?",
-opts: ["শুধুমাত্র শনি", "শনি এবং ইউরেনাস", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "বুধ, শুক্র ও মঙ্গল"],
-ans: 2,
-exp: "সাধারণত শনির বলয়টি সবচেয়ে স্পষ্ট ও সুন্দর হলেও সৌরজগতের চারটি বহিঃস্থ গ্রহেরই (বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন) নিজস্ব বলয় ব্যবস্থা রয়েছে।"
-},
-{
-q: "৬. পৃথিবীর একমাত্র প্রাকৃতিক উপগ্রহ কোনটি?",
-opts: ["টাইটান", "চাঁদ", "ফোবোস", "ডিমোস"],
-ans: 1,
-exp: "পৃথিবীর একমাত্র নিজস্ব প্রাকৃতিক উপগ্রহ হলো চাঁদ।"
-},
-{
-q: "৭. মঙ্গল গ্রহের প্রধান দুটি উপগ্রহের নাম কী কী?",
-opts: ["ফোবোস ও ডিমোস", "টাইটান ও ডিমোস", "গ্যানিমিড ও ফোবোস", "লো ও ইউরোপা"],
-ans: 0,
-exp: "লাল গ্রহ মঙ্গলের দুটি প্রধান প্রাকৃতিক উপগ্রহ হলো ফোবোস ও ডিমোস।"
-},
-{
-q: "৮. সৌরজগতের কোন গ্রহের নিজের অক্ষে আবর্তনকাল এবং সূর্যের চারপাশে পরিক্রমণকাল প্রায় সমান?",
-opts: ["বুধ", "শুক্র", "পৃথিবী", "নেপচুন"],
-ans: 1,
-exp: "শুক্র গ্রহের নিজের অক্ষে আবর্তন করতে সময় লাগে ২৪৩ দিন এবং সূর্যকে পরিক্রমণ করতে সময় লাগে ২২৫ দিন, যা প্রায় কাছাকাছি।"
-},
-{
-q: "৯. সৌরজগতের কোন গ্রহের একদিনের দৈর্ঘ্য বা দিনের দৈর্ঘ্য পৃথিবীর দিনের দৈর্ঘ্যের প্রায় সমান?",
-opts: ["বুধ", "শুক্র", "মঙ্গল", "শনি"],
-ans: 2,
-exp: "মঙ্গল গ্রহের নিজের অক্ষে আবর্তন করতে সময় লাগে ২৪.৬ ঘণ্টা, যা পৃথিবীর একদিনের বা আবর্তনকালের (২৪ ঘণ্টা) প্রায় সমান।"
-},
-{
-q: "১০. নিচের কোন কোন গ্রহকে 'অন্তঃস্থ গ্রহ' (Terrestrial planet) বলা হয়?",
-opts: ["বুধ, শুক্র, পৃথিবী ও মঙ্গল", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "ইউরেনাস ও নেপচুন", "শুধুমাত্র বুধ ও শুক্র"],
-ans: 0,
-exp: "সূর্যের কাছাকাছি অবস্থিত এবং প্রধানত শিলা বা লোহা দিয়ে গঠিত প্রথম চারটি গ্রহকে অন্তঃস্থ গ্রহ বা পার্থিব গ্রহ বলা হয়।"
-},
-{
-q: "১১. কোন কোন গ্রহকে 'বহিঃস্থ গ্রহ' (Jovian planet) বা গ্যাসীয় দৈত্য বলা হয়?",
-opts: ["বুধ, শুক্র, পৃথিবী ও মঙ্গল", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "ইউরেনাস এবং নেপচুন", "শনি, ইউরেনাস ও প্লুটো"],
-ans: 1,
-exp: "সৌরজগতের শেষ চারটি বৃহৎ গ্যাসীয় বা বরফ দৈত্যাকার গ্রহকে বহিঃস্থ গ্রহ বলা হয়।"
-},
-{
-q: "১২. সৌরজগতের কোন দুটি গ্রহকে একত্রে 'বহিঃস্থ যমজ' (Jovian twins) বলা হয়?",
-opts: ["বৃহস্পতি ও শনি", "ইউরেনাস ও নেপচুন", "পৃথিবী ও শুক্র", "মঙ্গল ও বৃহস্পতি"],
-ans: 1,
-exp: "আকার ও গঠনের গভীর মিলের জন্য ইউরেনাস ও নেপচুনকে একত্রে 'বহিঃস্থ যমজ' বলা হয়।"
-},
-{
-q: "১৩. কোন দুটি গ্রহের কক্ষপথের মধ্যবর্তী স্থানে 'গ্রহাণুপুঞ্জ' (Asteroids) বা গ্রহাণু বলয়টি অবস্থিত?",
-opts: ["পৃথিবী এবং মঙ্গল", "মঙ্গল এবং বৃহস্পতি", "বৃহস্পতি এবং শনি", "শনি এবং ইউরেনাস"],
-ans: 1,
-exp: "মঙ্গল এবং বৃহস্পতি গ্রহের মধ্যবর্তী বিশাল ফাঁকা অঞ্চলের কক্ষপথেই সৌরজগতের প্রধান গ্রহাণুপুঞ্জগুলি অবস্থান করে।"
-},
-{
-q: "১৪. সমগ্র সৌরজগতের সবচেয়ে বড় উপগ্রহ কোনটি এবং এটি কোন গ্রহের উপগ্রহ?",
-opts: ["টাইটান (শনির উপগ্রহ)", "গ্যানিমিড (বৃহস্পতির উপগ্রহ)", "ট্রাইটন (নেপচুনের উপগ্রহ)", "ফোবোস (মঙ্গলের উপগ্রহ)"],
-ans: 1,
-exp: "বৃহস্পতি গ্রহের উপগ্রহ 'গ্যানিমিড' হলো সমগ্র সৌরজগতের বৃহত্তম প্রাকৃতিক উপগ্রহ।"
-},
-{
-q: "১৫. পৃথিবী ছাড়া সৌরজগতের আর কোন গ্রহে মেরু অঞ্চলে বরফের আচ্ছাদন (Ice cap) দেখতে পাওয়া যায়?",
-opts: ["বুধ", "শুক্র", "মঙ্গল", "নেপচুন"],
-ans: 2,
-exp: "পৃথিবী ছাড়া একমাত্র মঙ্গল গ্রহের দুই মেরু অঞ্চলেই বরফের সাদা আচ্ছাদন বা আইস ক্যাপ দেখতে পাওয়া যায়।"
-}
+{q: "১. আমাদের সৌরজগতের সবচেয়ে নিকটতম নক্ষত্র কোনটি?",opts: ["আলফা সেন্টাউরি", "প্রক্সিমা সেন্টাউরি", "সিরিয়াস", "বার্নার্ডস স্টার"],ans: 1,exp: "আমাদের সৌরজগতের সবচেয়ে কাছে অবস্থিত নক্ষত্র বা তারাটি হলো প্রক্সিমা সেন্টাউরি।"},
+{q: "২. সৌরজগতের বাইরে রাতের আকাশে উজ্জ্বলতম নক্ষত্র কোনটি?",opts: ["প্রক্সিমা সেন্টাউরি", "সিরিয়াস", "স্পাইকা", "ভেগা"],ans: 1,exp: "সৌরজগতের বাইরে সবচেয়ে উজ্জ্বল নক্ষত্রটির নাম হলো সিরিয়াস, যাকে 'ডগ স্টার' (Dog Star) নামেও ডাকা হয়।"},
+{q: "৩. নিচের কোন গ্রহটিকে \"পৃথিবীর যমজ গ্রহ\" বলা হয়?",opts: ["বুধ", "মঙ্গল", "শুক্র", "ইউরেনাস"],ans: 2,exp: "আকার, ভর ও ঘনত্বের দিক দিয়ে পৃথিবীর সাথে অনেক মিল থাকায় শুক্র গ্রহকে পৃথিবীর যমজ বা বোন গ্রহ বলা হয়।"},
+{q: "৪. সৌরজগতের কোন গ্রহে বিখ্যাত 'গ্রেট রেড স্পট' (Great Red Spot) বা বিশাল লাল বিন্দুটি দেখা যায়?",opts: ["শনি", "বৃহস্পতি", "ইউরেনাস", "নেপচুন"],ans: 1,exp: "সৌরজগতের বৃহত্তম গ্রহ বৃহস্পতিতে একটি অতি শক্তিশালী ঝড় লক্ষ্য করা যায়, যা দূর থেকে দেখতে লাল বিন্দুর মতো লাগে। এটিই হলো 'গ্রেট রেড স্পট'।"},
+{q: "৫. সৌরজগতের কোন কোন গ্রহের চারপাশে গ্যাসীয় ও ধূলিকণার বলয় (Ring) দেখা যায়?",opts: ["শুধুমাত্র শনি", "শনি এবং ইউরেনাস", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "বুধ, শুক্র ও মঙ্গল"],ans: 2,exp: "সাধারণত শনির বলয়টি সবচেয়ে স্পষ্ট ও সুন্দর হলেও সৌরজগতের চারটি বহিঃস্থ গ্রহেরই (বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন) নিজস্ব বলয় ব্যবস্থা রয়েছে।"},
+{q: "৬. পৃথিবীর একমাত্র প্রাকৃতিক উপগ্রহ কোনটি?",opts: ["টাইটান", "চাঁদ", "ফোবোস", "ডিমোস"],ans: 1,exp: "পৃথিবীর একমাত্র নিজস্ব প্রাকৃতিক উপগ্রহ হলো চাঁদ।"},
+{q: "৭. মঙ্গল গ্রহের প্রধান দুটি উপগ্রহের নাম কী কী?",opts: ["ফোবোস ও ডিমোস", "টাইটান ও ডিমোস", "গ্যানিমিড ও ফোবোস", "লো ও ইউরোপা"],ans: 0,exp: "লাল গ্রহ মঙ্গলের দুটি প্রধান প্রাকৃতিক উপগ্রহ হলো ফোবোস ও ডিমোস।"},
+{q: "৮. সৌরজগতের কোন গ্রহের নিজের অক্ষে আবর্তনকাল এবং সূর্যের চারপাশে পরিক্রমণকাল প্রায় সমান?",opts: ["বুধ", "শুক্র", "পৃথিবী", "নেপচুন"],ans: 1,exp: "শুক্র গ্রহের নিজের অক্ষে আবর্তন করতে সময় লাগে ২৪৩ দিন এবং সূর্যকে পরিক্রমণ করতে সময় লাগে ২২৫ দিন, যা প্রায় কাছাকাছি।"},
+{q: "৯. সৌরজগতের কোন গ্রহের একদিনের দৈর্ঘ্য বা দিনের দৈর্ঘ্য পৃথিবীর দিনের দৈর্ঘ্যের প্রায় সমান?",opts: ["বুধ", "শুক্র", "মঙ্গল", "শনি"],ans: 2,exp: "মঙ্গল গ্রহের নিজের অক্ষে আবর্তন করতে সময় লাগে ২৪.৬ ঘণ্টা, যা পৃথিবীর একদিনের বা আবর্তনকালের (২৪ ঘণ্টা) প্রায় সমান।"},
+{q: "১০. নিচের কোন কোন গ্রহকে 'অন্তঃস্থ গ্রহ' (Terrestrial planet) বলা হয়?",opts: ["বুধ, শুক্র, পৃথিবী ও মঙ্গল", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "ইউরেনাস ও নেপচুন", "শুধুমাত্র বুধ ও শুক্র"],ans: 0,exp: "সূর্যের কাছাকাছি অবস্থিত এবং প্রধানত শিলা বা লোহা দিয়ে গঠিত প্রথম চারটি গ্রহকে অন্তঃস্থ গ্রহ বা পার্থিব গ্রহ বলা হয়।"},
+{q: "১১. কোন কোন গ্রহকে 'বহিঃস্থ গ্রহ' (Jovian planet) বা গ্যাসীয় দৈত্য বলা হয়?",opts: ["বুধ, শুক্র, পৃথিবী ও মঙ্গল", "বৃহস্পতি, শনি, ইউরেনাস ও নেপচুন", "ইউরেনাস এবং নেপচুন", "শনি, ইউরেনাস ও প্লুটো"],ans: 1,exp: "সৌরজগতের শেষ চারটি বৃহৎ গ্যাসীয় বা বরফ দৈত্যাকার গ্রহকে বহিঃস্থ গ্রহ বলা হয়।"},
+{q: "১২. সৌরজগতের কোন দুটি গ্রহকে একত্রে 'বহিঃস্থ যমজ' (Jovian twins) বলা হয়?",opts: ["বৃহস্পতি ও শনি", "ইউরেনাস ও নেপচুন", "পৃথিবী ও শুক্র", "মঙ্গল ও বৃহস্পতি"],ans: 1,exp: "আকার ও গঠনের গভীর মিলের জন্য ইউরেনাস ও নেপচুনকে একত্রে 'বহিঃস্থ যমজ' বলা হয়।"},
+{q: "১৩. কোন দুটি গ্রহের কক্ষপথের মধ্যবর্তী স্থানে 'গ্রহাণুপুঞ্জ' (Asteroids) বা গ্রহাণু বলয়টি অবস্থিত?",opts: ["পৃথিবী এবং মঙ্গল", "মঙ্গল এবং বৃহস্পতি", "বৃহস্পতি এবং শনি", "শনি এবং ইউরেনাস"],ans: 1,exp: "মঙ্গল এবং বৃহস্পতি গ্রহের মধ্যবর্তী বিশাল ফাঁকা অঞ্চলের কক্ষপথেই সৌরজগতের প্রধান গ্রহাণুপুঞ্জগুলি অবস্থান করে।"},
+{q: "১৪. সমগ্র সৌরজগতের সবচেয়ে বড় উপগ্রহ কোনটি এবং এটি কোন গ্রহের উপগ্রহ?",opts: ["টাইটান (শনির উপগ্রহ)", "গ্যানিমিড (বৃহস্পতির উপগ্রহ)", "ট্রাইটন (নেপচুনের উপগ্রহ)", "ফোবোস (মঙ্গলের উপগ্রহ)"],ans: 1,exp: "বৃহস্পতি গ্রহের উপগ্রহ 'গ্যানিমিড' হলো সমগ্র সৌরজগতের বৃহত্তম প্রাকৃতিক উপগ্রহ।"},
+{q: "১৫. পৃথিবী ছাড়া সৌরজগতের আর কোন গ্রহে মেরু অঞ্চলে বরফের আচ্ছাদন (Ice cap) দেখতে পাওয়া যায়?",opts: ["বুধ", "শুক্র", "মঙ্গল", "নেপচুন"],ans: 2,exp: "পৃথিবী ছাড়া একমাত্র মঙ্গল গ্রহের দুই মেরু অঞ্চলেই বরফের সাদা আচ্ছাদন বা আইস ক্যাপ দেখতে পাওয়া যায়।"}
 ];
 
 const TOTAL_QS = questions.length;
 
 // ============================================================
+// SMS / TOAST NOTIFICATION
+// ============================================================
+let smsTimeout;
+function showSMS(message) {
+    const toast = document.getElementById('smsToast');
+    document.getElementById('smsText').innerText = message;
+    toast.classList.add('show');
+    clearTimeout(smsTimeout);
+    smsTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4000);
+}
+
+// ============================================================
 // ইনিশিয়েশন ও কন্ট্রোল লজিক
 // ============================================================
 function initPage() {
-    // সেশন থেকে ইউজার চেক করা
     const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
-
     if (isLoggedIn && currentUser) {
-        // লগইন করা থাকলে সরাসরি টেস্টে প্রবেশ
         checkAttemptAndStart();
     } else {
-        // লগইন না থাকলে পাসওয়ার্ড পপ-আপ ওপেন হবে
         document.getElementById('loginOverlay').classList.add('active');
     }
 }
@@ -320,8 +270,8 @@ function checkAttemptAndStart() {
     let attemptCount = (data[currentUser]) || 0;
 
     if (attemptCount >= MAX_ATTEMPTS) {
-        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
-        goToHub();
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        setTimeout(goToHub, 1800);
         return;
     }
 
@@ -329,7 +279,10 @@ function checkAttemptAndStart() {
     data[currentUser] = attemptCount + 1;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
-    // কুইজ শুরু করা
+    // SMS-style notification
+    const remaining = MAX_ATTEMPTS - data[currentUser];
+    showSMS(`✅ লগইন সফল! এই সেটে বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+
     startQuiz();
 }
 
@@ -448,28 +401,38 @@ function nextQ() {
     }
 }
 
+// ============================================================
+// RESULT — IMAGE-STYLE
+// ============================================================
 function showResult() {
     document.getElementById('testArea').classList.add('hidden');
     document.getElementById('timerBox').classList.add('hidden');
     document.getElementById('resultWrap').classList.add('show');
 
     const pct = Math.round((score / TOTAL_QS) * 100);
-    document.getElementById('finalScore').innerText = `${pct}%`;
-    document.getElementById('rbCorrect').innerText = score;
-    document.getElementById('rbWrong').innerText = TOTAL_QS - score;
+    const wrongOrSkipped = TOTAL_QS - score;
 
-    let msg = "অসাধারণ!"; let icon = "🏆";
-    if (pct < 50) { msg = "আরও অনুশীলন প্রয়োজন!"; icon = "📚"; }
-    else if (pct < 80) { msg = "খুব ভালো চেষ্টা!"; icon = "👍"; }
+    // Emoji & tagline based on score
+    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
+    if (pct >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
+    else if (pct >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
+    else if (pct >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
+    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
 
-    document.getElementById('resultGrade').innerText = msg;
-    document.getElementById('resultIcon').innerText = icon;
+    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultTagline').innerText = tagline;
+    document.getElementById('resultPercent').innerText = pct + '%';
+    document.getElementById('resultCorrect').innerText = score;
+    document.getElementById('resultWrong').innerText = wrongOrSkipped;
 
+    // Attempt info
     let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
     let count = data[currentUser] || 0;
-    let remaining = MAX_ATTEMPTS - count;
+    let remaining = Math.max(0, MAX_ATTEMPTS - count);
+    document.getElementById('attemptsLeft').innerText = remaining;
 
-    document.getElementById('attemptInfo').innerText = `👤 ${currentUser} — Set 1: বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ`;
+    // SMS-style notification
+    showSMS(`📊 ফলাফল: ${pct}% | বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
 }
 
 function showReview() {
@@ -485,13 +448,16 @@ function restartQuiz() {
     let count = data[currentUser] || 0;
 
     if (count >= MAX_ATTEMPTS) {
-        alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
         return;
     }
 
-    // অ্যাটেম্পট সংখ্যা বাড়ানো
+    // অ্যাটেম্পট সংখ্যা বাড়ানো
     data[currentUser] = count + 1;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    const remaining = MAX_ATTEMPTS - data[currentUser];
+    showSMS(`🔄 আবার শুরু! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
 
     document.getElementById('resultWrap').classList.remove('show');
     startQuiz();

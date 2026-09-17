@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History Test 10 - Buddhism: Tripitaka, Councils & Universities</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+/* ================= RESULT WRAP (IMAGE-STYLE) ================= */
+.result-wrap {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    display: none;
+    max-width: 520px;
+    margin: 1rem auto;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.06);
+}
+.result-wrap.show { display: block; }
+
+.result-icon {
+    font-size: 4.5rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+.result-title {
+    font-family: 'Tiro Bangla', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1c2e24;
+    margin-bottom: 0.8rem;
+}
+.result-percent {
+    font-family: 'Syne', sans-serif;
+    font-size: 5rem;
+    font-weight: 800;
+    color: #1a7a4a;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+.result-message {
+    font-family: 'Tiro Bangla', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f9a825;
+    margin-bottom: 1.8rem;
+}
+
+.result-bars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.result-bar {
+    background: #eef7f0;
+    border-radius: 14px;
+    padding: 1.5rem 1rem;
+    border: 1px solid #d1e7d8;
+}
+.rb-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+.rb-num.correct { color: #1a7a4a; }
+.rb-num.wrong { color: #dc3545; }
+.rb-label {
+    font-family: 'Tiro Bangla', serif;
+    font-size: 1rem;
+    color: #5a7a66;
+    font-weight: 600;
+}
+
+.result-note {
+    background: #eef7f0;
+    border-radius: 12px;
+    padding: 1.1rem 1rem;
+    margin-bottom: 1.5rem;
+    font-family: 'Tiro Bangla', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4a6b56;
+    line-height: 1.5;
+    border: 1px solid #d1e7d8;
+}
+
+.result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.result-actions button {
+    padding: 16px;
+    border-radius: 12px;
+    font-family: 'Tiro Bangla', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: 0.25s;
+    letter-spacing: 0.3px;
+}
+.btn-review {
+    background: #2e9e4f;
+    color: white;
+    box-shadow: 0 4px 14px rgba(46,158,79,0.3);
+}
+.btn-review:hover { background: #1a7a4a; transform: translateY(-2px); }
+.btn-retry {
+    background: #2a9db5;
+    color: white;
+    box-shadow: 0 4px 14px rgba(42,157,181,0.3);
+}
+.btn-retry:hover { background: #1f7a8c; transform: translateY(-2px); }
+.btn-hub {
+    background: #6b8574;
+    color: white;
+    box-shadow: 0 4px 14px rgba(107,133,116,0.3);
+}
+.btn-hub:hover { background: #4d6355; transform: translateY(-2px); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-percent { font-size: 4rem; }
+.rb-num { font-size: 2rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১৫</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">History</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <!-- ========== RESULT WRAP (IMAGE STYLE) ========== -->
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">💪</div>
+        <div class="result-title">আপনার ফলাফল</div>
+        <div class="result-percent" id="resultPercent">0%</div>
+        <div class="result-message" id="resultMessage">চেষ্টা চালিয়ে যাও!</div>
+
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num correct" id="rbCorrect">0</div>
+                <div class="rb-label">সঠিক</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num wrong" id="rbWrong">0</div>
+                <div class="rb-label">ভুল / স্কিপ</div>
+            </div>
+        </div>
+
+        <div class="result-note" id="attemptNote">
+            বাকি আছে ৮ বার Test দেওয়ার সুযোগ (সর্বোচ্চ ১০ বার)
+        </div>
+
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+            <button class="btn-retry" onclick="retryQuiz()">আবার চেষ্টা করো</button>
+            <button class="btn-hub" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const TEST_ID = "history_test_10";
+const MAX_ATTEMPTS = 10;
+
+const questions = [
+    { q: "চালুক্যরাজ দ্বিতীয় পুলকেশীর সামরিক গৌরব ও হর্ষবর্ধনকে পরাজিত করার কাহিনী সংবলিত 'আইহোল শিলালিপি' কে রচনা করেছিলেন?", opts: ["হরিষেণ", "রবিকীর্তি", "বাণভট্ট", "উমাপতি ধর"], ans: 1, tag: "History - আইহোল", exp: "চালুক্যরাজ দ্বিতীয় পুলকেশীর সভাকবি রবিকীর্তি বিখ্যাত 'আইহোল শিলালিপি' রচনা করেছিলেন।", special: "💡 এই শিলালিপিটি সংস্কৃত ভাষায় রচিত এবং এটি থেকে দ্বিতীয় পুলকেশীর সাথে হর্ষবর্ধনের যুদ্ধের রাজকীয় বিবরণ জানা যায়।" },
+    { q: "গুপ্ত বংশের শ্রেষ্ঠ সম্রাট সমুদ্রগুপ্তের দিগ্বিজয় ও রাজত্বকাল সম্পর্কে জানার প্রধান উপাদান 'এলাহাবাদ প্রশস্তি' কার রচনা?", opts: ["কালিদাস", "বীরসেন", "হরিষেণ", "উমাপতি ধর"], ans: 2, tag: "History - এলাহাবাদ", exp: "সমুদ্রগুপ্তের বিখ্যাত সংস্কৃত পণ্ডিত ও সভাকবি হরিষেণ এলাহাবাদ প্রশস্তি (বা প্রয়াগ প্রশস্তি) রচনা করেন।", special: "💡 এটি চম্পু কাব্য শৈলীতে রচিত এবং এটি সম্রাট সমুদ্রগুপ্তের অসামান্য গুণাবলী ও সামরিক সাফল্যের ঐতিহাসিক আকর গ্রন্থ।" },
+    { q: "সাতবাহন বংশের শ্রেষ্ঠ রাজা গৌতমীপুত্র সাতকর্ণির সামরিক বিজয় ও কৃতিত্বের বিবরণ সংবলিত 'নাসিক প্রশস্তি' কে রচনা করেছিলেন?", opts: ["নয়নিকা", "গৌতমী বলশ্রী", "লোকমহাদেবী", "বীরসেন"], ans: 1, tag: "History - নাসিক", exp: "নাসিক প্রশস্তি গৌতমীপুত্র সাতকর্ণির মা 'গৌতমী বলশ্রী' কর্তৃক রচিত হয়েছিল, যাতে তাঁর পুত্রের গৌরবোজ্জ্বল কাহিনী এবং সাতবাহন সাম্রাজ্যের পুনরুত্থানের বিবরণ রয়েছে।", special: "💡 এই লিপিতে গৌতমীপুত্র সাতকর্ণিকে 'একমাত্র ব্রাহ্মণ' (এক ব্রাহ্মণ) এবং 'ক্ষত্রিয়দের দর্পমর্দনকারী' হিসেবে বিশেষিত করা হয়েছে।" },
+    { q: "সাতবাহন রাজবংশের প্রথম শক্তিশালী রাজা প্রথম সাতকর্ণির বিষয়ে জানার অত্যন্ত গুরুত্বপূর্ণ উপাদান 'নানাঘাট লিপি' কে রচনা করেন?", opts: ["গৌতমী বলশ্রী", "নয়নিকা বা নাগানিকা", "ধ্রুবদেবী", "কুমারদেবী"], ans: 1, tag: "History - নানাঘাট", exp: "প্রথম সাতকর্ণির মহিষী তথা স্ত্রী রানি নয়নিকা বা নাগানিকা তাঁর স্বামীর কৃতিত্ব তুলে ধরতে এই নানাঘাট লিপি উৎকীর্ণ করিয়েছিলেন।", special: "💡 এই লিপি থেকে প্রথম সাতকর্ণির অশ্বমেধ যজ্ঞ এবং ব্রাক্ষ্মণ ও বৌদ্ধদের ভূমি দানের প্রাচীনতম প্রমাণ পাওয়া যায়।" },
+    { q: "ভারতের ইতিহাসের অন্যতম প্রাচীন সংস্কৃত ভাষায় লিখিত শিলালিপি 'জুনাগড় প্রশস্তি' কোন বিখ্যাত শক রাজার কৃতিত্ব বর্ণনা করে?", opts: ["কণিষ্ক", "রুদ্রদমন", "নহপান", "প্রথম ভোজ"], ans: 1, tag: "History - জুনাগড়", exp: "জুনাগড় শিলালিপি বা জুনাগড় প্রশস্তি বিখ্যাত শক মহাক্ষত্রপ রুদ্রদমনের কৃতিত্ব ও তাঁর সময়কালের সুর্দশন হ্রদ সংস্কারের ইতিহাস তুলে ধরে।", special: "💡 এটি খাঁটি সংস্কৃত ভাষায় লিখিত ভারতের প্রথম বৃহৎ রাজকীয় শিলালিপি হিসেবে অত্যন্ত গুরুত্ব বহন করে।" },
+    { q: "বাংলার প্রথম সার্বভৌম এবং স্বাধীন রাজা শশাঙ্ক সম্পর্কে জানার প্রধান দেশীয় উপাদান 'গঞ্জাম লিপি' কার সাথে সম্পর্কিত?", opts: ["শশাঙ্ক", "ভাস্করবর্মণ", "হর্ষবর্ধন", "দেবপাল"], ans: 0, tag: "History - গঞ্জাম", exp: "গঞ্জাম লিপি থেকে গৌড়াধিপতি শশাঙ্কের শাসনকাল, তাঁর সাম্রাজ্যের সীমা ও তাঁর সার্বভৌমত্ব সম্পর্কে নিশ্চিত বিবরণ জানা যায়।", special: "💡 শশাঙ্কের রাজধানী ছিল কর্ণসুবর্ণ (বর্তমানে পশ্চিমবঙ্গের মুর্শিদাবাদ জেলায় অবস্থিত)।" },
+    { q: "ওডিশার উদয়গিরি পাহাড়ে অবস্থিত বিখ্যাত 'হাতিগুম্ফা লিপি' থেকে কোন কলিঙ্গরাজের রাজত্ব ও ধর্মীয় বিশ্বাসের ইতিহাস জানা যায়?", opts: ["অশোক", "খারবেল", "প্রথম রাজেন্দ্র চোল", "বিজয়ালয় চোল"], ans: 1, tag: "History - হাতিগুম্ফা", exp: "চেদি বংশের মহান কলিঙ্গরাজ খারবেলের রাজত্বকালের ধারাবাহিক ১৭ বছরের ইতিহাস এই হাতিগুম্ফা শিলালিপি থেকে জানা যায়।", special: "💡 এই লিপিটি প্রাকৃত ভাষায় খোদাই করা হয়েছিল এবং খারবেল ছিলেন জৈন ধর্মের একনিষ্ঠ পৃষ্ঠপোষক।" },
+    { q: "মধ্যপ্রদেশে আবিষ্কৃত 'মান্দাশোর লিপি' থেকে কোন প্রাচীন ভারতীয় শাসকের হুন আক্রমণ প্রতিহত করা ও রাজকীর্তির কথা জানা যায়?", opts: ["স্কন্দগুপ্ত", "যশোধর্মন", "শশাঙ্ক", "ধর্মপাল"], ans: 1, tag: "History - মান্দাশোর", exp: "মান্দাশোর লিপি থেকে মালবরাজ যশোধর্মনের দিগ্বিজয় এবং হুন নেতা মিহিরকুলকে পরাজিত করার ঐতিহাসিক তথ্য পাওয়া যায়।", special: "💡 এটি গুপ্ত সাম্রাজ্যের পতনের সমসাময়িক সময়ে উত্তর ভারতের রাজনৈতিক অস্থিরতা বুঝতে খুব সাহায্য করে।" },
+    { q: "পাল রাজবংশের দ্বিতীয় ও শ্রেষ্ঠ সম্রাট ধর্মপালের রাজত্বকাল ও তাঁর ভূমিদান সংক্রান্ত তথ্য জানার প্রধান উৎস 'খালিমপুর তাম্রলিপি' কার সময়কার?", opts: ["গোপাল", "ধর্মপাল", "দেবপাল", "রামপাল"], ans: 1, tag: "History - খালিমপুর", exp: "খালিমপুর তাম্রলিপিটি পাল বংশের শ্রেষ্ঠ রাজা ধর্মপালের শাসনকালের এবং তাঁর বিভিন্ন রাজকীয় অনুদান ও মগধ জয়ের কাহিনী বহন করে।", special: "💡 ধর্মপাল বিহারে বিখ্যাত বিক্রমশীলা ও সোমপুর মহাবিহার প্রতিষ্ঠা করেছিলেন।" },
+    { q: "সেন রাজবংশের অন্যতম শ্রেষ্ঠ রাজা বিজয় সেনের বংশমর্যাদা ও রাজ্যজয়ের কাহিনী সংবলিত 'দেওপাড়া প্রশস্তি' কে রচনা করেছিলেন?", opts: ["ধোয়ী", "উমাপতি ধর", "জয়দেব", "বল্লাল সেন"], ans: 1, tag: "History - দেওপাড়া", exp: "দেওপাড়া প্রশস্তি বিখ্যাত কবি উমাপতি ধর কর্তৃক রচিত হয়েছিল, যার থেকে বিজয় সেনের শাসন ও সামরিক বিজয়ের ইতিহাস জানা যায়।", special: "💡 উমাপতি ধর লক্ষণ সেনের রাজসভার অন্যতম প্রধান কবি বা পঞ্চরত্নের একজন ছিলেন।" },
+    { q: "ভারতে হুন আক্রমণ প্রতিহত করে সাম্রাজ্য রক্ষা করার কাহিনী সংবলিত বিখ্যাত 'ভিতারি লিপি' থেকে কোন গুপ্ত সম্রাটের কথা জানা যায়?", opts: ["সমুদ্রগুপ্ত", "প্রথম কুমারগুপ্ত", "স্কন্দগুপ্ত", "দ্বিতীয় চন্দ্রগুপ্ত"], ans: 2, tag: "History - ভিতারি", exp: "ভিতারি স্তম্ভলিপি থেকে গুপ্ত সম্রাট স্কন্দগুপ্তের শাসনকাল এবং কীভাবে তিনি বর্বর হুন জাতিকে পরাজিত করে ভারতকে রক্ষা করেছিলেন তা জানা যায়।", special: "💡 হুনদের চরমভাবে পরাজিত করার কারণে ইতিহাসবিদরা স্কন্দগুপ্তকে 'ভারতের রক্ষাকারী' উপাধিতে ভূষিত করেছেন।" },
+    { q: "গুপ্ত যুগের গুরুত্বপূর্ণ সামরিক অবস্থান এবং সামাজিক প্রেক্ষাপট সংবলিত 'এরান লিপি' কোন গুপ্ত সম্রাটের সাথে সম্পর্কিত?", opts: ["সমুদ্রগুপ্ত", "দ্বিতীয় চন্দ্রগুপ্ত", "স্কন্দগুপ্ত", "প্রথম কুমারগুপ্ত"], ans: 1, tag: "History - এরান", exp: "এরান লিপি মূলত দ্বিতীয় চন্দ্রগুপ্ত (বিক্রমাদিত্য) ও তাঁর মন্ত্রী বীরসেনের কার্যকলাপ ও তৎকালীন সামাজিক প্রেক্ষাপট জানতে সাহায্য করে।", special: "💡 এই লিপিটি থেকে ভারতের ইতিহাসে সতীদাহ প্রথার প্রথম নিশ্চিত লিখিত প্রত্নতাত্ত্বিক প্রমাণ মেলে।" },
+    { q: "এশিয়া মাইনরের তুর্কিতে আবিষ্কৃত বিখ্যাত 'বোঘাজকোই লিপি' থেকে মূলত কোন জাতির রাজাদের সম্পর্কে প্রাচীনতম তথ্য পাওয়া যায়?", opts: ["রোমান জাতি", "আর্য বা ইন্দো-আর্য জাতি", "সুমেরীয় জাতি", "চোল জাতি"], ans: 1, tag: "History - বোঘাজকোই", exp: "বোঘাজকোই লিপি থেকে প্রাচীন আর্য জাতির রাজাদের সন্ধি ও তাঁদের প্রাচীনতম দেবতাদের উল্লেখ পাওয়া যায়।", special: "💡 এই লিপিতে ইন্দ্র, বরুণ, মিত্র এবং নসত্যস নামক ৪ জন বৈদিক দেবতার উল্লেখ রয়েছে, যা প্রমাণ করে আর্যদের মূল বাসকেন্দ্র মধ্য এশিয়ার কাছাকাছি ছিল।" },
+    { q: "গুর্জর-প্রতিহার রাজবংশের ইতিহাস এবং তাঁদের শ্রেষ্ঠ রাজা সম্পর্কে জানার অতি মূল্যবান উপাদান 'গোয়ালিয়র প্রশস্তি' কার শাসনকালের?", opts: ["প্রথম ভোজ বা মিহির ভোজ", "মহীপাল", "হরিচন্দ্র", "যশপাল"], ans: 0, tag: "History - গোয়ালিয়র", exp: "গোয়ালিয়র প্রশস্তি থেকে প্রতিহাররাজ প্রথম ভোজ বা মিহির ভোজের রাজ্যজয়, পরাক্রম এবং তাঁর রাজত্বকালের ইতিহাস জানা যায়।", special: "💡 প্রথম ভোজ প্রতিহার রাজবংশের সর্বশ্রেষ্ঠ শাসক ছিলেন এবং তিনি বৈষ্ণব ধর্মের একনিষ্ঠ অনুসারী ছিলেন।" },
+    { q: "দক্ষিণ ভারতের শক্তিশালী চোল রাজাদের ইতিহাস এবং তাঁদের বিখ্যাত নৌ-অভিযানের তথ্য সংবলিত 'তাঞ্জোর লিপি' কোন রাজার সাথে সম্পর্কিত?", opts: ["বিজয়ালয় চোল", "প্রথম রাজরাজ চোল", "প্রথম রাজেন্দ্র চোল", "অপরাজিত বর্মন"], ans: 2, tag: "History - তাঞ্জোর", exp: "তাঞ্জোর লিপি থেকে চোল সম্রাট প্রথম রাজেন্দ্র চোলের দক্ষিণ-পূর্ব এশিয়া জয় ও সুমাত্রা-জাভায় রাজকীয় সামরিক নৌ-অভিযানের কৃতিত্বপূর্ণ ইতিহাস জানা যায়।", special: "💡 প্রথম রাজেন্দ্র চোল 'গঙ্গইকোন্ড চোল' উপাধি ধারণ করেছিলেন এবং গঙ্গইকোন্ড চোলপুরম নামক নতুন রাজধানী স্থাপন করেন।" },
+    { q: "প্রাচীন ভারতের মধ্যপ্রদেশের বেসনগরে আবিষ্কৃত বিখ্যাত 'গরুড়ধ্বজ লিপি' কোন ব্যাকট্রিয় গ্রিকরাজের রাজদূতের কথা স্মরণ করায়?", opts: ["মিনান্দার", "হেলিওডোরাস", "সেলুকাস", "ডেমোস্থেনিস"], ans: 1, tag: "History - গরুড়ধ্বজ", exp: "গরুড়ধ্বজ লিপিটি ব্যাকট্রিয় গ্রিকরাজ হেলিওডোরাসের সময়ে নির্মিত হয়েছিল, যিনি ভগবান বিষ্ণুর উপাসক বা 'ভাগবত' ধর্মে দীক্ষিত হয়েছিলেন।", special: "💡 এটি প্রাচীন ভারতে ভাগবত বা বৈষ্ণব ধর্মের প্রসারের অন্যতম প্রাচীনতম নির্ভরযোগ্য প্রত্নতাত্ত্বিক প্রমাণ।" },
+    { q: "সম্রাট অশোকের কলিঙ্গ বিজয়ের রক্তক্ষয়ী যুদ্ধের উল্লেখ কোন শিলালেখতে বা লিপিতে বিশদভাবে খোদাই রয়েছে?", opts: ["১০-তম শিলালেখ", "১২-তম শিলালেখ", "১৩-তম শিলালেখ", "১ম শিলালেখ"], ans: 2, tag: "History - ১৩তম শিলালেখ", exp: "সম্রাট অশোকের ১৩-তম প্রধান শিলালেখতে কলিঙ্গ যুদ্ধের ভয়াবহতা এবং তাঁর জীবনের পরিবর্তনের কাহিনী বর্ণিত রয়েছে।", special: "💡 কলিঙ্গ যুদ্ধের পর চণ্ডাশোক নামে পরিচিত সম্রাট অশোক চিরকালের জন্য যুদ্ধনীতি ত্যাগ করে ধর্ম বিজয়ের নীতি গ্রহণ করেন।" },
+    { q: "বিখ্যাত প্রাচীন বৌদ্ধ জীবনী মহাকাব্য 'বুদ্ধচরিত' ও 'সূত্রালঙ্কার' কার অমর সৃষ্টি?", opts: ["নাগার্জুন", "অশ্বঘোষ", "বসুমিত্র", "আর্যভট্ট"], ans: 1, tag: "History - অশ্বঘোষ", exp: "বুদ্ধচরিত এবং সূত্রালঙ্কার গ্রন্থের রচয়িতা হলেন কুষাণ রাজসভার বিখ্যাত পণ্ডিত, দার্শনিক ও কবি অশ্বঘোষ।", special: "💡 অশ্বঘোষ কুষাণ সম্রাট কণিষ্কের রাজত্বকালে অনুষ্ঠিত চতুর্থ বৌদ্ধ সংগীতির সহ-সভাপতি হিসেবে দায়িত্ব পালন করেছিলেন।" },
+    { q: "প্রাচীন ভারতের বৌদ্ধ দর্শনের বিখ্যাত 'শূন্যতাবাদ'-এর জনক এবং 'শতসাহস্রিকা-প্রজ্ঞাপারমিতা' ও 'মাধ্যমিকা সূত্র' গ্রন্থের রচয়িতা কে?", opts: ["অসঙ্গ", "নাগার্জুন", "বুদ্ধঘোষ", "বসুবন্ধু"], ans: 1, tag: "History - নাগার্জুন", exp: "শতসাহস্রিকা-প্রজ্ঞাপারমিতা এবং মাধ্যমিকা সূত্রের রচয়িতা হলেন প্রখ্যাত দার্শনিক ও কুষাণ রাজসভার রসায়নবিদ নাগার্জুন।", special: "💡 নাগার্জুনকে তাঁর অসাধারণ বৈজ্ঞানিক ও দার্শনিক প্রজ্ঞার কারণে অনেক সময় 'ভারতের আইনস্টাইন' বলে সম্বোধন করা হয়ে থাকে।" },
+    { q: "চন্দ্রগুপ্ত মৌর্যের মগধের সিংহাসন আরোহণ এবং নন্দ রাজবংশের পতনের রাজনৈতিক নাটক সংবলিত বিখ্যাত গ্রন্থ 'মুদ্রারাক্ষস'-এর রচয়িতা কে?", opts: ["বিশাখদত্ত", "বাৎসায়ন", "শূদ্রক", "ভারবি"], ans: 0, tag: "History - মুদ্রারাক্ষস", exp: "'মুদ্রারাক্ষস' এবং গুপ্ত যুগের পটভূমিতে রচিত 'দেবীচন্দ্রগুপ্তম' নাটক দুটির রচয়িতা হলেন বিখ্যাত গুপ্তযুগীয় নাট্যকার বিশাখদত্ত।", special: "💡 মুদ্রারাক্ষস হলো একটি সম্পূর্ণ রাজনৈতিক গোয়েন্দাধর্মী ঐতিহাসিক নাটক, যেখানে কোনো প্রধান নারী চরিত্রের উপস্থিতি নেই।" }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 15 * 60;
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+// ============================================================
+// ATTEMPT TRACKING
+// ============================================================
+function getAttemptKey() {
+    return "attempts_" + TEST_ID + "_" + new Date().toISOString().split('T')[0];
+}
+function getAttemptsUsed() {
+    return parseInt(localStorage.getItem(getAttemptKey()) || "0");
+}
+function incrementAttempts() {
+    const used = getAttemptsUsed() + 1;
+    localStorage.setItem(getAttemptKey(), used);
+    return used;
+}
+function getRemainingAttempts() {
+    return Math.max(0, MAX_ATTEMPTS - getAttemptsUsed());
+}
+
+// ============================================================
+// TIMER
+// ============================================================
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+// ============================================================
+// RENDER QUESTION
+// ============================================================
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+// ============================================================
+// FINISH QUIZ (IMAGE-STYLE RESULT)
+// ============================================================
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+
+    // Track attempt
+    const used = incrementAttempts();
+    const remaining = MAX_ATTEMPTS - used;
+    const percent = Math.round((score / questions.length) * 100);
+
+    // Update UI
+    document.getElementById('resultPercent').innerText = `${percent}%`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    // Result icon & message
+    let icon = '💪';
+    let msg = 'চেষ্টা চালিয়ে যাও!';
+    if (percent >= 80) { icon = '🏆'; msg = 'দুর্দান্ত! তুমি সেরা!'; }
+    else if (percent >= 60) { icon = '🎉'; msg = 'বেশ ভালো করেছ!'; }
+    else if (percent >= 40) { icon = '👍'; msg = 'আরেকটু চেষ্টা করো!'; }
+    else if (percent >= 20) { icon = '📚'; msg = 'আরো পড়াশোনা দরকার!'; }
+
+    document.getElementById('resultIcon').innerText = icon;
+    document.getElementById('resultMessage').innerText = msg;
+
+    // Attempt note
+    if (remaining > 0) {
+        document.getElementById('attemptNote').innerText = `বাকি আছে ${toBn(remaining)} বার Test দেওয়ার সুযোগ (সর্বোচ্চ ${toBn(MAX_ATTEMPTS)} বার)`;
+    } else {
+        document.getElementById('attemptNote').innerText = `আজকের ${toBn(MAX_ATTEMPTS)} বার Test দেওয়ার সুযোগ শেষ। আগামীকাল আবার আসো!`;
+    }
+
+    document.getElementById('resultWrap').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+// ============================================================
+// RETRY
+// ============================================================
+function retryQuiz() {
+    if (getRemainingAttempts() <= 0) {
+        alert("❌ আপনি আজকের " + MAX_ATTEMPTS + " বার Test দেওয়ার সুযোগ শেষ করেছেন। আগামীকাল আবার চেষ্টা করুন।");
+        return;
+    }
+    currentQ = 0;
+    userAnswers = [];
+    score = 0;
+    wrong = 0;
+    timeLeft = TOTAL_TIME;
+    answered = false;
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('progressWrap').style.display = 'block';
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('timerBox').classList.remove('danger');
+    renderQuestion();
+    startTimer();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// REVIEW
+// ============================================================
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="goToHub()">🏠 Chapter Hub-এ ফিরুন</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goToHub() {
+    window.location.href = "../index.html";
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+// ============================================================
+// BANGLA NUMBER
+// ============================================================
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

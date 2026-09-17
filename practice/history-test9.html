@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History Test 9 - Gautama Buddha & Buddhism</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ১৫</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">History</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// HISTORY TEST 9 — গৌতম বুদ্ধ ও বৌদ্ধ ধর্ম
+// Source: প্রশ্ন ১ - ১৫
+// প্রশ্ন নম্বর বাদ — শুধু প্রশ্ন
+// ইংরেজি বন্ধনী বাদ — শুধু বাংলা
+// ============================================================
+const questions = [
+    {
+        q: "বৌদ্ধ ধর্মের মহান প্রবক্তা গৌতম বুদ্ধ আনুমানিক কত খ্রিস্টপূর্বাব্দে জন্মগ্রহণ করেছিলেন?",
+        opts: ["৫৪০ খ্রিস্টপূর্বাব্দ", "৫৬৩ খ্রিস্টপূর্বাব্দ", "৪৬৮ খ্রিস্টপূর্বাব্দ", "৪৮৩ খ্রিস্টপূর্বাব্দ"],
+        ans: 1,
+        tag: "History - বুদ্ধের জন্ম",
+        exp: "ভগবান গৌতম বুদ্ধ আনুমানিক ৫৬৩ খ্রিস্টপূর্বাব্দে নেপালের তরাই অঞ্চলে অবস্থিত কপিলাবস্তুর লুম্বিনী উদ্যানে জন্মগ্রহণ করেছিলেন।",
+        special: "💡 তাঁর বৈশাখী পূর্ণিমা তিথিতে জন্ম নেওয়ার কারণে এই দিনটি বিশ্বজুড়ে 'বুদ্ধ পূর্ণিমা' বা 'বৈশাখী বুদ্ধ পূর্ণিমা' হিসেবে অত্যন্ত পবিত্রতার সাথে পালন করা হয়।"
+    },
+    {
+        q: "গৌতম বুদ্ধের পিতা শুদ্ধোধন তৎকালীন কপিলাবস্তুর কোন বিখ্যাত ক্ষত্রিয় রাজবংশের প্রধান বা রাজা ছিলেন?",
+        opts: ["জ্ঞাতৃক বংশ", "মৌর্য বংশ", "শাক্য বংশ", "লিচ্ছবি বংশ"],
+        ans: 2,
+        tag: "History - শাক্য বংশ",
+        exp: "গৌতম বুদ্ধের পিতা শুদ্ধোধন ছিলেন কপিলাবস্তুর ক্ষত্রিয় রাজবংশ 'শাক্য' বংশের রাজা। এই রাজবংশে জন্ম নেওয়ার কারণেই বুদ্ধকে অনেক সময় 'শাক্যমুনি' নামেও ডাকা হয়।",
+        special: "💡 বুদ্ধের মাতার নাম ছিল নেপালের দেবদহের রাজকন্যা মায়াদেবী, যিনি সিদ্ধার্থের জন্মের মাত্র সাত দিন পরেই পরলোকগমন করেন।"
+    },
+    {
+        q: "গৌতম বুদ্ধের শৈশব বা বাল্যকালের প্রকৃত নাম কী ছিল?",
+        opts: ["বর্ধমান", "সিদ্ধার্থ", "রাহুল", "তথাগত"],
+        ans: 1,
+        tag: "History - সিদ্ধার্থ",
+        exp: "গৌতম বুদ্ধের আসল বা শৈশবের নাম ছিল 'সিদ্ধার্থ'।",
+        special: "💡 সিদ্ধার্থ শব্দের অর্থ হলো \"যিনি নিজের লক্ষ্য লাভ করেছেন\"। পরবর্তীতে দিব্যজ্ঞান লাভ করার পর তিনি 'বুদ্ধ' বা জ্ঞানী নামে পরিচিত হন।"
+    },
+    {
+        q: "পুত্রের জন্মের মাত্র সাতদিন পর সাংসারিক মায়া কাটিয়ে কত বছর বয়সে সিদ্ধার্থ গৃহত্যাগ করেন, যা বৌদ্ধশাস্ত্রে 'মহাভিনিষ্ক্রমণ' নামে পরিচিত?",
+        opts: ["২৫ বছর", "২৯ বছর", "৩০ বছর", "৩৫ বছর"],
+        ans: 1,
+        tag: "History - মহাভিনিষ্ক্রমণ",
+        exp: "পুত্রের জন্মের মাত্র সাতদিন পর, বৈরাগ্য ও সত্যের সন্ধানে সিদ্ধার্থ মাত্র ২৯ বছর বয়সে নিজের রাজপ্রাসাদ ও পরিবার ত্যাগ করেন। এই ঐতিহাসিক ঘটনাকে বৌদ্ধ শাস্ত্রে 'মহাভিনিষ্ক্রমণ' বলা হয়।",
+        special: "💡 সিদ্ধার্থের স্ত্রীর নাম ছিল যশোধরা এবং তাঁর একমাত্র পুত্রের নাম ছিল রাহুল।"
+    },
+    {
+        q: "গৃহত্যাগের পর সিদ্ধার্থ কার কার নিকট থেকে দীক্ষা নিয়েছিলেন, যাঁরা তাঁর প্রথম আধ্যাত্মিক গুরু হিসেবে সুপরিচিত?",
+        opts: ["মহাবীর ও পার্শ্বনাথ", "আলারাকালাম ও উদ্রক রামপুত্র", "উপগুপ্ত ও মোগ্ললিপুত্ত তিস্য", "বসুমিত্র ও অশ্বঘোষ"],
+        ans: 1,
+        tag: "History - প্রথম গুরু",
+        exp: "গৃহত্যাগের পর সিদ্ধার্থের প্রথম গুরু ছিলেন আলারাকালাম এবং পরবর্তীতে তিনি উদ্রক রামপুত্র-এর শিষ্যত্ব গ্রহণ করে সাধনা শুরু করেন।",
+        special: "💡 এদের কাছে যোগ সাধনা ও দর্শনের প্রাথমিক শিক্ষা নিয়েও সিদ্ধার্থের মনের পরম সত্য জানার তৃষ্ণা মেটেনি, তাই তিনি নিজে কঠোর তপস্যার পথ বেছে নেন।"
+    },
+    {
+        q: "দীর্ঘ কত বছর কঠোর তপস্যার পর সিদ্ধার্থ অবশেষে উরুবিল্বের বুদ্ধগয়ায় দিব্যজ্ঞান বা 'বোধি' লাভ করতে সক্ষম হন?",
+        opts: ["৫ বছর", "৬ বছর", "১২ বছর", "৩ বছর"],
+        ans: 1,
+        tag: "History - বোধি লাভ",
+        exp: "২৯ বছর বয়সে গৃহত্যাগের পর সিদ্ধার্থ দীর্ঘ ৬ বছর কঠোর কৃচ্ছসাধন ও নিরঞ্জনা নদীর তীরে তপস্যা করেন। অবশেষে ৩৫ বছর বয়সে তিনি পরম জ্ঞান বা 'বোধি' লাভ করেন।",
+        special: "💡 পরম জ্ঞান লাভ করার পরই তিনি 'বুদ্ধ' (জ্ঞানী) এবং 'তথাগত' (যিনি পরম সত্যের সন্ধান পেয়েছেন) নামে জগৎজুড়ে বিখ্যাত হন।"
+    },
+    {
+        q: "সিদ্ধার্থ বুদ্ধগয়ার কোন গাছের নিচে বসে ধ্যানস্থ হয়ে দিব্যজ্ঞান লাভ করেছিলেন, যা পরবর্তীতে 'বোধি বৃক্ষ' নামে পরিচিত হয়?",
+        opts: ["বট গাছ", "শাল গাছ", "অশ্বত্থ গাছ", "নিম গাছ"],
+        ans: 2,
+        tag: "History - বোধি বৃক্ষ",
+        exp: "সিদ্ধার্থ বুদ্ধগয়ার যে ঐতিহাসিক অশ্বত্থ গাছের নিচে ধ্যানস্থ হয়ে পরম জ্ঞান লাভ করেছিলেন, সেই গাছটি ইতিহাসে 'বোধি বৃক্ষ' এবং স্থানটি 'বুদ্ধগয়া' নামে পবিত্র তীর্থক্ষেত্রে পরিণত হয়।",
+        special: "💡 পরবর্তীতে এই বোধি বৃক্ষটিকে বাংলার রাজা শশাঙ্ক হিংসাবশত কেটে ফেলেছিলেন বলে ইতিহাসে উল্লেখ রয়েছে।"
+    },
+    {
+        q: "জ্ঞান লাভের পর বুদ্ধদেব বারাণসীর কাছে ঋষিপত্তনের কোন বনে তাঁর প্রথম পাঁচজন শিষ্যের কাছে ধর্মমত প্রচার করেন?",
+        opts: ["বেলুবন", "লুম্বিনী উদ্যান", "মৃগদাভ বা মৃগশিখা বন", "জেটবন"],
+        ans: 2,
+        tag: "History - প্রথম ধর্মপ্রচার",
+        exp: "পরম জ্ঞান লাভের পর বুদ্ধদেব বারাণসীর ঋষিপত্তনের (যার বর্তমান নাম সারনাথ) বিখ্যাত মৃগদাভ বা মৃগশিখা বনে তাঁর প্রথম বাণী বা ধর্ম প্রচার করেন।",
+        special: "💡 বুদ্ধদেবের প্রথম ধর্মপ্রচারের এই মহান ঘটনাটিকে বৌদ্ধশাস্ত্রে 'ধর্মচক্র প্রবর্তন' বা ধর্মচক্রের ঘূর্ণন বলা হয়ে থাকে।"
+    },
+    {
+        q: "সারনাথের মৃগদাভে বুদ্ধদেবের প্রথম উপদেশ গ্রহণকারী পাঁচজন প্রিয় শিষ্য বা 'পঞ্চবর্গীয় ভিক্ষু'-র নাম কী ছিল?",
+        opts: ["মহাকাশ্যপ, সাবাকামী, উপগুপ্ত, বসুমিত্র ও অশ্বঘোষ", "কৌন্ডিন্য, অশ্বজিৎ, বাষ্প, মহানাম এবং ভদ্রিক", "আনন্দ, উপালি, রাহুল, জীবক ও সারিপুত্র", "ভদ্রবাহু, স্থূলভদ্র, ক্ষমাশ্রমণ, দেবর্ষি ও পার্শ্বনাথ"],
+        ans: 1,
+        tag: "History - পঞ্চবর্গীয় ভিক্ষু",
+        exp: "সারনাথে বুদ্ধদেবের প্রথম বাণী শ্রবণকারী পাঁচজন শিষ্য হলেন— কৌন্ডিন্য, অশ্বজিৎ, বাষ্প, মহানাম এবং ভদ্রিক।",
+        special: "💡 এই পাঁচজন শিষ্যই প্রথম বৌদ্ধ সংঘের ভিত্তিপ্রস্তর স্থাপন করেছিলেন এবং সারাজীবন বুদ্ধের বাণী প্রচারে আত্মনিয়োগ করেছিলেন।"
+    },
+    {
+        q: "আনুমানিক ৪৮৬ খ্রিস্টপূর্বাব্দে (মতান্তরে ৪৮৩ খ্রি. পূ.) ৮০ বছর বয়সে বুদ্ধদেব কোথায় মহাপরিনির্বাণ (দেহত্যাগ) লাভ করেন?",
+        opts: ["সারনাথ", "বুদ্ধগয়া", "মল্ল রাজ্যের রাজধানী কুশিনগরে", "কপিলাবস্তু"],
+        ans: 2,
+        tag: "History - মহাপরিনির্বাণ",
+        exp: "ভগবান বুদ্ধ আনুমানিক ৪৮৬ খ্রিস্টপূর্বাব্দে (মতান্তরে ৪৮৩ খ্রি. পূ.) ৮০ বছর বয়সে মল্ল মহাজনপদের রাজধানী কুশিনগরে মহাপরিনির্বাণ বা দেহত্যাগ করেন।",
+        special: "💡 বুদ্ধদেবের এই দেহত্যাগের ঘটনাটি বৌদ্ধ সংস্কৃতিতে 'মহাপরিনির্বাণ' নামে অত্যন্ত পবিত্র ও শোকের সাথে স্মরণ করা হয়।"
+    },
+    {
+        q: "বুদ্ধদেবের জীবনের কয়েকটি অত্যন্ত গুরুত্বপূর্ণ ঐতিহাসিক ঘটনার সাথে প্রতীক চিহ্নিত করার ক্ষেত্রে \"মহাভিনিষ্ক্রমণ\" (গৃহত্যাগ)-এর প্রতীক কোনটি ছিল?",
+        opts: ["পদ্ম ও ষাঁড়", "ঘোড়া", "বোধি বৃক্ষ", "স্তূপ"],
+        ans: 1,
+        tag: "History - প্রতীক ঘোড়া",
+        exp: "বুদ্ধদেবের গৃহত্যাগ বা মহাভিনিষ্ক্রমণ নামক ঘটনার প্রতীক হিসেবে 'ঘোড়া' ব্যবহার করা হয়।",
+        special: "💡 কন্থক নামক তাঁর প্রিয় ঘোড়ায় চড়েই তিনি সেদিন রাজপ্রাসাদের সীমানা পেরিয়ে চলে গিয়েছিলেন।"
+    },
+    {
+        q: "বুদ্ধদেবের প্রথম ধর্মপ্রচার (ধর্মচক্র প্রবর্তন) এবং মহাপরিনির্বাণ (মৃত্যু)-র ধর্মীয় প্রতীক যথাক্রমে কী কী?",
+        opts: ["বোধি বৃক্ষ ও পদ্ম", "ধর্মচক্র ও স্তূপ", "ঘোড়া ও ষাঁড়", "সিংহ ও পদ্ম"],
+        ans: 1,
+        tag: "History - ধর্মচক্র ও স্তূপ",
+        exp: "প্রথম ধর্মপ্রচারের প্রতীক হলো 'ধর্মচক্র' এবং মহাপরিনির্বাণ বা মৃত্যুর প্রতীক হলো 'স্তূপ'।",
+        special: "💡 বুদ্ধের দেহাবশেষের ওপর নির্মিত পবিত্র স্মৃতিসৌধগুলিকেই 'স্তূপ' বলা হয়, যা বৌদ্ধ স্থাপত্যের এক অনন্য নিদর্শন।"
+    },
+    {
+        q: "বুদ্ধদেবের জন্ম এবং তাঁর পরম জ্ঞান বা 'নির্বাণ' লাভের প্রতীক হিসেবে কোন দুটি জিনিস চিহ্নিত করা হয়?",
+        opts: ["ঘোড়া ও স্তূপ", "পদ্ম ও ষাঁড় এবং বোধি বৃক্ষ", "ধর্মচক্র ও সিংহ", "ছাগল ও শাল গাছ"],
+        ans: 1,
+        tag: "History - জন্ম ও নির্বাণের প্রতীক",
+        exp: "বুদ্ধদেবের অলৌকিক জন্মের প্রতীক হলো 'পদ্ম ও ষাঁড়' এবং তাঁর দিব্যজ্ঞান বা নির্বাণ লাভের প্রতীক হলো 'বোধি বৃক্ষ'।",
+        special: "💡 এই প্রতীকগুলি প্রাচীন ভারতের বিখ্যাত ভাস্কর্য ও শিলালেখগুলিতে বুদ্ধদেবের উপস্থিতি বোঝাতে খোদাই করা হতো।"
+    },
+    {
+        q: "বুদ্ধ প্রবর্তিত বৌদ্ধ ধর্মের মূল ভিত্তিস্বরূপ ঘোষিত \"চারটি আর্যসত্য\" আসলে কী?",
+        opts: ["বুদ্ধ, ধর্ম, সংঘ এবং মোক্ষ", "অহিংসা, সত্য, অচৌর্য এবং অপরিগ্রহ", "দুঃখের অস্তিত্ব আছে, দুঃখের কারণ আছে, দুঃখের নিবৃত্তি সম্ভব এবং দুঃখ নিবৃত্তির পন্থা আছে", "সৎ বিশ্বাস, সৎ জ্ঞান, সৎ আচরণ এবং সৎ চেতনা"],
+        ans: 2,
+        tag: "History - চারটি আর্যসত্য",
+        exp: "বুদ্ধ প্রবর্তিত চারটি প্রধান সত্য হলো— ① দুঃখের অস্তিত্ব আছে, ② দুঃখের কারণ আছে, ③ দুঃখের নিবৃত্তি সম্ভব এবং ④ দুঃখ নিবৃত্তির পন্থা আছে।",
+        special: "💡 এই চারটি মহান বাক্যকে বৌদ্ধধর্মে \"আর্যসত্য\" বা 'Noble Truths' বলা হয়, যা মানুষের দুঃখমুক্তির চিরন্তন পথ দেখায়।"
+    },
+    {
+        q: "মানুষের জীবনে দুঃখের মূল কারণ আসক্তি বা তৃষ্ণার বিনাশের জন্য বুদ্ধদেব যে আটটি অভিন্ন পথ বা আচরণের কথা বলেছেন, সেটিকে কী বলা হয়?",
+        opts: ["চতুর্যাম", "পঞ্চমহাব্রত", "অষ্টাঙ্গিক মার্গ", "ষড়দর্শন"],
+        ans: 2,
+        tag: "History - অষ্টাঙ্গিক মার্গ",
+        exp: "মানুষের চরম আসক্তি বা লোভ লালসা দূর করে দুঃখ থেকে চিরমুক্তির আটটি পথের সংকলনই হলো 'অষ্টাঙ্গিক মার্গ'।",
+        special: "💡 এই আটটি পথ হলো— সৎ জীবিকা, সৎ চেষ্টা, সৎ চিন্তা, সৎ সংকল্প, সৎ দৃষ্টি, সৎ বাক্য, সৎ কার্য এবং সৎ চেতনা।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 15 * 60; // ১৫ মিনিট (১৫ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

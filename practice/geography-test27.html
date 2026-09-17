@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geography Test 27 - River Valley Projects & Dams of India</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ২০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">Geography</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// GEOGRAPHY TEST 27 — ভারতের নদী পরিকল্পনা ও বাঁধসমূহ
+// Source: প্রশ্ন ১ - ২০
+// প্রশ্ন নম্বর বাদ — শুধু প্রশ্ন
+// ইংরেজি বন্ধনী বাদ — শুধু বাংলা
+// ============================================================
+const questions = [
+    {
+        q: "স্বাধীন ভারতের প্রথম বহুমুখী নদী উপত্যকা পরিকল্পনা কোনটি এবং এটি কত সালে প্রতিষ্ঠিত হয়েছিল?",
+        opts: ["ভাকরা-নাঙ্গাল পরিকল্পনা (১৯৫৫)", "দামোদর উপত্যকা পরিকল্পনা (১৯৪৮)", "হীরাকুঁদ বহুমুখী পরিকল্পনা (১৯৫৭)", "রিহান্দ বাঁধ পরিকল্পনা (১৯৬০)"],
+        ans: 1,
+        tag: "Geography - DVC",
+        exp: "১৯৪৮ সালের ৭ই জুলাই আইনসভার বিশেষ আইন দ্বারা দামোদর ভ্যালি কর্পোরেশন (DVC) গঠিত হয়। এটি স্বাধীন ভারতের প্রথম বহুমুখী নদী উপত্যকা পরিকল্পনা।",
+        special: "💡 এই পরিকল্পনাটি আমেরিকার বিখ্যাত 'টেনেসি ভ্যালি অথরিটি'-এর অনুকরণে ও রূপরেখা মেনে তৈরি করা হয়েছিল, যার মূল উদ্দেশ্য ছিল বন্যা নিয়ন্ত্রণ ও বিদ্যুৎ উৎপাদন।"
+    },
+    {
+        q: "দামোদর উপত্যকা পরিকল্পনার (DVC) সদর দপ্তর বা হেডকোয়ার্টার্স কোথায় অবস্থিত?",
+        opts: ["রাঁচি", "ধানবাদ", "কলকাতা", "আসানসোল"],
+        ans: 2,
+        tag: "Geography - DVC সদর",
+        exp: "ডিভিসি (DVC)-র সদর দপ্তর পশ্চিমবঙ্গের কলকাতায় অবস্থিত। তবে এর প্রধান কাজের পরিধি মূলত পশ্চিমবঙ্গ ও ঝাড়খণ্ড রাজ্য জুড়ে বিস্তৃত।",
+        special: "💡 এই যৌথ উদ্যোগের অংশীদার হলো তিনটি সংস্থা বা সরকার—ভারত সরকার, পশ্চিমবঙ্গ সরকার এবং ঝাড়খণ্ড সরকার।"
+    },
+    {
+        q: "ডিভিসি (DVC) পরিকল্পনার অধীনে দামোদরের প্রধান উপনদী 'বরাকর'-এর ওপর নির্মিত বিখ্যাত বাঁধ দুটি কোনটি কোনটি?",
+        opts: ["পাঞ্চেত ও দুর্গাপুর ব্যারেজ", "তিল্লাইয়া ও মাইথন বাঁধ", "কোণার ও বোকারো বাঁধ", "ফারাক্কা ও মেসেঞ্জোর বাঁধ"],
+        ans: 1,
+        tag: "Geography - তিল্লাইয়া ও মাইথন",
+        exp: "বরাকর নদী হলো দামোদরের প্রধান উপনদী। এই বরাকর নদীর ওপরেই ঝাড়খণ্ডে ১৯৫৩ সালে তিল্লাইয়া এবং ১৯৫৭ সালে মাইথন বাঁধ দুটি নির্মিত হয়েছে।",
+        special: "💡 মাইথন বাঁধের নিচে ভারতের অন্যতম বৃহত্তম ভূগর্ভস্থ জলবিদ্যুৎ কেন্দ্র (Underground Power Station) গড়ে তোলা হয়েছে।"
+    },
+    {
+        q: "দামোদর নদীর ওপর সরাসরি নির্মিত DVC-র প্রধান বাঁধটির নাম কী এবং এটি ঝাড়খণ্ডের কোন জেলায় অবস্থিত?",
+        opts: ["মাইথন বাঁধ; ধানবাদ", "পাঞ্চেত বাঁধ; পুরুলিয়া-ধানবাদ সীমান্তে", "কোণার বাঁধ; হাজারীবাগ", "তিল্লাইয়া বাঁধ; কোডারমা"],
+        ans: 1,
+        tag: "Geography - পাঞ্চেত",
+        exp: "১৯৫৯ সালে নির্মিত পাঞ্চেত বাঁধটি সরাসরি দামোদর নদের ওপর গড়ে উঠেছে। এটি মূলত ঝাড়খণ্ডের ধানবাদ জেলা ও পশ্চিমবঙ্গের পুরুলিয়া জেলার সীমান্তে অবস্থিত।",
+        special: "💡 পাঞ্চেত পাহাড়ের পাদদেশে অবস্থিত হওয়ায় এই বাঁধের নাম রাখা হয়েছে পাঞ্চেত বাঁধ। এটি মূলত সেচ ও জলবিদ্যুৎ উৎপাদনের জন্য কাজ করে।"
+    },
+    {
+        q: "শতদ্রু নদীর ওপর নির্মিত ভারতের বৃহত্তম বহুমুখী নদী উপত্যকা পরিকল্পনা 'ভাকরা-নাঙ্গাল' কোন কোন রাজ্যের যৌথ প্রয়াস?",
+        opts: ["উত্তরপ্রদেশ ও বিহার", "পাঞ্জাব, হরিয়ানা ও রাজস্থান", "হিমাচল প্রদেশ ও উত্তরাখণ্ড", "মধ্যপ্রদেশ ও গুজরাট"],
+        ans: 1,
+        tag: "Geography - ভাকরা-নাঙ্গাল",
+        exp: "ভাকরা-নাঙ্গাল পরিকল্পনাটি উত্তর-পশ্চিম ভারতের তিনটি রাজ্য—পাঞ্জাব, হরিয়ানা এবং রাজস্থানের একটি অতি গুরুত্বপূর্ণ যৌথ বহুমুখী প্রকল্প।",
+        special: "💡 এই প্রকল্পের মাধ্যমে উৎপাদিত বিদ্যুৎ ও সেচের জল এই তিন রাজ্যের শিল্প ও সবুজ বিপ্লবের মূল চালিকাশক্তি হিসেবে কাজ করে।"
+    },
+    {
+        q: "ভাকরা ও নাঙ্গাল প্রকৃতপক্ষে দুটি ভিন্ন বাঁধ। এদের ভৌগোলিক অবস্থান ও চরিত্র সম্পর্কে কোন তথ্যটি সঠিক?",
+        opts: ["দুটি বাঁধই পাঞ্জাবে অবস্থিত", "ভাকরা বাঁধটি হিমাচল প্রদেশে এবং নাঙ্গাল বাঁধটি পাঞ্জাবে অবস্থিত", "ভাকরা বাঁধটি শতদ্রু নদীতে ও নাঙ্গাল বাঁধটি বিপাশা নদীতে অবস্থিত", "দুটি বাঁধই মূলত মাটির তৈরি বাঁধ"],
+        ans: 1,
+        tag: "Geography - ভাকরা ও নাঙ্গাল",
+        exp: "ভাকরা বাঁধটি হিমাচল প্রদেশের বিলাসপুর জেলায় শতদ্রু নদীর ওপর অবস্থিত এবং এর প্রায় ১৩ কিমি নিচের দিকে পাঞ্জাবের নাঙ্গাল নামক স্থানে নাঙ্গাল ড্যামটি গড়ে উঠেছে।",
+        special: "💡 ভাকরা হলো জল মজুত করার মূল ড্যাম আর নাঙ্গাল হলো মূলত ভাকরা থেকে ছাড়া অতিরিক্ত জলের ভারসাম্য বজায় রাখার ও সেচখাল নিয়ন্ত্রণ করার ব্যারেজ।"
+    },
+    {
+        q: "ওড়িশার মহানদীর ওপর নির্মিত ভারতের দীর্ঘতম নদী পরিকল্পনা 'হীরাকুঁদ'-এর মূল বাঁধটির দৈর্ঘ্য কত কিলোমিটার?",
+        opts: ["১৫ কিমি", "৪.৮ কিমি", "২৫.৮ কিমি", "১২.৪ কিমি"],
+        ans: 1,
+        tag: "Geography - হীরাকুঁদ",
+        exp: "ওড়িশার সম্বলপুরের কাছে মহানদীর ওপর নির্মিত হীরাকুঁদ বাঁধের মূল কাঠামোর দৈর্ঘ্য ৪.৮ কিমি। তবে পার্শ্ববর্তী মাটির বাঁধ বা ডাইকসহ এর মোট দৈর্ঘ্য ২৫.৮ কিমি।",
+        special: "💡 ১৯৫৭ সালে পণ্ডিত জওহরলাল নেহরু এই বাঁধটির উদ্বোধন করেন। হীরাকুঁদ জলাশয়টি এশিয়ার অন্যতম বৃহত্তম কৃত্রিম হ্রদ এবং এটি একটি সংরক্ষিত রামসার সাইট।"
+    },
+    {
+        q: "চম্বল নদী উপত্যকা পরিকল্পনা ভারতের কোন দুটি রাজ্যের একটি অন্যতম গুরুত্বপূর্ণ যৌথ উদ্যোগ?",
+        opts: ["রাজস্থান ও উত্তরপ্রদেশ", "রাজস্থান ও মধ্যপ্রদেশ", "মধ্যপ্রদেশ ও গুজরাট", "পাঞ্জাব ও হরিয়ানা"],
+        ans: 1,
+        tag: "Geography - চম্বল উপত্যকা",
+        exp: "যমুনার উপনদী চম্বল নদীর ওপর রাজস্থান ও মধ্যপ্রদেশের সীমানায় ১৯৫৪ সালে এই নদী পরিকল্পনার কাজ শুরু হয়।",
+        special: "💡 এই পরিকল্পনার প্রধান লক্ষ্য ছিল মালভূমি অঞ্চলের মাটির ক্ষয় বা গালি ক্ষয় (Gully Erosion) রোধ করা এবং বিদ্যুৎ ও সেচের জল সরবরাহ করা।"
+    },
+    {
+        q: "চম্বল নদী পরিকল্পনার অধীনে মধ্যপ্রদেশে চম্বল নদীর ওপর নির্মিত প্রথম ও প্রধান বাঁধটির নাম কী?",
+        opts: ["রাণা প্রতাপ সাগর বাঁধ", "গান্ধী সাগর বাঁধ", "জওহর সাগর বাঁধ", "কোটা ব্যারেজ"],
+        ans: 1,
+        tag: "Geography - গান্ধী সাগর",
+        exp: "১৯৫৭ সালে মধ্যপ্রদেশের মান্দসৌর জেলায় চম্বল নদীর ওপর নির্মিত গান্ধী সাগর বাঁধটি হলো এই পরিকল্পনার প্রথম ও বৃহত্তম প্রধান বাঁধ।",
+        special: "💡 এই বাঁধের পেছনে গঠিত কৃত্রিম জলাশয়টি গান্ধী সাগর নামেই পরিচিত, যা মধ্যপ্রদেশের অন্যতম প্রধান পর্যটন ও মৎস্য চাষের কেন্দ্র।"
+    },
+    {
+        q: "রাজস্থানে চম্বল নদীর ওপর নির্মিত অত্যন্ত বিখ্যাত দুটি বাঁধ কোনটি কোনটি?",
+        opts: ["গান্ধী সাগর ও উমিয়াম বাঁধ", "রাণা প্রতাপ সাগর ও জওহর সাগর বাঁধ", "উকাই ও ধরোই বাঁধ", "সালাল ও ডুলহস্তি বাঁধ"],
+        ans: 1,
+        tag: "Geography - রাণা প্রতাপ ও জওহর সাগর",
+        exp: "রাজস্থানের চিত্তোরগড় জেলায় রাণা প্রতাপ সাগর এবং কোটা জেলায় জওহর সাগর (কোটা ড্যাম) চম্বল নদীর ওপর নির্মিত হয়েছে।",
+        special: "💡 রাণা প্রতাপ সাগর বাঁধের জলবিদ্যুৎ উৎপাদন ক্ষমতা চমৎকার এবং এর পাশেই ভারতের বিখ্যাত রাওয়াতভাটা পারমাণবিক বিদ্যুৎ কেন্দ্রটি অবস্থিত।"
+    },
+    {
+        q: "রাজস্থানের চম্বল নদীর ওপর মূলত সেচকাজ নিয়ন্ত্রণের জন্য নির্মিত বিখ্যাত ব্যারেজ বা বাঁধটির নাম কী?",
+        opts: ["জওহর সাগর", "কোটা ব্যারেজ", "গান্ধী সাগর", "মেতুর বাঁধ"],
+        ans: 1,
+        tag: "Geography - কোটা ব্যারেজ",
+        exp: "রাজস্থানের কোটা শহরে অবস্থিত কোটা ব্যারেজটি চম্বল পরিকল্পনার চতুর্থ ধাপ। এর প্রধান কাজ হলো জলবিদ্যুৎ কেন্দ্রের জল ছেড়ে দিয়ে খালের মাধ্যমে রাজস্থান ও মধ্যপ্রদেশের কৃষিজমিতে সেচ দেওয়া।",
+        special: "💡 কোটা ব্যারেজের চমৎকার জল ছাড়ার দৃশ্য দেখতে বর্ষাকালে বহু পর্যটক ভিড় করেন।"
+    },
+    {
+        q: "শতদ্রু ও বিপাশা নদীর মিলনস্থলে পাঞ্জাবের 'হরিকে ব্যারেজ' থেকে উৎপন্ন হওয়া ভারতের দীর্ঘতম সেচখালটির নাম কী?",
+        opts: ["সারদা খাল", "ইন্দিরা গান্ধী খাল", "ইডেন খাল", "মেদিনীপুর খাল"],
+        ans: 1,
+        tag: "Geography - ইন্দিরা গান্ধী খাল",
+        exp: "পাঞ্জাবের হরিকে ব্যারেজ থেকে উৎপন্ন ইন্দিরা গান্ধী খাল (পূর্বতন রাজস্থান ক্যানেল) হলো ভারতের দীর্ঘতম সেচখাল (দৈর্ঘ্য প্রায় ৬৫০ কিমি)।",
+        special: "💡 এই খালের জলের সাহায্যেই রাজস্থানের শুষ্ক থর মরুভূমি অঞ্চলের গঙ্গানগর, বিকানের ও জয়সলমের জেলায় মরুভূমি সবুজায়নের রূপ পেয়েছে।"
+    },
+    {
+        q: "সোন নদীর ওপর নির্মিত মধ্যপ্রদেশের বিখ্যাত বহুমুখী নদী পরিকল্পনার নাম কী?",
+        opts: ["রিহান্দ প্রকল্প", "বাণসাগর প্রকল্প", "গান্ধী সাগর", "হীরাকুঁদ"],
+        ans: 1,
+        tag: "Geography - বাণসাগর",
+        exp: "গঙ্গার ডানতীরের উপনদী সোন নদীর ওপর মধ্যপ্রদেশের শাহদোল জেলায় বাণসাগর বাঁধ ও বহুমুখী নদী পরিকল্পনা গড়ে তোলা হয়েছে।",
+        special: "💡 এটি মধ্যপ্রদেশ, উত্তরপ্রদেশ ও বিহারের একটি অত্যন্ত লাভজনক যৌথ নদী প্রকল্প। প্রাচীন সংস্কৃত কবি বাণভট্টের নামানুসারে এর নাম বাণসাগর রাখা হয়েছে।"
+    },
+    {
+        q: "কৃষ্ণা নদীর ওপর নির্মিত তেলেঙ্গানা ও অন্ধ্রপ্রদেশের বিখ্যাত ঐতিহাসিক বহুমুখী নদী পরিকল্পনার নাম কী?",
+        opts: ["আলমাট্টি বাঁধ", "নাগার্জুন সাগর বহুমুখী পরিকল্পনা", "মেতুর বাঁধ", "তুঙ্গভদ্রা প্রকল্প"],
+        ans: 1,
+        tag: "Geography - নাগার্জুন সাগর",
+        exp: "কৃষ্ণা নদীর ওপর অন্ধ্রপ্রদেশ ও তেলেঙ্গানা সীমান্তে অবস্থিত নাগার্জুন সাগর হলো ভারতের অন্যতম বৃহত্তম এবং প্রথম যুগের রাজমিস্ত্রির গাঁথনি বা পাথরের তৈরি বাঁধ।",
+        special: "💡 প্রাচীন বৌদ্ধ পণ্ডিত ও দার্শনিক 'নাগার্জুন'-এর নামানুসারে এই প্রকল্পের নামকরণ করা হয়েছে।"
+    },
+    {
+        q: "কোন নদীর ওপর কর্ণাটকের বিখ্যাত 'শিবসমুদ্রম' বহুমুখী পরিকল্পনা ও জলবিদ্যুৎ কেন্দ্রটি অবস্থিত?",
+        opts: ["কৃষ্ণা নদী", "কাবেরী নদী", "গোদাবরী নদী", "তুঙ্গভদ্রা নদী"],
+        ans: 1,
+        tag: "Geography - শিবসমুদ্রম",
+        exp: "কর্ণাটকে কাবেরী নদীর ওপর শিবসমুদ্রম জলপ্রপাতের জলশক্তিকে কাজে লাগিয়ে ১৯০২ সালে শিবসমুদ্রম জলবিদ্যুৎ পরিকল্পনা শুরু হয়।",
+        special: "💡 এটি এশিয়ার অন্যতম প্রথম এবং ভারতের প্রথম সফল বাণিজ্যিক জলবিদ্যুৎ প্রকল্প, যা কর্ণাটকের কোলার গোল্ড ফিল্ডস বা সোনার খনিতে প্রথম বিদ্যুৎ সরবরাহ করত।"
+    },
+    {
+        q: "ভারতের গুজরাটে নর্মদা নদীর ওপর নির্মিত ভারতের অন্যতম বিতর্কিত ও বৃহত্তম বাঁধটির নাম কী?",
+        opts: ["উকাই বাঁধ", "সর্দার সরোবর বাঁধ", "কদানা বাঁধ", "গান্ধী সাগর"],
+        ans: 1,
+        tag: "Geography - সর্দার সরোবর",
+        exp: "গুজরাটের নবগামের কাছে নর্মদা নদীর ওপর সর্দার সরোবর বাঁধ নির্মিত হয়েছে, যার মূল উদ্দেশ্য গুজরাটের খরাপ্রবণ কচ্ছ ও সৌরাষ্ট্র অঞ্চলে সেচ প্রদান করা।",
+        special: "💡 এটি ভারতের দ্বিতীয় বৃহত্তম কংক্রিটের তৈরি গ্র্যাভিটি ড্যাম। এই বাঁধ নির্মাণের ফলে বন্য ও বনাঞ্চল ধ্বংস এবং আদিবাসীদের উচ্ছেদের প্রতিবাদেই ১৯৮৫ সালে মেধা পাটকরের নেতৃত্বে 'নর্মদা বাঁচাও আন্দোলন' শুরু হয়েছিল।"
+    },
+    {
+        q: "মহানদীর ওপর ওড়িশার সম্বলপুরের কাছে নির্মিত হীরাকুঁদ বাঁধের আদি পরিকল্পনা ও প্রস্তাবনা ১৯৩৭ সালে কে করেছিলেন?",
+        opts: ["পণ্ডিত জওহরলাল নেহরু", "স্যার মোক্ষগুণ্ডম বিশ্বেশ্বরাইয়া", "ড. বি আর আম্বেদকর", "সর্দার বল্লভভাই প্যাটেল"],
+        ans: 1,
+        tag: "Geography - বিশ্বেশ্বরাইয়া",
+        exp: "ওড়িশার প্রলয়ংকরী বন্যা রোধ করার জন্য ভারতের মহান প্রকৌশলী স্যার এম. বিশ্বেশ্বরাইয়া ১৯৩৭ সালে মহানদীর ওপর বাঁধ দেওয়ার আদি পরিকল্পনা ও খসড়া তৈরি করেছিলেন।",
+        special: "💡 তাঁর জন্মদিন ১৫ই সেপ্টেম্বরকে ভারতে প্রতি বছর অত্যন্ত শ্রদ্ধার সাথে \"প্রকৌশলী দিবস\" বা 'Engineers' Day' হিসেবে পালন করা হয়।"
+    },
+    {
+        q: "উত্তরপ্রদেশের সোনভদ্র জেলায় সোন নদীর উপনদী রিহান্দ নদীর ওপর নির্মিত 'রিহান্দ বাঁধ' প্রকল্পটির জলাশয়টি কী নামে পরিচিত?",
+        opts: ["গোবিন্দ সাগর", "গোবিন্দ বল্লভ পন্থ সাগর", "রানা প্রতাপ সাগর", "নিজাম সাগর"],
+        ans: 1,
+        tag: "Geography - গোবিন্দ বল্লভ পন্থ সাগর",
+        exp: "রিহান্দ বাঁধ নির্মাণের ফলে গঠিত সুবিশাল জলাশয়টির নাম উত্তরপ্রদেশের প্রথম মুখ্যমন্ত্রী গোবিন্দ বল্লভ পন্থের নামানুসারে রাখা হয়েছে।",
+        special: "💡 এটি আয়তনের বিচারে ভারতের বৃহত্তম কৃত্রিম মিষ্টি জলের হ্রদ বা জলাশয়, যা মধ্যপ্রদেশ ও উত্তরপ্রদেশ সীমান্তে অবস্থিত।"
+    },
+    {
+        q: "মহানদীর ওপর নির্মিত হীরাকুঁদ বহুমুখী নদী পরিকল্পনার জলবিদ্যুৎ উৎপাদন ক্ষমতা বাড়াতে কোন নদীর ওপর আরেকটি সহ-প্রকল্প গড়ে তোলা হয়েছে?",
+        opts: ["তেল নদী", "চিপলিমা জলবিদ্যুৎ প্রকল্প", "হাসদো নদী", "বৈতরণী নদী"],
+        ans: 1,
+        tag: "Geography - চিপলিমা",
+        exp: "হীরাকুঁদ বাঁধ থেকে নির্গত অতিরিক্ত জলপ্রবাহকে কাজে লাগিয়ে ওড়িশার সম্বলপুরের কাছে চিপলিমা নামক স্থানে আরেকটি জলবিদ্যুৎ প্রকল্প গড়ে তোলা হয়েছে।",
+        special: "💡 চিপলিমা ও হীরাকুঁদ যৌথভাবে ওড়িশার শিল্প ও খনি অঞ্চলে বিদ্যুৎ সরবরাহের প্রধান নির্ভরযোগ্য উৎস।"
+    },
+    {
+        q: "কৃষ্ণা নদীর উপনদী তুঙ্গভদ্রা নদীর ওপর নির্মিত 'তুঙ্গভদ্রা বহুমুখী নদী পরিকল্পনা' কোন দুটি রাজ্যের যৌথ প্রয়াস?",
+        opts: ["তামিলনাড়ু ও কেরল", "অন্ধ্রপ্রদেশ ও কর্ণাটক", "মহারাষ্ট্র ও গুজরাট", "ওড়িশা ও ছত্তিশগড়"],
+        ans: 1,
+        tag: "Geography - তুঙ্গভদ্রা",
+        exp: "কর্ণাটকের হোসপেটের কাছে তুঙ্গভদ্রা নদীর উপর নির্মিত এই বাঁধটি কর্ণাটক ও অন্ধ্রপ্রদেশের খরাপ্রবণ রায়ালসীমা অঞ্চলের জলসেচ ও বিদ্যুৎ সমস্যার চমৎকার সমাধান করেছে।",
+        special: "💡 তুঙ্গভদ্রা নদীটি প্রাচীন বিজয়নগর সাম্রাজ্যের লীলাভূমি ছিল এবং এর তীরে বিখ্যাত বিশ্ব ঐতিহ্যবাহী স্থান 'হাম্পি' অবস্থিত।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (২০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History Test 6 - Vedangas, Shadadarshan & Vedic Society</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+--primary: #1a7a4a;
+--primary-hover: #2aad68;
+--accent: #f9a825;
+--bg-main: #f0faf4;
+--bg-card: #ffffff;
+--text-main: #1c2e24;
+--text-meta: #5a7a66;
+--border-color: #c5dccb;
+--success: #28a745;
+--danger: #dc3545;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+.bn-font { font-family: 'Tiro Bangla', serif; }
+
+.navbar { background: var(--primary); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.logo span { color: var(--accent); }
+.timer-box { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 8px; color: white; font-weight: 800; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 6px; font-family: 'Syne'; }
+.timer-box.danger { background: var(--danger); border-color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.2rem 0.9rem; }
+
+.progress-wrap { background: white; border-radius: 10px; padding: 10px 14px; margin-bottom: 1rem; border: 2px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 7px; font-family: 'Tiro Bangla', serif; font-weight: 700; font-size: 0.82rem; flex-wrap: wrap; gap: 6px; }
+.progress-info .q-counter { color: var(--primary); font-size: 0.88rem; }
+.progress-info .score-live { color: var(--text-meta); }
+.progress-bar-bg { background: var(--bg-main); height: 7px; border-radius: 50px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+.q-card { background: white; border-radius: 14px; padding: 1.2rem 1rem; border: 2px solid var(--border-color); box-shadow: 0 6px 20px rgba(26,122,74,0.06); animation: slideIn 0.4s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 2px dashed var(--border-color); flex-wrap: wrap; gap: 8px; }
+.q-num { font-family: 'Tiro Bangla', serif; font-size: 0.92rem; font-weight: 800; color: var(--primary); }
+.q-tag { font-family: 'Tiro Bangla', serif; font-size: 0.72rem; background: var(--bg-main); color: var(--primary); padding: 3px 9px; border-radius: 50px; font-weight: 700; }
+
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.55; margin-bottom: 1.2rem; }
+
+.opts { display: grid; grid-template-columns: 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 0.7rem 0.85rem; border: 2px solid var(--border-color); border-radius: 10px; background: #fdfdfd; cursor: pointer; transition: all 0.2s; }
+.opt:hover:not(.disabled) { border-color: var(--primary); background: var(--bg-main); }
+.opt.selected { border-color: var(--primary); background: var(--bg-main); }
+.opt.correct { border-color: var(--success) !important; background: #f0fdf4 !important; }
+.opt.wrong { border-color: var(--danger) !important; background: #fef2f2 !important; }
+.opt.disabled { cursor: not-allowed; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text-meta); flex-shrink: 0; background: white; transition: 0.2s; font-family: 'Syne'; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--text-main); line-height: 1.45; font-weight: 600; padding-top: 3px; word-break: break-word; }
+.opt.selected .opt-circle { background: var(--primary); border-color: var(--primary); color: white; }
+.opt.correct .opt-circle { background: var(--success) !important; border-color: var(--success) !important; color: white !important; }
+.opt.wrong .opt-circle { background: var(--danger) !important; border-color: var(--danger) !important; color: white !important; }
+
+.explanation { background: var(--bg-main); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 0.9rem 1rem; margin-top: 1rem; display: none; animation: fadeIn 0.4s ease; }
+.explanation.show { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.explanation-title { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; flex-wrap: wrap; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 5px; word-break: break-word; }
+.explanation .special-note { background: white; border-radius: 7px; padding: 8px 10px; margin-top: 8px; font-size: 0.82rem; border: 1px dashed var(--border-color); font-family: 'Tiro Bangla', serif; line-height: 1.6; word-break: break-word; }
+
+.next-btn { width: 100%; background: var(--primary); color: white; padding: 13px; font-size: 1rem; border: none; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(26,122,74,0.25); margin-top: 1rem; }
+.next-btn:hover:not(:disabled) { background: var(--primary-hover); }
+.next-btn:disabled { background: #b0b8b3; cursor: not-allowed; box-shadow: none; }
+
+.result-wrap { background: white; border-radius: 16px; padding: 2rem 1.2rem; text-align: center; border: 2px solid var(--border-color); display: none; box-shadow: 0 12px 30px rgba(26,122,74,0.1); animation: slideIn 0.5s ease; }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.result-score { font-size: 3rem; font-weight: 900; color: var(--primary); font-family: 'Syne'; }
+.result-total { font-size: 0.95rem; color: var(--text-meta); font-family: 'Tiro Bangla', serif; font-weight: bold; margin-bottom: 1.5rem; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 12px; padding: 1rem 0.7rem; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 900; font-family: 'Syne'; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.82rem; color: var(--text-meta); font-weight: bold; margin-top: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { padding: 13px; border-radius: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; }
+.btn-review { background: var(--success); color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color) !important; }
+.btn-home:hover { background: var(--bg-main); }
+
+.warning-modal { position: fixed; inset: 0; background: rgba(28,46,36,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 300; padding: 15px; }
+.warning-modal.show { display: flex; }
+.warning-box { background: white; border-radius: 14px; padding: 1.5rem; max-width: 360px; text-align: center; border: 2px solid var(--primary); }
+.warning-box .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.warning-box h3 { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--primary); margin-bottom: 8px; }
+.warning-box p { font-family: 'Tiro Bangla', serif; font-size: 0.88rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
+.warning-box button { padding: 10px 22px; border: none; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.9rem; font-weight: bold; cursor: pointer; margin: 4px; }
+.warning-box .btn-ok { background: var(--primary); color: white; }
+.warning-box .btn-cancel { background: transparent; color: var(--text-meta); border: 2px solid var(--border-color); }
+
+@media (max-width: 480px) {
+.navbar { padding: 0.65rem 0.8rem; }
+.logo { font-size: 1.05rem; }
+.timer-box { padding: 5px 11px; font-size: 0.85rem; }
+.container { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; border-radius: 12px; }
+.q-text { font-size: 0.95rem; line-height: 1.55; margin-bottom: 1rem; }
+.opt { padding: 0.65rem 0.75rem; gap: 9px; }
+.opt-circle { min-width: 26px; height: 26px; font-size: 12px; }
+.opt-text { font-size: 0.85rem; line-height: 1.45; }
+.explanation { padding: 0.8rem 0.85rem; }
+.explanation p { font-size: 0.82rem; line-height: 1.55; }
+.explanation .special-note { font-size: 0.78rem; padding: 7px 9px; }
+.explanation-title { font-size: 0.82rem; }
+.next-btn { padding: 12px; font-size: 0.95rem; }
+.result-icon { font-size: 3rem; }
+.result-score { font-size: 2.5rem; }
+}
+
+@media (max-width: 360px) {
+.q-text { font-size: 0.9rem; }
+.opt-text { font-size: 0.82rem; }
+.explanation p { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" onclick="confirmExit()">Test<span>Bazar</span></div>
+    <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">20:00</span></div>
+</nav>
+
+<div class="container" id="mainContainer">
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-info">
+            <span class="q-counter bn-font" id="qCounter">প্রশ্ন ১ / ২০</span>
+            <span class="score-live bn-font" id="scoreLive">সঠিক: ০ · ভুল: ০</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+        <div class="q-header">
+            <span class="q-num" id="qNum">প্রশ্ন ১</span>
+            <span class="q-tag" id="qTag">History</span>
+        </div>
+        <div class="q-text" id="qText">প্রশ্ন লোড হচ্ছে...</div>
+        <div class="opts" id="optsBox"></div>
+        <div class="explanation" id="explanation">
+            <div class="explanation-title">✅ সঠিক উত্তর: <span id="correctAnsLabel"></span></div>
+            <p id="expMain"></p>
+            <div class="special-note" id="expSpecial"></div>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="goNext()" disabled>পরবর্তী প্রশ্ন →</button>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="result-total bn-font" id="finalTotal">মোট প্রাপ্ত নম্বর</div>
+        <div class="result-bars">
+            <div class="result-bar">
+                <div class="rb-num" id="rbCorrect" style="color:var(--success)">0</div>
+                <div class="rb-label">সঠিক উত্তর</div>
+            </div>
+            <div class="result-bar">
+                <div class="rb-num" id="rbWrong" style="color:var(--danger)">0</div>
+                <div class="rb-label">ভুল উত্তর</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="btn-review" onclick="showFullReview()">👀 সম্পূর্ণ রিভিউ দেখুন</button>
+            <button class="btn-home" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>
+        </div>
+    </div>
+</div>
+
+<div class="warning-modal" id="warningModal">
+    <div class="warning-box">
+        <div class="icon">⚠️</div>
+        <h3>আপনি কি নিশ্চিত?</h3>
+        <p>টেস্ট ছেড়ে চলে গেলে আপনার অগ্রগতি হারিয়ে যাবে।</p>
+        <button class="btn-cancel" onclick="closeWarning()">বাতিল</button>
+        <button class="btn-ok" onclick="confirmAction()">হ্যাঁ, নিশ্চিত</button>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// HISTORY TEST 6 — বেদাঙ্গ, ষড়দর্শন ও বৈদিক সমাজ
+// Source: প্রশ্ন ২১ - ৪০
+// প্রশ্ন নম্বর বাদ — শুধু প্রশ্ন
+// ইংরেজি বন্ধনী বাদ — শুধু বাংলা
+// ============================================================
+const questions = [
+    {
+        q: "বৈদিক সাহিত্যকে নির্ভুলভাবে উচ্চারণ করতে, পাঠ করতে এবং যাগযজ্ঞ সঠিক পদ্ধতিতে পালন করতে মোট কয়টি 'বেদাঙ্গ'-এর প্রয়োজন হয়?",
+        opts: ["৪টি", "৬টি", "৮টি", "১০টি"],
+        ans: 1,
+        tag: "History - বেদাঙ্গ",
+        exp: "বৈদিক সাহিত্য বিশাল ও জটিল হয়ে উঠলে তা শুদ্ধভাবে পাঠ করা ও যাগযজ্ঞ নির্ভুলভাবে পালনের জন্য ৬টি বেদাঙ্গের সৃষ্টি হয়।",
+        special: "💡 এই ছয়টি বেদাঙ্গ হলো— ① শিক্ষা, ② ছন্দ, ③ ব্যাকরণ, ④ নিরুক্ত, ⑤ জ্যোতিষ এবং ⑥ কল্প।"
+    },
+    {
+        q: "উপনিষদের পরম আধ্যাত্মিক ও গভীর তত্ত্বগুলির যৌক্তিক আলোচনা ও ব্যাখ্যা থেকে প্রাচীন ভারতের কোন ব্যবস্থার উৎপত্তি হয়েছিল?",
+        opts: ["বেদাঙ্গ", "উপবেদ", "ষড়দর্শন", "সূত্র-সাহিত্য"],
+        ans: 2,
+        tag: "History - ষড়দর্শন",
+        exp: "উপনিষদের গভীর দার্শনিক তত্ত্বগুলির আলোচনা ও ধারাবাহিক ব্যাখ্যা থেকেই প্রাচীন ভারতীয় 'ষড়দর্শন' বা ছয়টি দর্শনের উৎপত্তি হয়েছিল।",
+        special: "💡 এই ষড়দর্শনের মূল ছয়টি শাখা হলো— ① সাংখ্য, ② যোগ, ③ ন্যায়, ④ বৈশেষিক, ⑤ পূর্ব মীমাংসা এবং ⑥ উত্তর মীমাংসা।"
+    },
+    {
+        q: "ভারতীয় প্রাচীন দর্শনের অন্যতম গভীর ও প্রখ্যাত শাখা 'মীমাংসা দর্শন'-এর প্রধান স্রষ্টা কে ছিলেন?",
+        opts: ["কপিল মুনি", "মহর্ষি জৈমিনি", "মহর্ষি গৌতম", "মহর্ষি কণাদ"],
+        ans: 1,
+        tag: "History - জৈমিনি",
+        exp: "প্রাচীন ভারতীয় মীমাংসা দর্শনের (বা পূর্ব মীমাংসার) প্রধান স্রষ্টা বা রচয়িতা ছিলেন মহর্ষি 'জৈমিনি'।",
+        special: "💡 অন্যদিকে, কপিল মুনি 'সাংখ্য দর্শন', মহর্ষি গৌতম 'ন্যায় দর্শন' এবং মহর্ষি কণাদ 'বৈশেষিক দর্শন'-এর প্রবক্তা ছিলেন।"
+    },
+    {
+        q: "আর্যদের জীবনের সুশৃঙ্খল চারিত্রিক বিকাশের জন্য বৈদিক সমাজে প্রচলিত 'চতুরাশ্রম'-এর ৪টি পর্যায় ক্রমানুসারে কোনটি সঠিক?",
+        opts: ["গার্হস্থ্য ➔ ব্রহ্মচর্য ➔ বানপ্রস্থ ➔ সন্ন্যাস", "ব্রহ্মচর্য ➔ গার্হস্থ্য ➔ বানপ্রস্থ ➔ সন্ন্যাস", "ব্রহ্মচর্য ➔ বানপ্রস্থ ➔ গার্হস্থ্য ➔ সন্ন্যাস", "ব্রহ্মচর্য ➔ গার্হস্থ্য ➔ সন্ন্যাস ➔ বানপ্রস্থ"],
+        ans: 1,
+        tag: "History - চতুরাশ্রম",
+        exp: "বৈদিক সমাজের অন্যতম প্রধান বৈশিষ্ট্য ছিল 'চতুরাশ্রম'। এর সঠিক ক্রমানুসার হলো— প্রথম জীবনে ব্রহ্মচর্য (গুরুগৃহে বিদ্যাচর্চা), তারপর গার্হস্থ্য (সংসার ধর্ম), পরবর্তীতে বানপ্রস্থ (সংসার ত্যাগ) এবং শেষ জীবনে সন্ন্যাস (পরমাত্মার চিন্তা)।",
+        special: "💡 এটি মূলত একজন মানুষের ১০০ বছরের আয়ুকে ২৫ বছর করে ৪টি ভাগে ভাগ করে পরিকল্পিত জীবনযাপনের একটি প্রাচীন সামাজিক রূপরেখা ছিল।"
+    },
+    {
+        q: "বৈদিক যুগের সামাজিক চতুর্বর্ণ প্রথার মধ্যে কোন বিশেষ সামাজিক শ্রেণীটি বাকি ৩টি শ্রেণীকে সার্বিকভাবে সেবা করার দায়িত্বে ছিল?",
+        opts: ["ব্রাহ্মণ", "ক্ষত্রিয়", "বৈশ্য", "শূদ্র"],
+        ans: 3,
+        tag: "History - শূদ্র",
+        exp: "আর্যদের চতুর্বর্ণের চার নম্বর স্তরটি ছিল 'শূদ্র'। তারা মূলত সমাজে ওপরের তিনটি শ্রেণীকে (ব্রাহ্মণ, ক্ষত্রিয় ও বৈশ্য) সেবা করত।",
+        special: "💡 ব্রাহ্মণরা ছিলেন পুরোহিত, ক্ষত্রিয়রা ছিলেন যোদ্ধা এবং বৈশ্যদের মূলত বণিক, কৃষক ও পশুপালক।"
+    },
+    {
+        q: "বৈদিক যুগের অর্থনৈতিক কাঠামো ও ব্যবসা-বাণিজ্যে প্রচলিত বিনিময় প্রথার প্রধান বা মূল মাধ্যম কোনটি ছিল?",
+        opts: ["তামা", "গোরু", "রূপার পাত্র", "রেশম"],
+        ans: 1,
+        tag: "History - গোরু",
+        exp: "বৈদিক যুগে মুদ্রার প্রচলন কম থাকায় কেনাবেচা এবং বিভিন্ন বাণিজ্যিক বা লেনদেনের বিনিময় প্রথার প্রধান মাধ্যম ছিল 'গোরু'।",
+        special: "💡 গোরুকে বৈদিক সমাজে অত্যন্ত পবিত্র ও মূল্যবান সম্পদ মনে করা হতো। যার গোয়ালে যত বেশি গোরু থাকত, তাকে তত ধনী মনে করা হতো।"
+    },
+    {
+        q: "আর্য সমাজের শাসনব্যবস্থার সর্বনিম্ন বা প্রাথমিক স্তরে থাকা \"গ্রামের শাসনকর্তা বা প্রধান\"-কে কী বলা হতো?",
+        opts: ["বিশপতি", "গোপ", "গ্রামণী", "রাজন"],
+        ans: 2,
+        tag: "History - গ্রামণী",
+        exp: "আর্য সমাজে প্রশাসনিকভাবে গ্রামের প্রধানকে 'গ্রামণী' বলা হতো।",
+        special: "💡 এই গ্রামণীরাই গ্রামীণ এলাকার আইন-শৃঙ্খলা ও রাজস্ব সংগ্রহের প্রাথমিক কাজ তদারকি করতেন।"
+    },
+    {
+        q: "বৈদিক সমাজে কয়েকটি গ্রামের সমন্বয়ে কোন বৃহৎ প্রশাসনিক কাঠামো গড়ে উঠত, যার প্রধানকে 'বিশপতি' বলা হতো?",
+        opts: ["জন", "বিশ", "সভা", "রাজন"],
+        ans: 1,
+        tag: "History - বিশ",
+        exp: "আর্য সমাজে কয়েকটি ছোট গ্রাম বা এলাকা নিয়ে গড়ে উঠত 'বিশ' অথবা 'জন'। এই বিশের প্রধান বা শাসনকর্তাকে 'বিশপতি' বলা হতো।",
+        special: "💡 অন্যদিকে জনের প্রধানকে 'গোপ' বলা হতো এবং সাধারণভাবে প্রচলিত শাসনব্যবস্থাটি ছিল রাজতান্ত্রিক।"
+    },
+    {
+        q: "আর্যদের রাজনৈতিক শাসন ব্যবস্থায় রাজাকে (রাজন) সুপরামর্শ দানকারী বয়োজ্যেষ্ঠ ও জ্ঞান-বৃদ্ধদের পবিত্র পরিষদটির নাম কী ছিল?",
+        opts: ["সভা", "সমিতি", "বিশ", "গোপ"],
+        ans: 0,
+        tag: "History - সভা",
+        exp: "বৈদিক রাজার শাসন পরিচালনার সুবিধার জন্য দুটি পরিষদ ছিল। এর মধ্যে 'সভা' ছিল সমাজের বয়োজ্যেষ্ঠ ও অত্যন্ত জ্ঞানী-বৃদ্ধদের বিশেষ রাজনৈতিক প্রতিষ্ঠান।",
+        special: "💡 অন্যদিকে, 'সমিতি' ছিল বৈদিক যুগের সাধারণ মানুষের বা সর্বসাধারণের জাতীয় পরিষদ।"
+    },
+    {
+        q: "ঋগ্বেদে আর্যদের সমাজ ও দৈনন্দিন জীবনধারায় 'গাভিষ্টি' শব্দটি মূলত কোন ক্ষেত্রটিকে নির্দেশ করে?",
+        opts: ["নতুন গোরু খোঁজা", "যুদ্ধ", "বৃহৎ যজ্ঞ", "শস্য সংগ্রহ"],
+        ans: 1,
+        tag: "History - গাভিষ্টি",
+        exp: "ঋগ্বেদে আর্যদের মধ্যে ঘটা পারস্পরিক বা বহিঃশত্রুর সাথে লড়াই বা যুদ্ধের নাম ছিল 'গাভিষ্টি'।",
+        special: "💡 গাভিষ্টি শব্দটির আক্ষরিক অর্থ হলো \"গোরুর অনুসন্ধান\"। গোরু দখল করাকে কেন্দ্র করেই মূলত বৈদিক যুগের অধিকাংশ যুদ্ধ বা লড়াই সংঘটিত হতো।"
+    },
+    {
+        q: "ঋগ্বেদিক আর্যদের সবচেয়ে জনপ্রিয় ও প্রধান দেবতা কে ছিলেন, যাঁকে বৃষ্টি ও বজ্রের দেবতা বা 'পুরন্দর' বলা হতো?",
+        opts: ["অগ্নি", "ইন্দ্র", "বরুণ", "প্রজাপতি"],
+        ans: 1,
+        tag: "History - ইন্দ্র",
+        exp: "ঋগ্বেদিক আর্যদের প্রধান উপাস্য দেবতা ছিলেন দেবরাজ 'ইন্দ্র'। তিনি ছিলেন বৃষ্টি ও বজ্রের দেবতা এবং তাঁকে 'পুরন্দর' বলা হতো।",
+        special: "💡 তবে ঋগ্বেদিক যুগের পরে, অর্থাৎ পরবর্তী বৈদিক যুগে ইন্দ্রের প্রাধান্য হ্রাস পায় এবং প্রধান দেবতা হয়ে ওঠেন 'প্রজাপতি' বা ব্রহ্মা।"
+    },
+    {
+        q: "বৈদিক দেবমণ্ডলীর মধ্যে সবচেয়ে প্রাচীনতম এবং দেবতাদের পরম পিতা বা আকাশের দেবতা হিসেবে কে পূজিত হতেন?",
+        opts: ["দৌঃ", "বরুণ", "অগ্নি", "সূর্য"],
+        ans: 0,
+        tag: "History - দৌঃ",
+        exp: "বৈদিক দেবদেবীদের মধ্যে সবচেয়ে প্রাচীনতম দেবতা হলেন 'দৌঃ'। তাঁকে দেবতাদের পিতা বা দ্যুলোকের পিতা বলে সম্মান জানানো হতো।",
+        special: "💡 দৌঃ ছিলেন মূলত অসীম আকাশের এক আদি দৈব প্রতিরূপ।"
+    },
+    {
+        q: "বৈদিক যুগে মর্ত্যের সাথে স্বর্গের দেবতাদের যোগাযোগের প্রধান মাধ্যম আগুনের দেবতা 'অগ্নি'-র উদ্দেশ্যে ঋগ্বেদে কতগুলি স্তোত্র নিবেদিত রয়েছে?",
+        opts: ["প্রায় ১০০টি", "প্রায় ২০০টি", "প্রায় ৩০০টি", "প্রায় ৫০০টি"],
+        ans: 1,
+        tag: "History - অগ্নি",
+        exp: "বৈদিক দেবতা অগ্নির উদ্দেশ্যে ঋগ্বেদে প্রায় ২০০টি স্তোত্র নিবেদিত হয়েছে।",
+        special: "💡 আর্যদের বিশ্বাস ছিল যে অগ্নিতে আহুতি দেওয়া যজ্ঞের সামগ্রী স্বয়ং অগ্নির মাধ্যমে স্বর্গের দেবতাদের কাছে পৌঁছে যায়।"
+    },
+    {
+        q: "বৈদিক দেবমণ্ডলীর মধ্যে জলের অধিপতি, নৈতিক নিয়মের রক্ষক এবং স্বর্গরাজ্যের পরম সম্রাট হিসেবে কে সুপরিচিত ছিলেন?",
+        opts: ["বায়ু", "মরুৎ", "বরুণ", "ইন্দ্র"],
+        ans: 2,
+        tag: "History - বরুণ",
+        exp: "বৈদিক যুগে জলের দেবতা এবং স্বর্গরাজ্যের সম্রাট হিসেবে 'বরুণ' দেবতাকে পুজো করা হতো।",
+        special: "💡 বরুণ ছিলেন মহাজাগতিক ও নৈতিক নিয়ম 'ঋত'-এর প্রধান নিয়ন্ত্রক।"
+    },
+    {
+        q: "বৈদিক আর্যরা লোহাকে কী নামে ডাকত এবং তাঁদের প্রধান খাদ্যশস্য ধান ও গমকে যথাক্রমে কী বলা হতো?",
+        opts: ["অয়স এবং ব্রীহি ও গোধূম", "তামা এবং সিন্দন ও সিন্দুর", "সীসা এবং যব ও গোধূম", "লৌহ এবং ধান ও গোধূম"],
+        ans: 0,
+        tag: "History - অয়স",
+        exp: "বৈদিক যুগে আর্যরা লোহাকে 'অয়স' বলে অভিহিত করত। এছাড়া আর্যদের প্রধান খাদ্যশস্য হিসেবে ধানকে 'ব্রীহি' এবং গমকে 'গোধূম' বলা হতো।",
+        special: "💡 তাম্র-প্রস্তর যুগের সমাপ্তির পর লোহা বা অয়সের ব্যবহারের ফলে বৈদিক সমাজ ও প্রযুক্তিতে এক বড় অর্থনৈতিক বিপ্লব ঘটেছিল।"
+    },
+    {
+        q: "বৈদিক যুগে ব্যবসা-বাণিজ্যের সুবিধার্থে প্রচলিত দুটি অতি প্রাচীন ও বিখ্যাত স্বর্ণমুদ্রার নাম কী ছিল?",
+        opts: ["পুরাণ ও ধারণ", "নিষ্ক ও মনা", "শতমান ও কৃষ্ণল", "দাদ ও তামা"],
+        ans: 1,
+        tag: "History - নিষ্ক ও মনা",
+        exp: "বৈদিক যুগে প্রচলিত দুটি স্বর্ণমুদ্রা বা সোনার তৈরি অলংকার সদৃশ মুদ্রার নাম ছিল 'নিষ্ক' ও 'মনা'।",
+        special: "💡 এই মুদ্রাগুলি মূলত ওজনের ভিত্তিতে তৈরি হতো এবং রাজকীয় পুরস্কার বা বড় বাণিজ্যে ব্যবহৃত হতো।"
+    },
+    {
+        q: "পরবর্তী বৈদিক যুগে বিনিময় প্রথাকে আরও গতিশীল করার জন্য ব্যবহৃত রূপার মুদ্রাগুলিকে কী বলা হতো?",
+        opts: ["নিষ্ক", "মনা", "ধারণ বা পুরাণ", "কৃষ্ণল"],
+        ans: 2,
+        tag: "History - ধারণ ও পুরাণ",
+        exp: "পরবর্তী বৈদিক যুগে রৌপ্য বা রূপার তৈরি মুদ্রাকে 'ধারণ' বা 'পুরাণ' বলা হতো।",
+        special: "💡 এছাড়া পরবর্তী বৈদিক যুগে কৃষ্ণল এবং শতমান নামক মুদ্রাগুলির প্রচলনও ব্যাপকভাবে বৃদ্ধি পেয়েছিল।"
+    },
+    {
+        q: "যুগের অগ্রগতির নিরিখে সিন্ধু সভ্যতা ও আর্য সভ্যতা যথাক্রমে মানব ইতিহাসের কোন কোন যুগের প্রতিনিধিত্ব করে?",
+        opts: ["তাম্র-প্রস্তর যুগ এবং লৌহ যুগ", "লৌহ যুগ এবং ব্রোঞ্জ যুগ", "প্রস্তর যুগ এবং তাম্র-প্রস্তর যুগ", "ব্রোঞ্জ যুগ এবং প্রস্তর যুগ"],
+        ans: 0,
+        tag: "History - যুগ বিভাজন",
+        exp: "সিন্ধু সভ্যতা ছিল মূলত তাম্র-প্রস্তর যুগের সভ্যতা, যেখানে লোহার ব্যবহার অজানা ছিল। অন্যদিকে আর্য সভ্যতা ছিল সম্পূর্ণভাবে লোহার যুগ বা লৌহ যুগের সভ্যতা।",
+        special: "💡 লোহার ব্যবহারের কারণেই আর্যদের অস্ত্রশস্ত্র অনেক উন্নত ও যুদ্ধমুখী ছিল।"
+    },
+    {
+        q: "সিন্ধু সভ্যতা এবং আর্য সভ্যতার পারিবারিক ও সমাজ কাঠামোর প্রধান পার্থক্য নিচের কোনটি ছিল?",
+        opts: ["সিন্ধু ছিল পিতৃতান্ত্রিক এবং আর্য ছিল মাতৃতান্ত্রিক", "সিন্ধু ছিল মাতৃতান্ত্রিক এবং আর্য ছিল পিতৃতান্ত্রিক", "উভয় সভ্যতাই সম্পূর্ণ গণতান্ত্রিক ছিল", "আর্যরা মাতৃতান্ত্রিক এবং সিন্ধু ছিল সামন্ততান্ত্রিক"],
+        ans: 1,
+        tag: "History - পারিবারিক কাঠামো",
+        exp: "সিন্ধু সভ্যতার পরিবার ও সমাজ মূলত মাতৃতান্ত্রিক ছিল এবং সেখানে মাতৃদেবীর প্রাধান্য ছিল। কিন্তু বৈদিক বা আর্য সভ্যতার সমাজ ছিল কঠোরভাবে পিতৃতান্ত্রিক ও পুরুষপ্রধান।",
+        special: "💡 আর্যদের সমাজে পুরুষ দেবতাদের প্রাধান্য ছিল এবং যজ্ঞ বা ধর্মীয় ক্রিয়াকলাপে পুরুষদের মূল ভূমিকা থাকত।"
+    },
+    {
+        q: "সিন্ধু সভ্যতা ও আর্য সভ্যতার পার্থক্যের ক্ষেত্রে নিচের কোন জোড়টি এবং তার বৈসাদৃশ্যটি সঠিক নয়?",
+        opts: ["সিন্ধুর বাড়ি পোড়া ইটের তৈরি ➔ আর্যের বাড়ি বাঁশ ও খড়ের তৈরি", "সিন্ধুর প্রধান জীবিকা বাণিজ্য ➔ আর্যের প্রধান জীবিকা কৃষিকাজ", "সিন্ধুর ভাষা সংস্কৃত ➔ আর্যের ভাষা সম্ভবত দ্রাবিড়", "সিন্ধুরা মৃতদেহ সমাধিস্থ করত ➔ আর্যরা মৃতদেহ দাহ করত"],
+        ans: 2,
+        tag: "History - ভাষা তুলনা",
+        exp: "সিন্ধু সভ্যতার ভাষা ছিল সম্ভবত দ্রাবিড় এবং আর্য সভ্যতার ভাষা ছিল সুপ্রসিদ্ধ দেবভাষা সংস্কৃত। প্রশ্নে জোড়টি উল্টো দেওয়া রয়েছে, তাই এটি সঠিক নয়।",
+        special: "💡 সিন্ধু সভ্যতা ছিল মূলত একটি সুপরিকল্পিত নগরকেন্দ্রিক সভ্যতা, অন্যদিকে আর্য সভ্যতা গড়ে উঠেছিল নদীমাতৃক গ্রামীণ পটভূমির ওপর ভিত্তি করে।"
+    }
+];
+
+const LABELS = ['A', 'B', 'C', 'D'];
+const TOTAL_TIME = 20 * 60; // ২০ মিনিট (২০ প্রশ্নের জন্য)
+let currentQ = 0;
+let userAnswers = [];
+let score = 0;
+let wrong = 0;
+let timerInterval;
+let timeLeft = TOTAL_TIME;
+let answered = false;
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            autoSubmit();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft <= 120) document.getElementById('timerBox').classList.add('danger');
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[currentQ];
+    document.getElementById('qNum').innerText = `প্রশ্ন ${toBn(currentQ + 1)}`;
+    document.getElementById('qCounter').innerText = `প্রশ্ন ${toBn(currentQ + 1)} / ${toBn(questions.length)}`;
+    document.getElementById('qTag').innerText = q.tag;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+
+    const progressPercent = ((currentQ) / questions.length) * 100;
+    document.getElementById('progressFill').style.width = progressPercent + '%';
+
+    const optsBox = document.getElementById('optsBox');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'opt';
+        optDiv.id = `opt_${idx}`;
+        optDiv.innerHTML = `
+            <div class="opt-circle">${LABELS[idx]}</div>
+            <div class="opt-text">${opt}</div>
+        `;
+        optDiv.onclick = () => selectOption(idx);
+        optsBox.appendChild(optDiv);
+    });
+
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').innerText = (currentQ === questions.length - 1) ? '🏁 ফলাফল দেখুন' : 'পরবর্তী প্রশ্ন →';
+
+    const card = document.getElementById('qCard');
+    card.style.animation = 'none';
+    setTimeout(() => card.style.animation = 'slideIn 0.4s ease', 10);
+}
+
+function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQ];
+    const isCorrect = idx === q.ans;
+    userAnswers[currentQ] = idx;
+
+    if (isCorrect) score++;
+    else wrong++;
+
+    document.querySelectorAll('.opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        el.onclick = null;
+        if (i === q.ans) el.classList.add('correct');
+        if (i === idx && !isCorrect) el.classList.add('wrong');
+    });
+
+    document.getElementById('correctAnsLabel').innerText = `${q.opts[q.ans]}`;
+    document.getElementById('expMain').innerText = q.exp;
+    document.getElementById('expSpecial').innerText = q.special;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('scoreLive').innerText = `সঠিক: ${toBn(score)} · ভুল: ${toBn(wrong)}`;
+    document.getElementById('nextBtn').disabled = false;
+
+    setTimeout(() => {
+        document.getElementById('explanation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+}
+
+function goNext() {
+    if (currentQ < questions.length - 1) {
+        currentQ++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        finishQuiz();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('qCard').style.display = 'none';
+    document.getElementById('resultWrap').classList.add('show');
+
+    document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+    document.getElementById('finalTotal').innerText = `মোট প্রাপ্ত নম্বর (Total: ${questions.length})`;
+    document.getElementById('rbCorrect').innerText = score;
+    document.getElementById('rbWrong').innerText = wrong;
+
+    const percent = (score / questions.length) * 100;
+    let icon = '🏆';
+    if (percent >= 80) icon = '🏆';
+    else if (percent >= 60) icon = '🎉';
+    else if (percent >= 40) icon = '👍';
+    else icon = '📚';
+    document.getElementById('resultIcon').innerText = icon;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function autoSubmit() {
+    alert('⏰ সময় শেষ! আপনার পরীক্ষা স্বয়ংক্রিয়ভাবে জমা হয়ে গেল।');
+    finishQuiz();
+}
+
+function showFullReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('qCard').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'block';
+
+    const container = document.getElementById('qCard');
+    let html = `<div style="text-align:center; margin-bottom: 1rem;">
+        <h2 class="bn-font" style="color: var(--primary); font-size: 1.15rem;">📋 সম্পূর্ণ রিভিউ</h2>
+        <p class="bn-font" style="color: var(--text-meta); margin-top: 4px; font-size: 0.85rem;">সব প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা</p>
+    </div>`;
+
+    questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const isCorrect = userAns === q.ans;
+        const statusColor = isCorrect ? 'var(--success)' : 'var(--danger)';
+        const statusText = isCorrect ? '✅ সঠিক' : '❌ ভুল';
+
+        html += `
+        <div style="background: ${isCorrect ? '#f0fdf4' : '#fef2f2'}; border-left: 4px solid ${statusColor}; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.9rem; border: 2px solid ${isCorrect ? '#86efac' : '#fca5a5'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span class="bn-font" style="font-weight: 800; color: var(--primary); font-size: 0.88rem;">প্রশ্ন ${toBn(i + 1)}</span>
+                <span class="bn-font" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 50px; background: ${statusColor}; color: white; font-weight: bold;">${statusText}</span>
+            </div>
+            <div class="bn-font" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; line-height: 1.55;">${q.q}</div>
+            <div class="bn-font" style="font-size: 0.85rem; margin-bottom: 5px;">
+                <strong style="color: var(--success);">সঠিক উত্তর:</strong> ${q.opts[q.ans]}
+            </div>
+            ${userAns !== undefined ? `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+                <strong>আপনার উত্তর:</strong> ${q.opts[userAns]}
+            </div>` : `<div class="bn-font" style="font-size: 0.82rem; margin-bottom: 6px; color: var(--text-meta);">
+                <strong>আপনার উত্তর:</strong> দেননি
+            </div>`}
+            <div style="background: white; border-radius: 7px; padding: 8px 10px; margin-top: 6px;">
+                <div class="bn-font" style="font-size: 0.82rem; color: var(--text-main); line-height: 1.6;"><strong>ব্যাখ্যা:</strong> ${q.exp}</div>
+                <div class="bn-font" style="font-size: 0.78rem; color: var(--text-meta); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-color); line-height: 1.55;">${q.special}</div>
+            </div>
+        </div>`;
+    });
+
+    html += `<button class="next-btn" onclick="window.location.href='../index.html'">🏠 Home এ ফিরে যান</button>`;
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+let pendingAction = null;
+function confirmExit() {
+    if (document.getElementById('resultWrap').classList.contains('show')) {
+        window.location.href = '../index.html';
+        return;
+    }
+    document.getElementById('warningModal').classList.add('show');
+    pendingAction = 'exit';
+}
+function closeWarning() {
+    document.getElementById('warningModal').classList.remove('show');
+    pendingAction = null;
+}
+function confirmAction() {
+    if (pendingAction === 'exit') window.location.href = '../index.html';
+}
+
+function toBn(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    renderQuestion();
+    startTimer();
+});
+</script>
+</body>
+</html>

@@ -112,6 +112,19 @@ a { text-decoration: none; }
 .set-badge.free-tag { background: #d1fae5; color: #065f46; }
 .set-badge.locked-tag { background: #fee2e2; color: #991b1b; }
 
+/* ================= LOGIN ================= */
+.login-box { max-width: 400px; text-align: center; }
+.login-icon { font-size: 3rem; margin-bottom: 15px; color: var(--accent); }
+.login-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; font-family: 'Tiro Bangla', serif; transition: 0.3s; }
+.login-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 122, 74, 0.15); }
+.login-submit { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; font-family: 'Tiro Bangla', serif; transition: 0.3s; }
+.login-submit:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.login-error { color: #dc2626; font-size: 0.9rem; margin-top: 5px; font-family: 'Tiro Bangla', serif; font-weight: bold; display: none; }
+.login-saved-info { background: #e8f7ef; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--primary); font-weight: 700; display: none; }
+.login-saved-info.show { display: block; }
+.login-attempt-info { background: #fff8e1; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #b8860b; font-weight: 700; display: none; }
+.login-attempt-info.show { display: block; }
+
 /* ================= 365 DAYS CALENDAR ================= */
 .today-banner { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 30px rgba(26,122,74,0.25); position: relative; overflow: hidden; }
 .today-banner::before { content: ''; position: absolute; top: -50%; right: -10%; width: 200px; height: 200px; background: rgba(249, 168, 37, 0.15); border-radius: 50%; }
@@ -146,38 +159,28 @@ a { text-decoration: none; }
 .day-card.missed { background: #fef2f2; border-color: #fca5a5; }
 .day-card.missed .day-status { background: var(--danger); color: white; }
 
-/* ================= LOGIN ================= */
-.login-box { max-width: 400px; text-align: center; }
-.login-icon { font-size: 3rem; margin-bottom: 15px; color: var(--accent); }
-.login-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; outline: none; font-family: 'Tiro Bangla', serif; transition: 0.3s; }
-.login-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 122, 74, 0.15); }
-.login-submit { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; font-family: 'Tiro Bangla', serif; transition: 0.3s; }
-.login-submit:hover { background: var(--primary-hover); transform: translateY(-2px); }
-.login-error { color: #dc2626; font-size: 0.9rem; margin-top: 5px; font-family: 'Tiro Bangla', serif; font-weight: bold; display: none; }
+/* ================= RESULT ================= */
+.result-wrap { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 1px solid var(--border-color); display: none; max-width: 600px; margin: 0 auto; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.result-wrap.show { display: block; }
+.result-icon { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1; }
+.result-score { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 5px; }
+.result-total { font-size: 1rem; color: var(--text-meta); margin-bottom: 0.5rem; font-family: 'Tiro Bangla', serif; font-weight: bold; }
+.result-grade { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; font-family: 'Tiro Bangla', serif; color: #e8730a; }
+.result-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.result-bar { background: var(--bg-main); border-radius: 10px; padding: 1rem; text-align: center; border: 1px solid var(--border-color); }
+.rb-num { font-size: 1.8rem; font-weight: 800; }
+.rb-label { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: var(--text-meta); margin-top: 0.2rem; font-weight: bold; }
+.attempt-info { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: var(--primary); font-weight: bold; margin-bottom: 1.5rem; background: #e8f7ef; padding: 10px; border-radius: 8px; }
+.result-actions { display: flex; flex-direction: column; gap: 10px; }
+.result-actions button { width: 100%; padding: 14px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none; transition: 0.2s; }
+.btn-retry { background: #17a2b8; color: white; }
+.btn-retry:hover { background: #138496; }
+.btn-review { background: #28a745; color: white; }
+.btn-review:hover { background: #218838; }
+.btn-home { background: transparent; color: #5a7a66; border: 2px solid var(--border-color); }
+.btn-home:hover { background: var(--bg-main); }
 
-/* ================= RESULT PAGE (IMAGE-STYLE) ================= */
-.result-wrapper { max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
-.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
-.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: var(--text-main); margin-bottom: 18px; }
-.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 8px; }
-.result-percent.low { color: #1a7a4a; }
-.result-percent.high { color: #1a7a4a; }
-.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 25px; }
-.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-.result-stat-box { background: #f0faf4; border: 2px solid var(--border-color); border-radius: 16px; padding: 20px 10px; }
-.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-.result-stat-num.correct { color: var(--primary); }
-.result-stat-num.wrong { color: #e63946; }
-.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: var(--text-meta); }
-.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: var(--text-main); line-height: 1.5; margin-bottom: 25px; }
-.result-attempt-info .num { color: var(--primary); font-weight: 800; }
-.result-buttons { display: flex; flex-direction: column; gap: 12px; }
-.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
-.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-.result-btn.green { background: #2e9e4f; }
-.result-btn.blue { background: #1a9bb8; }
-.result-btn.gray { background: #6b7a72; }
-
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
 .navbar { padding: 1rem; }
 .container { padding: 1.5rem 1rem; }
@@ -187,7 +190,6 @@ a { text-decoration: none; }
 .today-banner { padding: 1.2rem; }
 .today-banner-left h2 { font-size: 1.2rem; }
 .today-banner-btn { padding: 12px 20px; font-size: 1rem; }
-.result-percent { font-size: 4.5rem; }
 }
 </style>
 </head>
@@ -322,6 +324,17 @@ a { text-decoration: none; }
 <div class="login-icon">🔒</div>
 <h3 class="bn-font" style="margin-bottom: 10px; color: var(--primary);">টেস্টটি লক করা আছে</h3>
 <p class="bn-font" style="font-size: 0.95rem; color: var(--text-meta); margin-bottom: 15px;">এটি আনলক করতে সঠিক ইউজারনেম ও পাসওয়ার্ড প্রদান করুন।</p>
+
+<!-- Saved credentials info -->
+<div class="login-saved-info" id="loginSavedInfo">
+    💾 আগের লগইন তথ্য পাওয়া গেছে — শুধু ক্লিক করুন
+</div>
+
+<!-- Attempt info -->
+<div class="login-attempt-info" id="loginAttemptInfo">
+    ⏳ এই মাসে বাকি আছে <span id="loginAttemptsLeft">৫</span> বার টেস্ট দেওয়ার সুযোগ
+</div>
+
 <input type="text" id="usernameInput" class="login-input" placeholder="ইউজারনেম দিন">
 <input type="password" id="passwordInput" class="login-input" placeholder="পাসওয়ার্ড দিন">
 <div class="login-error" id="loginErrorMsg">ভুল ইউজারনেম বা পাসওয়ার্ড! আবার চেষ্টা করুন।</div>
@@ -338,39 +351,6 @@ a { text-decoration: none; }
 <p class="modal-sub">পরীক্ষা ও বছর নির্বাচন করুন</p>
 </div>
 <div id="previousYearContent"></div>
-</div>
-</div>
-
-<!-- ================= MODAL 5: RESULT (IMAGE-STYLE) ================= -->
-<div class="modal-overlay" id="resultModal">
-<div class="modal-box" style="max-width: 480px; border-color: var(--border-color);">
-<button class="modal-close" onclick="closeModal('resultModal')">&times;</button>
-<div class="result-wrapper" id="resultWrapper">
-    <div class="result-emoji" id="resultEmoji">💪</div>
-    <div class="result-heading">আপনার ফলাফল</div>
-    <div class="result-percent" id="resultPercent">0%</div>
-    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
-
-    <div class="result-stats">
-        <div class="result-stat-box">
-            <div class="result-stat-num correct" id="resultCorrect">0</div>
-            <div class="result-stat-label">সঠিক</div>
-        </div>
-        <div class="result-stat-box">
-            <div class="result-stat-num wrong" id="resultWrong">0</div>
-            <div class="result-stat-label">ভুল / স্কিপ</div>
-        </div>
-    </div>
-
-    <div class="result-attempt-info" id="resultAttemptInfo">
-        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ৫ বার)
-    </div>
-
-    <div class="result-buttons">
-        <button class="result-btn green" onclick="showExplanations()">উত্তর ও ব্যাখ্যা দেখুন</button>
-        <button class="result-btn blue" onclick="retryTest()">আবার চেষ্টা করো</button>
-        <button class="result-btn gray" onclick="goToChapterHub()">Chapter Hub-এ ফিরুন</button>
-    </div>
 </div>
 </div>
 
@@ -450,25 +430,67 @@ let targetSetNum = 0;
 let calendarMode = "";
 let activeDateKey = "";
 const LABELS = ['A', 'B', 'C', 'D'];
-const MONTHLY_ATTEMPT_LIMIT = 5;
+const MONTHLY_LIMIT = 5; // ★ প্রতি মাসে ৫ বার
 
 // ============================================================
-// MONTHLY ATTEMPT TRACKING (Practice Zone)
+// ★ MONTHLY ATTEMPT TRACKING (ইউজারনেম অনুযায়ী)
 // ============================================================
 function getMonthKey() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
 }
-function getMonthlyAttempts() {
-    const raw = localStorage.getItem('practiceAttempts_' + getMonthKey());
+
+// প্রতিটি ইউজারের জন্য আলাদা key: "attempts_<username>_<YYYY-MM>"
+function getAttemptStorageKey(username) {
+    return `attempts_${username}_${getMonthKey()}`;
+}
+
+// ইউজারের এই মাসের কতবার টেস্ট দিয়েছে
+function getMonthlyAttempts(username) {
+    if (!username) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username));
     return raw ? parseInt(raw) : 0;
 }
-function incrementMonthlyAttempts() {
-    const current = getMonthlyAttempts();
-    localStorage.setItem('practiceAttempts_' + getMonthKey(), current + 1);
+
+// ইউজারের attempt বাড়ানো
+function incrementMonthlyAttempts(username) {
+    if (!username) return;
+    const current = getMonthlyAttempts(username);
+    localStorage.setItem(getAttemptStorageKey(username), current + 1);
 }
-function getRemainingAttempts() {
-    return Math.max(0, MONTHLY_ATTEMPT_LIMIT - getMonthlyAttempts());
+
+// ইউজারের বাকি কতবার আছে
+function getRemainingAttempts(username) {
+    return Math.max(0, MONTHLY_LIMIT - getMonthlyAttempts(username));
+}
+
+// ============================================================
+// ★ SAVED CREDENTIALS (স্টুডেন্টের সুবিধার জন্য)
+// ============================================================
+const SAVED_CRED_KEY = "testBazarSavedCredentials";
+
+function saveCredentials(username, password) {
+    // শুধু username সেভ করব, password নয় (নিরাপত্তার জন্য)
+    // তবে ইউজার চাইলে দুটোই সেভ করা যায়
+    localStorage.setItem(SAVED_CRED_KEY, JSON.stringify({
+        username: username,
+        password: password,
+        savedAt: Date.now()
+    }));
+}
+
+function getSavedCredentials() {
+    const raw = localStorage.getItem(SAVED_CRED_KEY);
+    if (!raw) return null;
+    try {
+        return JSON.parse(raw);
+    } catch(e) {
+        return null;
+    }
+}
+
+function clearSavedCredentials() {
+    localStorage.removeItem(SAVED_CRED_KEY);
 }
 
 // ============================================================
@@ -506,14 +528,18 @@ function scrollToSubjects() {
 function openSets(subjectCode, subjectName) {
     targetSubjectCode = subjectCode;
     document.getElementById('modalSubjectTitle').innerHTML = `📖 ${subjectName} - সেটসমূহ`;
+
+    // ★ বাকি attempts দেখাও (লগইন করা ইউজারের জন্য)
+    const loggedInUser = sessionStorage.getItem("currentStudent") || "";
+    let remaining = MONTHLY_LIMIT;
+    if (loggedInUser) {
+        remaining = getRemainingAttempts(loggedInUser);
+    }
+    document.getElementById('modalSetSub').innerHTML =
+        `৩০টি সেট · ১ম ২টি ফ্রি · এই মাসে বাকি <b style="color:var(--primary);">${toBnNum(remaining)}</b> বার`;
+
     const grid = document.getElementById('modalSetsGrid');
     grid.innerHTML = '';
-
-    // Show remaining attempts
-    const remaining = getRemainingAttempts();
-    document.getElementById('modalSetSub').innerHTML =
-        `৩০টি সেট · ১ম ২টি ফ্রি · এই মাসে বাকি <b style="color:var(--primary);">${remaining}</b> বার`;
-
     for (let i = 1; i <= 30; i++) {
         const isFree = i <= 2;
         const setBtn = document.createElement('div');
@@ -531,44 +557,166 @@ function openSets(subjectCode, subjectName) {
 function handleSetClick(subjectCode, setNum) {
     targetSetNum = setNum;
 
-    // Free sets — no login needed, no limit
+    // ★ Set 1 ও Set 2 — ফ্রি, লগইন ছাড়াই যাবে
     if (setNum <= 2) {
         window.location.href = `practice/${subjectCode}-test${setNum}.html`;
         return;
     }
 
-    // Check monthly limit
-    if (getRemainingAttempts() <= 0) {
-        alert(`⚠️ এই মাসে আপনার ৫ বার টেস্ট দেওয়ার সীমা শেষ!\n\nপরের মাসে আবার চেষ্টা করুন।`);
-        return;
-    }
-
-    const isAlreadyLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn");
-    if (isAlreadyLoggedIn === "true") {
-        // Already logged in — allow and count attempt
-        incrementMonthlyAttempts();
-        window.location.href = `practice/${subjectCode}-test${setNum}.html`;
-    } else {
-        closeModal('setsModal');
-        openModal('loginModal');
-    }
+    // ★ Set 3 থেকে Set 30 — লগইন বাধ্যতামূলক
+    // প্রতিবার লগইন করতে হবে, কিন্তু credentials saved থাকলে সহজ হবে
+    closeModal('setsModal');
+    openLoginModal(subjectCode, setNum);
 }
 
 // ============================================================
-// LOGIN
+// ★ LOGIN MODAL (Saved credentials সহ)
+// ============================================================
+function openLoginModal(subjectCode, setNum) {
+    // Modal-এ subject/set info দেখাও
+    document.querySelector('#loginModal .login-icon').innerText = '🔒';
+    document.querySelector('#loginModal h3').innerText = 'টেস্টটি লক করা আছে';
+    document.querySelector('#loginModal p').innerText =
+        `Set ${toBnNum(setNum)} আনলক করতে সঠিক ইউজারনেম ও পাসওয়ার্ড প্রদান করুন।`;
+
+    // Saved credentials চেক করো
+    const saved = getSavedCredentials();
+    const savedInfo = document.getElementById('loginSavedInfo');
+    const userInput = document.getElementById('usernameInput');
+    const passInput = document.getElementById('passwordInput');
+
+    if (saved && saved.username) {
+        userInput.value = saved.username;
+        passInput.value = saved.password || '';
+        savedInfo.classList.add('show');
+        savedInfo.innerHTML = `💾 স্বাগতম <b>${saved.username}</b>! পাসওয়ার্ড দিয়ে "টেস্ট শুরু করুন" চাপুন।`;
+    } else {
+        userInput.value = '';
+        passInput.value = '';
+        savedInfo.classList.remove('show');
+    }
+
+    // Attempt info
+    const attemptInfo = document.getElementById('loginAttemptInfo');
+    const loggedInUser = sessionStorage.getItem("currentStudent") || saved?.username || "";
+    if (loggedInUser) {
+        const left = getRemainingAttempts(loggedInUser);
+        document.getElementById('loginAttemptsLeft').innerText = toBnNum(left);
+        attemptInfo.classList.add('show');
+    } else {
+        attemptInfo.classList.remove('show');
+    }
+
+    // Error hide
+    document.getElementById('loginErrorMsg').style.display = 'none';
+
+    // Focus on password if username already filled
+    setTimeout(() => {
+        if (userInput.value) {
+            passInput.focus();
+        } else {
+            userInput.focus();
+        }
+    }, 100);
+
+    openModal('loginModal');
+
+    // Enter key handler
+    passInput.onkeydown = (e) => {
+        if (e.key === 'Enter') attemptLogin();
+    };
+}
+
+// ============================================================
+// ★ ATTEMPT LOGIN
 // ============================================================
 function attemptLogin() {
     const uName = document.getElementById('usernameInput').value.trim();
     const pWord = document.getElementById('passwordInput').value.trim();
     const errorMsg = document.getElementById('loginErrorMsg');
-    if (GLOBAL_USERS[uName] && GLOBAL_USERS[uName] === pWord) {
-        sessionStorage.setItem("testBazarUserLoggedIn", "true");
-        sessionStorage.setItem("currentStudent", uName);
-        incrementMonthlyAttempts(); // Count this attempt
-        window.location.href = `practice/${targetSubjectCode}-test${targetSetNum}.html`;
-    } else {
+
+    // Validation
+    if (!uName || !pWord) {
+        errorMsg.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দুটোই দিন!";
         errorMsg.style.display = 'block';
+        return;
     }
+
+    // Check credentials
+    if (!GLOBAL_USERS[uName] || GLOBAL_USERS[uName] !== pWord) {
+        errorMsg.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড!";
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+    // ★ Check monthly limit for this user
+    const remaining = getRemainingAttempts(uName);
+    if (remaining <= 0) {
+        errorMsg.innerText = `⚠️ এই মাসে আপনার ${toBnNum(MONTHLY_LIMIT)} বার টেস্ট দেওয়ার সীমা শেষ! পরের মাসে আবার চেষ্টা করুন।`;
+        errorMsg.style.display = 'block';
+        return;
+    }
+
+    // ★ Save credentials for next time
+    saveCredentials(uName, pWord);
+
+    // ★ Increment attempt count
+    incrementMonthlyAttempts(uName);
+
+    // ★ Set session
+    sessionStorage.setItem("testBazarUserLoggedIn", "true");
+    sessionStorage.setItem("currentStudent", uName);
+
+    // ★ Calculate new remaining and show SMS
+    const newRemaining = getRemainingAttempts(uName);
+    showSMS(`✅ লগইন সফল! Set ${toBnNum(targetSetNum)} শুরু হচ্ছে...\n📊 এই মাসে বাকি: ${toBnNum(newRemaining)} বার`);
+
+    // Redirect to test page
+    setTimeout(() => {
+        window.location.href = `practice/${targetSubjectCode}-test${targetSetNum}.html`;
+    }, 800);
+}
+
+// ============================================================
+// ★ SMS / TOAST NOTIFICATION
+// ============================================================
+function showSMS(message) {
+    // পুরনো toast মুছে ফেলো
+    const oldToast = document.getElementById('smsToastGlobal');
+    if (oldToast) oldToast.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'smsToastGlobal';
+    toast.style.cssText = `
+        position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%);
+        background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px;
+        font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: 700;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 90%; text-align: center; border-left: 5px solid #f9a825;
+        white-space: pre-line;
+    `;
+    toast.innerText = message;
+    document.body.appendChild(toast);
+
+    // Show
+    requestAnimationFrame(() => {
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+    });
+
+    // Auto hide
+    setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(-120%)';
+        setTimeout(() => toast.remove(), 400);
+    }, 3500);
+}
+
+// ============================================================
+// ★ BANGLA NUMBER
+// ============================================================
+function toBnNum(num) {
+    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(num).split('').map(d => bnDigits[parseInt(d)] || d).join('');
 }
 
 // ============================================================
@@ -667,14 +815,12 @@ function buildCalendar() {
 
         if (status === 'today') {
             if (calendarMode === 'mock' && isAttempted(key)) {
-                card.onclick = () => alert("✅ আপনি আজকের পরীক্ষা ইতিমধ্যে দিয়েছেন।");
+                card.onclick = () => showSMS("✅ আপনি আজকের পরীক্ষা ইতিমধ্যে দিয়েছেন।");
             } else {
-                card.onclick = () => {
-                    window.location.href = filePath;
-                };
+                card.onclick = () => { window.location.href = filePath; };
             }
         } else {
-            card.onclick = () => alert("🔒 এই পরীক্ষাটি এখনো লক করা আছে।\n\n" + dateBn + " তারিখে এটি খুলবে।");
+            card.onclick = () => showSMS("🔒 এই পরীক্ষাটি এখনো লক করা আছে।\n\n" + dateBn + " তারিখে এটি খুলবে।");
         }
 
         upcomingGrid.appendChild(card);
@@ -686,11 +832,8 @@ function buildCalendar() {
         const d = new Date(today);
         d.setDate(today.getDate() - i);
         const key = formatDateKey(d);
-        const dayNum = -i;
         const attempted = isAttempted(key);
         const status = attempted ? 'completed' : 'missed';
-
-        const filePath = `${folder}/${prefix}-${key}.html`;
         const card = document.createElement('div');
         card.className = 'day-card ' + status;
         card.dataset.status = status;
@@ -699,23 +842,16 @@ function buildCalendar() {
             ? `<div class="day-status">✅ সম্পন্ন</div>`
             : `<div class="day-status">❌ মিস</div>`;
 
-        const dayNameBn = formatDayNameBn(d);
-        const dateBn = formatDateBn(d);
-        const dayNumBn = toBnNum(Math.abs(dayNum));
-
         card.innerHTML = `
             ${badge}
-            <div class="day-date">Day ${dayNumBn}</div>
-            <div class="day-dayname">${dayNameBn}</div>
-            <div class="day-meta">📅 ${dateBn}</div>
+            <div class="day-date">Day ${toBnNum(i)}</div>
+            <div class="day-dayname">${formatDayNameBn(d)}</div>
+            <div class="day-meta">📅 ${formatDateBn(d)}</div>
         `;
 
         card.onclick = () => {
-            if (attempted) {
-                alert("✅ আপনি এই দিনের পরীক্ষা সম্পন্ন করেছেন।\n\n" + dateBn);
-            } else {
-                alert("❌ আপনি এই দিনের পরীক্ষা মিস করেছেন।\n\n" + dateBn);
-            }
+            if (attempted) showSMS("✅ আপনি এই দিনের পরীক্ষা সম্পন্ন করেছেন।\n\n" + formatDateBn(d));
+            else showSMS("❌ আপনি এই দিনের পরীক্ষা মিস করেছেন।\n\n" + formatDateBn(d));
         };
 
         pastGrid.appendChild(card);
@@ -723,11 +859,6 @@ function buildCalendar() {
 }
 
 function checkFileExists(path) { return true; }
-
-function toBnNum(num) {
-    const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-    return String(num).split('').map(d => bnDigits[parseInt(d)]).join('');
-}
 
 // ============================================================
 // START TODAY QUIZ
@@ -742,7 +873,7 @@ function startTodayQuiz() {
         const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn");
         if (isLoggedIn !== "true") {
             closeModal('calendarModal');
-            openModal('loginModal');
+            openLoginModal('mock', todayKey);
             return;
         }
     }
@@ -818,58 +949,6 @@ window.onclick = function(event) {
         event.target.classList.remove('active');
         document.body.style.overflow = '';
     }
-}
-
-// ============================================================
-// RESULT PAGE FUNCTIONS (IMAGE-STYLE)
-// ============================================================
-// এগুলো practice/*.html ফাইল থেকে কল করা যাবে
-// উদাহরণ: showResult({ correct: 10, wrong: 5, total: 15 })
-
-function showResult(data) {
-    const correct = data.correct || 0;
-    const wrong = data.wrong || 0;
-    const total = data.total || (correct + wrong);
-    const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
-
-    // Set values
-    document.getElementById('resultCorrect').innerText = toBnNum(correct);
-    document.getElementById('resultWrong').innerText = toBnNum(wrong);
-    document.getElementById('resultPercent').innerText = percent + '%';
-
-    // Emoji & tagline based on score
-    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
-    if (percent >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
-    else if (percent >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
-    else if (percent >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
-    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
-
-    document.getElementById('resultEmoji').innerText = emoji;
-    document.getElementById('resultTagline').innerText = tagline;
-
-    // Attempts left
-    const left = getRemainingAttempts();
-    document.getElementById('attemptsLeft').innerText = toBnNum(left);
-
-    // Show modal
-    openModal('resultModal');
-}
-
-function showExplanations() {
-    closeModal('resultModal');
-    alert("📖 উত্তর ও ব্যাখ্যা পেজ খোলা হচ্ছে...\n\n(এখানে আপনার explanation.html বা অনুরূপ পেজে রিডাইরেক্ট করুন)");
-    // window.location.href = 'explanations.html';
-}
-
-function retryTest() {
-    closeModal('resultModal');
-    // Reload the test page
-    window.location.reload();
-}
-
-function goToChapterHub() {
-    closeModal('resultModal');
-    window.location.href = 'index.html#subject-section';
 }
 
 // ============================================================

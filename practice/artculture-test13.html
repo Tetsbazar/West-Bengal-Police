@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Art, Culture & Literature | Set 13</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; margin-bottom: 6px; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+.result-wrap { display: none; max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
+.result-wrap.show { display: block; }
+.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: #1c2e24; margin-bottom: 18px; }
+.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 8px; }
+.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: #f9a825; margin-bottom: 25px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.result-stat-box { background: #f0faf4; border: 2px solid #c5dccb; border-radius: 16px; padding: 20px 10px; }
+.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.result-stat-num.correct { color: #1a7a4a; }
+.result-stat-num.wrong { color: #e63946; }
+.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: #5a7a66; }
+.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: #1c2e24; line-height: 1.5; margin-bottom: 25px; }
+.result-attempt-info .num { color: #1a7a4a; font-weight: 800; }
+.result-buttons { display: flex; flex-direction: column; gap: 12px; }
+.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
+.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.result-btn.green { background: #2e9e4f; }
+.result-btn.blue { background: #1a9bb8; }
+.result-btn.gray { background: #6b7a72; }
+
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+.hidden { display: none !important; }
+.toast-sms { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; text-align: center; border-left: 5px solid #f9a825; white-space: pre-line; }
+.toast-sms.show { transform: translateX(-50%) translateY(0); }
+.toast-sms .sms-title { font-size: 0.8rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 1px; }
+
+@media (max-width: 480px) {
+.main { padding: 1rem 0.7rem; }
+.q-card { padding: 1rem 0.85rem; }
+.q-text { font-size: 0.95rem; }
+.opt-text { font-size: 0.85rem; }
+.explanation p { font-size: 0.82rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast-sms" id="smsToast">
+    <div class="sms-title">📩 TEST BAZAR</div>
+    <div id="smsText">আপনার বার্তা এখানে</div>
+</div>
+
+<div class="top-bar">
+<div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+<div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+<div class="login-overlay" id="loginOverlay">
+<div class="login-modal">
+<h2>🔐 লগইন করুন</h2>
+<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div class="set-name-display">🎭 Art, Culture & Literature — Test 13</div>
+<div class="input-group">
+<label>ইউজারনেম</label>
+<input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+</div>
+<div class="input-group">
+<label>পাসওয়ার্ড</label>
+<input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+</div>
+<button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+<button class="cancel-btn" onclick="goToHub()">বাতিল</button>
+<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+</div>
+</div>
+
+<div id="testArea" class="hidden">
+<div class="quiz-info">
+<div class="info-item">🎭 <strong>শিল্প, সংস্কৃতি ও সাহিত্য</strong> — Test 13</div>
+<div class="info-item">📝 <span>ভারতীয় চলচ্চিত্র ও থিয়েটার</span></div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="q-card" id="qCard">
+<div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+<div class="q-text" id="qText"></div>
+<div class="opts" id="qOpts"></div>
+<div class="explanation" id="explanation">
+    <p id="expMain"></p>
+</div>
+<div class="nav-row">
+<div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+<button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+</div>
+</div>
+</div>
+
+<div class="result-wrap" id="resultWrap">
+    <div class="result-emoji" id="resultEmoji">💪</div>
+    <div class="result-heading">আপনার ফলাফল</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
+
+    <div class="result-stats">
+        <div class="result-stat-box">
+            <div class="result-stat-num correct" id="resultCorrect">0</div>
+            <div class="result-stat-label">সঠিক</div>
+        </div>
+        <div class="result-stat-box">
+            <div class="result-stat-num wrong" id="resultWrong">0</div>
+            <div class="result-stat-label">ভুল / স্কিপ</div>
+        </div>
+    </div>
+
+    <div class="result-attempt-info" id="resultAttemptInfo">
+        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ৫ বার)
+    </div>
+
+    <div class="result-buttons">
+        <button class="result-btn green" onclick="showReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+        <button class="result-btn blue" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+        <button class="result-btn gray" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+const MAX_ATTEMPTS = 5;
+const TIME_LIMIT = 10 * 60; // ★ ১০ মিনিট
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+const GLOBAL_USERS = {
+"demo1": "1234", "demo2": "1234", "demo3": "1234", "demo4": "1234", "mali": "1234", "sagun": "1234", "dhiren": "1234",
+"ajay": "7251", "anita": "1234", "jaba": "1234", "student100": "pass001", "rohit2027": "abc456"
+};
+
+let currentUser = sessionStorage.getItem("currentStudent") || "";
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+
+// ★ সঠিক উত্তর A, B, C, D-তে সমানভাবে ছড়ানো (৪, ৪, ৪, ৩)
+const questions = [
+{
+q: "১৮৯৫ সালে সিনেমা নামক অদ্ভুত মাধ্যমটির প্রথম আবিষ্কার করার কৃতিত্ব কোন ফরাসি ভ্রাতৃদ্বয়কে দেওয়া হয়?",
+opts: ["লুমিয়ের ব্রাদার্স", "রাইট ব্রাদার্স", "স্মিথ ব্রাদার্স", "মন্টগোলফিয়ার ব্রাদার্স"],
+ans: 0,
+exp: "ফরাসি বিজ্ঞানী নিকোলাস ও জিন লুমিয়ের (যাঁরা লুমিয়ের ব্রাদার্স নামে খ্যাত) ১৮৯৫ সালে সিনেমা মাধ্যমটি আবিষ্কার করেন। তাঁদের পরিচালিত ও প্রযোজিত বিশ্বের প্রথম নির্বাক ছবির নাম ছিল 'দ্য অ্যারাইভাল অব্ এ ট্রেন অ্যাট দ্য স্টেশন'।"
+},
+{
+q: "লুমিয়ের ব্রাদার্সের তৈরি বিশ্বের প্রথম নির্বাক ছবি 'দ্য অ্যারাইভাল অব্ এ ট্রেন অ্যাট দ্য স্টেশন' কত সালে প্রথম ভারতে প্রদর্শিত হয়?",
+opts: ["১৮৯৮ সালে কলকাতার স্টার থিয়েটারে", "১৮৯৬ সালে বোম্বাইয়ের ওয়াটসন হোটেলে", "১৯০০ সালে ক্লাসিক থিয়েটারে", "১৯০৩ সালে ম্যাজেস্টিক সিনেমায়"],
+ans: 1,
+exp: "১৮৯৬ খ্রিস্টাব্দে বোম্বাই (বর্তমানে মুম্বাই) শহরের ওয়াটসন হোটেলের এক বিরাট কক্ষে লুমিয়ের ব্রাদার্সের এই প্রথম নির্বাক ছবিটি ভারতে প্রদর্শিত হয়েছিল।"
+},
+{
+q: "১৮৯৮ খ্রিস্টাব্দের ২১ ডিসেম্বর কলকাতায় প্রথম চলচ্চিত্রের প্রদর্শন কার নেতৃত্বে এবং কোন থিয়েটারে অনুষ্ঠিত হয়েছিল?",
+opts: ["হীরালাল সেন, ক্লাসিক থিয়েটার", "আর্দেশির ইরানি, এলফিনস্টোন বায়োস্কোপ", "জে জে স্টিভেনসন, স্টার থিয়েটার", "সখারাম ভাতওয়াদেকর, ম্যাজেস্টিক থিয়েটার"],
+ans: 2,
+exp: "১৮৯৮ খ্রিস্টাব্দের ২১ ডিসেম্বর কলকাতার বিখ্যাত স্টার থিয়েটারে জে জে স্টিভেনসনের নেতৃত্বে প্রথম চলচ্চিত্রের প্রদর্শন সম্পন্ন হয়েছিল।"
+},
+{
+q: "ভারতীয় চলচ্চিত্রের আদি যুগে পেশাদার মঞ্চে অভিনীত নাটকের দৃশ্যাবলি, বিজ্ঞাপন ও ডকুমেন্টরি ছবি নির্মাণ করা বিখ্যাত হীরালাল সেন ও তাঁর সহোদর মতিলাল সেনকে কী বলা হতো?",
+opts: ["বাংলার ফালকে ব্রাদার্স", "ভারতীয় চলচ্চিত্রের জনক", "প্রথম নির্বাক পরিচালক", "ভারতের লুমিয়ের ব্রাদার্স"],
+ans: 3,
+exp: "হীরালাল সেন ও মতিলাল সেন তাঁদের 'রয়্যাল বায়োস্কোপ কোম্পানি' নামক প্রতিষ্ঠান থেকে বহু স্বল্পদৈর্ঘ্য চলচ্চিত্র ও নাটকের দৃশ্য ধারণ করেছিলেন। এ কারণেই এই সেন ভ্রাতৃদ্বয়কে 'ভারতের লুমিয়ের ব্রাদার্স' বলা হতো।"
+},
+{
+q: "১৯০০ সালের ৯ ফেব্রুয়ারি হীরালাল সেনের একক প্রচেষ্টায় কলকাতার ক্লাসিক থিয়েটারে বঙ্কিমচন্দ্র চট্টোপাধ্যায়ের কোন কালজয়ী উপন্যাস অবলম্বনে নির্মিত সিনেমাটি পর্দায় প্রদর্শিত হয়েছিল?",
+opts: ["ভ্রমর (কৃষ্ণকান্তের উইল)", "আনন্দমঠ", "কপালকুণ্ডলা", "দুর্গেশনন্দিনী"],
+ans: 0,
+exp: "হীরালাল সেনের একক প্রচেষ্টায় ১৯০০ সালের ৯ ফেব্রুয়ারি কলকাতার ক্লাসিক থিয়েটারে বঙ্কিমচন্দ্র চট্টোপাধ্যায়ের বিখ্যাত ‘ভ্রমর’ (কৃষ্ণকান্তের উইল) সিনেমাটি প্রদর্শিত হয়েছিল। তাঁর প্রথম পরিচালনার ছবি 'আলিবাবা অ্যান্ড ফরটি থিভস' মুক্তি পেয়েছিল ১৯০৩ সালের ২৩ জানুয়ারি।"
+},
+{
+q: "১৮৯৯ সালে প্রথম ভারতীয় হিসেবে দুটি স্বল্পদৈর্ঘ্যের নির্বাক ছবি 'দ্য রেসলারস্' (The Wrestlers) ও 'ম্যান অ্যান্ড মাংকি' কে তৈরি করেছিলেন?",
+opts: ["হীরালাল সেন", "দাদাসাহেব ফালকে", "সখারাম ভাতওয়াদেকর", "অমর চৌধুরী"],
+ans: 2,
+exp: "১৮৯৯ সালে সখারাম ভাতওয়াদেকর প্রথম ভারতীয় হিসেবে এই দুটি স্বল্পদৈর্ঘ্যের নির্বাক ছবি নির্মাণ করে ভারতীয় চলচ্চিত্র নির্মাণের ঐতিহাসিক সূচনা করেছিলেন।"
+},
+{
+q: "১৯১৩ সালের ৩ মে ইংরেজি ও হিন্দি সাবটাইটেল সহ মুক্তিপ্রাপ্ত ভারতের প্রথম পূর্ণদৈর্ঘ্যের নির্বাক কাহিনীচিত্র 'রাজা হরিশচন্দ্র' কে নির্মাণ করেছিলেন?",
+opts: ["আর্দেশির ইরানি", "হীরালাল সেন", "অমর চৌধুরী", "ধুনধীরাজ গোবিন্দ ফালকে"],
+ans: 3,
+exp: "ধুনধীরাজ গোবিন্দ ফালকে (যিনি দাদাসাহেব ফালকে নামে বিশেষভাবে পরিচিত) ৩,৭০০ ফুট দীর্ঘ ভারতের প্রথম পূর্ণদৈর্ঘ্যের নির্বাক চলচ্চিত্র 'রাজা হরিশচন্দ্র' নির্মাণ করেছিলেন।"
+},
+{
+q: "ভারতীয় চলচ্চিত্রের ধারাকে সমৃদ্ধ করার অসামান্য অবদানের জন্য কাকে 'ভারতীয় চলচ্চিত্রের জনক' বলা হয়?",
+opts: ["দাদাসাহেব ফালকে", "হীরালাল সেন", "আর্দেশির ইরানি", "সত্যজিৎ রায়"],
+ans: 0,
+exp: "১৯১৩ সালে ভারতের প্রথম পূর্ণদৈর্ঘ্য চলচ্চিত্র 'রাজা হরিশচন্দ্র' সফলভাবে নির্মাণের কারণে দাদাসাহেব ফালকে-কে ভারতীয় চলচ্চিত্রের জনক বলা হয়।"
+},
+{
+q: "১৯৩১ সালের ১৪ মার্চ মুম্বাইয়ের ম্যাজেস্টিক সিনেমায় মুক্তি পাওয়া ভারতের প্রথম সবাক চলচ্চিত্রের নাম কী?",
+opts: ["জামাইষষ্ঠী", "কিষান কন্যা", "আলম আরা", "সত্যবাদী রাজা হরিশচন্দ্র"],
+ans: 2,
+exp: "ইম্পিরিয়াল ফিল্ম কোম্পানি প্রযোজিত ও আর্দেশির ইরানি পরিচালিত ভারতের প্রথম সবাক ছবি হলো 'আলম আরা'।"
+},
+{
+q: "১৯৩১ খ্রিস্টাব্দে মুক্তি পাওয়া প্রথম বাংলা সবাক চলচ্চিত্রের নাম কী এবং এর পরিচালক কে ছিলেন?",
+opts: ["সত্যবাদী রাজা হরিশচন্দ্র, পরিচালক হীরালাল সেন", "জামাইষষ্ঠী, পরিচালক অমর চৌধুরী", "নূরজাহান, পরিচালক নীতিন বসু", "দেবদাস, পরিচালক প্রমথেশ বড়ুয়া"],
+ans: 1,
+exp: "১৯৩১ খ্রিস্টাব্দে প্রথম বাংলা সবাক ছবি 'জামাইষষ্ঠী' মুক্তি পায়। জে এফ ম্যাডান প্রযোজিত ম্যাডান থিয়েটারের এই ছবিটির পরিচালক ছিলেন অমর চৌধুরী।"
+},
+{
+q: "১৯১৭ খ্রিস্টাব্দে নির্মিত প্রথম বাংলা নির্বাক কাহিনীচিত্রের নাম কী, যা ম্যাডানের এলফিনস্টোন বায়োস্কোপ কোম্পানি তৈরি করেছিল?",
+opts: ["জামাইষষ্ঠী", "বিল্বমঙ্গল", "আলিবাবা", "সত্যবাদী রাজা হরিশচন্দ্র"],
+ans: 3,
+exp: "১৯১৭ খ্রিস্টাব্দে প্রথম বাংলা নির্বাক কাহিনীচিত্র 'সত্যবাদী রাজা হরিশচন্দ্র' মুক্তি লাভ করে। এটি নির্মাণ করেছিল বিখ্যাত এলফিনস্টোন বায়োস্কোপ কোম্পানি।"
+},
+{
+q: "১৯৩৭ সালে আর্দেশির ইরানি পরিচালিত ভারতের প্রথম সম্পূর্ণ রঙিন চলচ্চিত্রের নাম কী ছিল?",
+opts: ["আলম আরা", "মাদার ইন্ডিয়া", "উর্বশী", "কিষান কন্যা"],
+ans: 3,
+exp: "১৯৩৭ সালে আর্দেশির ইরানি পরিচালিত 'কিষান কন্যা' ছিল ভারতের প্রথম সফল রঙিন চলচ্চিত্র।"
+},
+{
+q: "ভারতের প্রথম আন্তর্জাতিক চলচ্চিত্র উৎসব (International Film Festival) কত সালে এবং কোথায় অনুষ্ঠিত হয়েছিল?",
+opts: ["১৯৫২ সালে বোম্বাইতে", "১৯৫৪ সালে কলকাতায়", "১৯৫৬ সালে মাদ্রাজে", "১৯৬০ সালে দিল্লিতে"],
+ans: 0,
+exp: "১৯৫২ খ্রিস্টাব্দে বোম্বাইতে ভারতের প্রথম আন্তর্জাতিক চলচ্চিত্র উৎসবের আসর বসেছিল, যা ভারতীয় সিনেমাকে বিশ্বের দরবারে তুলে ধরতে সাহায্য করেছিল।"
+},
+{
+q: "বাংলা নাটকের এক কিংবদন্তি ব্যক্তিত্ব উৎপল দত্তের নেতৃত্বাধীন বিখ্যাত নাট্যদল 'পিপল্স লিট্ল থিয়েটার' (PLT)-এর কয়েকটি অমর প্রযোজনা কোনগুলি?",
+opts: ["টিনের তলোয়ার, কল্লোল, ফেরারি ফৌজ", "সাজানো বাগান, রুদালি, দায়বদ্ধ", "মারীচ সংবাদ, জগন্নাথ, ফুটবল", "রক্তকরবী, নবান্ন, রুদ্ধসংগীত"],
+ans: 0,
+exp: "উৎপল দত্তের প্রধান নাট্যদল ছিল পিএলটি (PLT), যার বিখ্যাত প্রযোজনাগুলির মধ্যে অন্যতম হলো 'টিনের তলোয়ার', 'লালদুর্গ', 'কল্লোল', 'ক্ষমা করব না' এবং 'ফেরারি ফৌজ'।"
+},
+{
+q: "বিশিষ্ট নাট্যব্যক্তিত্ব অজিতেশ বন্দ্যোপাধ্যায় কোন বিখ্যাত নাট্যদলের সাথে যুক্ত ছিলেন?",
+opts: ["বহুরূপী", "নান্দীকার", "সুন্দরম", "চেতনা"],
+ans: 1,
+exp: "নান্দীকার নাট্যদলের প্রধান নাট্যব্যক্তিত্ব ছিলেন অজিতেশ বন্দ্যোপাধ্যায়। এই দলের বিখ্যাত নাটকগুলির মধ্যে রয়েছে 'ফুটবল', 'মেঘনাদবধ কাব্য', 'ফেরিওয়ালার মৃত্যু', 'শেষ সাক্ষাৎকার', 'অজ্ঞাতবাস', 'মাধবী' এবং 'নাচনি'।"
+}
+];
+
+const TOTAL_QS = questions.length;
+
+function getMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function getAttemptStorageKey(username) {
+    return `attempts_${username}_artculture_test13_${getMonthKey()}`;
+}
+function getMonthlyAttempts(username) {
+    if (!username) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username));
+    return raw ? parseInt(raw) : 0;
+}
+function incrementMonthlyAttempts(username) {
+    if (!username) return;
+    const current = getMonthlyAttempts(username);
+    localStorage.setItem(getAttemptStorageKey(username), current + 1);
+}
+function getRemainingAttempts(username) {
+    return Math.max(0, MAX_ATTEMPTS - getMonthlyAttempts(username));
+}
+
+function showSMS(message) {
+    const toast = document.getElementById('smsToast');
+    document.getElementById('smsText').innerText = message;
+    toast.classList.add('show');
+    clearTimeout(window.smsTimeout);
+    window.smsTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function initPage() {
+    const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
+    if (isLoggedIn && currentUser) {
+        checkAttemptAndStart();
+    } else {
+        document.getElementById('loginOverlay').classList.add('active');
+    }
+}
+
+function doLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value.trim();
+    const err = document.getElementById('loginError');
+    if (!u || !p) { err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.style.display = 'block'; return; }
+    if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+        currentUser = u;
+        sessionStorage.setItem("testBazarUserLoggedIn", "true");
+        sessionStorage.setItem("currentStudent", u);
+        document.getElementById('loginOverlay').classList.remove('active');
+        checkAttemptAndStart();
+    } else {
+        err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+        err.style.display = 'block';
+    }
+}
+
+function checkAttemptAndStart() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        setTimeout(goToHub, 1800);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`✅ লগইন সফল! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    startQuiz();
+}
+
+function startQuiz() {
+    cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+    timeLeft = TIME_LIMIT;
+    isReviewMode = false;
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('danger');
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[cur];
+    document.getElementById('qNum').innerText = isReviewMode
+        ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}`
+        : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+
+    const optsContainer = document.getElementById('qOpts');
+    optsContainer.innerHTML = '';
+    q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+        if (isReviewMode) {
+            btn.classList.add('disabled');
+            if (idx === q.ans) btn.classList.add('correct');
+            else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+        } else {
+            btn.onclick = () => selectAnswer(idx, btn);
+        }
+        optsContainer.appendChild(btn);
+    });
+
+    const nextBtn = document.getElementById('nextBtn');
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('scoreShow').innerText = isReviewMode
+        ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর"
+        : `সঠিক: ${score} | ভুল: ${wrong}`;
+
+    if (isReviewMode) {
+        document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+        document.getElementById('explanation').classList.add('show');
+        nextBtn.disabled = false;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+    } else {
+        nextBtn.disabled = true;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+    }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+    if (answered) return;
+    answered = true;
+    const q = questions[cur];
+    userAnswers[cur] = selectedIdx;
+    const allBtns = document.getElementById('qOpts').children;
+    for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.add('disabled');
+        if (i === q.ans) allBtns[i].classList.add('correct');
+    }
+    if (selectedIdx === q.ans) score++;
+    else { btnElement.classList.add('wrong'); wrong++; }
+
+    document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+    document.getElementById('expMain').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+    if (cur < TOTAL_QS - 1) { cur++; loadQuestion(); }
+    else {
+        if (isReviewMode) {
+            document.getElementById('testArea').classList.add('hidden');
+            document.getElementById('resultWrap').classList.add('show');
+        } else { clearInterval(timerInterval); showResult(); }
+    }
+}
+
+function showResult() {
+    document.getElementById('testArea').classList.add('hidden');
+    document.getElementById('timerBox').classList.add('hidden');
+    document.getElementById('resultWrap').classList.add('show');
+    const pct = Math.round((score / TOTAL_QS) * 100);
+    const wrongOrSkipped = TOTAL_QS - score;
+    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
+    if (pct >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
+    else if (pct >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
+    else if (pct >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
+    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
+    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultTagline').innerText = tagline;
+    document.getElementById('resultPercent').innerText = pct + '%';
+    document.getElementById('resultCorrect').innerText = score;
+    document.getElementById('resultWrong').innerText = wrongOrSkipped;
+    const remaining = getRemainingAttempts(currentUser);
+    document.getElementById('attemptsLeft').innerText = remaining;
+    showSMS(`📊 ফলাফল: ${pct}% | বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+}
+
+function showReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    isReviewMode = true;
+    cur = 0;
+    loadQuestion();
+}
+
+function restartQuiz() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`🔄 আবার শুরু! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    document.getElementById('resultWrap').classList.remove('show');
+    startQuiz();
+}
+
+function goToHub() {
+    window.location.href = "../index.html";
+}
+
+window.onload = initPage;
+</script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — History | Set 12</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Syne', sans-serif; background: #f0faf4; min-height: 100vh; color: #1c2e24; }
+.en-font { font-family: 'Syne', sans-serif; }
+.top-bar { background: #1a7a4a; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.top-logo { font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; }
+.top-logo span { color: #f9a825; }
+.timer-box { background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 6px; color: white; font-weight: 700; font-size: 0.95rem; }
+.timer-box.danger { background: #dc3545; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.main { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+
+.quiz-info { background: white; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; border: 1px solid #c5dccb; display: flex; gap: 1rem; flex-wrap: wrap; }
+.info-item { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #5a7a66; font-weight: 600; }
+.info-item strong { color: #1a7a4a; }
+.progress-wrap { background: #c5dccb; border-radius: 4px; height: 6px; margin-bottom: 1.2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: #1a7a4a; border-radius: 4px; transition: width 0.3s; }
+.q-card { background: white; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.q-num { font-size: 0.9rem; font-weight: 700; color: #1a7a4a; margin-bottom: 0.8rem; }
+.q-text { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: #1c2e24; font-weight: 700; line-height: 1.6; margin-bottom: 1.2rem; }
+.opts { display: flex; flex-direction: column; gap: 0.6rem; }
+.opt { display: flex; align-items: flex-start; gap: 12px; padding: 0.8rem 1rem; border: 1.5px solid #c5dccb; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; transition: all 0.2s; width: 100%; }
+.opt:hover:not(.disabled) { border-color: #1a7a4a; background: #f0faf4; }
+.opt-circle { min-width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c5dccb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #5a7a66; flex-shrink: 0; }
+.opt-text { font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1c2e24; line-height: 1.6; font-weight: 600; padding-top: 2px; }
+.opt.correct { border-color: #1a7a4a; background: #e8f7ef; }
+.opt.correct .opt-circle { background: #1a7a4a; border-color: #1a7a4a; color: white; }
+.opt.wrong { border-color: #dc3545; background: #fdf0f0; }
+.opt.wrong .opt-circle { background: #dc3545; border-color: #dc3545; color: white; }
+.opt.disabled { cursor: default; }
+.explanation { background: #f0faf4; border-left: 4px solid #1a7a4a; border-radius: 0 8px 8px 0; padding: 1rem; margin-top: 1rem; display: none; }
+.explanation.show { display: block; }
+.explanation p { font-family: 'Tiro Bangla', serif; font-size: 0.9rem; color: #2c4035; line-height: 1.7; }
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.score-show { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; color: #5a7a66; font-weight: bold; }
+.next-btn { background: #1a7a4a; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.next-btn:hover:not(:disabled) { background: #2aad68; }
+.next-btn:disabled { background: #c5dccb; cursor: not-allowed; }
+
+.result-wrap { display: none; max-width: 480px; margin: 0 auto; text-align: center; padding: 10px 0; }
+.result-wrap.show { display: block; }
+.result-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 6px; }
+.result-heading { font-family: 'Tiro Bangla', serif; font-size: 1.7rem; font-weight: 800; color: #1c2e24; margin-bottom: 18px; }
+.result-percent { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; color: #1a7a4a; line-height: 1; margin-bottom: 8px; }
+.result-tagline { font-family: 'Tiro Bangla', serif; font-size: 1.4rem; font-weight: 800; color: #f9a825; margin-bottom: 25px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.result-stat-box { background: #f0faf4; border: 2px solid #c5dccb; border-radius: 16px; padding: 20px 10px; }
+.result-stat-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.result-stat-num.correct { color: #1a7a4a; }
+.result-stat-num.wrong { color: #e63946; }
+.result-stat-label { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; font-weight: 700; color: #5a7a66; }
+.result-attempt-info { background: #f0faf4; border-radius: 14px; padding: 18px 15px; font-family: 'Tiro Bangla', serif; font-size: 1.15rem; font-weight: 700; color: #1c2e24; line-height: 1.5; margin-bottom: 25px; }
+.result-attempt-info .num { color: #1a7a4a; font-weight: 800; }
+.result-buttons { display: flex; flex-direction: column; gap: 12px; }
+.result-btn { border: none; border-radius: 14px; padding: 18px 20px; font-family: 'Tiro Bangla', serif; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.25s; color: white; }
+.result-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.result-btn.green { background: #2e9e4f; }
+.result-btn.blue { background: #1a9bb8; }
+.result-btn.gray { background: #6b7a72; }
+
+.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+.login-overlay.active { display: flex; }
+.login-modal { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.login-modal h2 { font-family: 'Tiro Bangla', serif; color: #1a7a4a; font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center; }
+.login-modal p { font-family: 'Tiro Bangla', serif; color: #5a7a66; font-size: 0.9rem; margin-bottom: 1.5rem; text-align: center; }
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #1c2e24; margin-bottom: 5px; font-family: 'Tiro Bangla', serif; }
+.input-group input { width: 100%; padding: 12px; border: 1.5px solid #c5dccb; border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s; }
+.input-group input:focus { border-color: #1a7a4a; box-shadow: 0 0 0 3px rgba(26,122,74,0.1); }
+.login-btn { width: 100%; background: #1a7a4a; color: white; border: none; padding: 12px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
+.cancel-btn { width: 100%; background: transparent; color: #5a7a66; border: 1.5px solid #c5dccb; padding: 10px; border-radius: 8px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.error-msg { color: #dc3545; font-size: 0.85rem; font-weight: 700; margin-top: 10px; font-family: 'Tiro Bangla', serif; display: none; text-align: center; }
+.set-name-display { background: #f0faf4; border-radius: 8px; padding: 0.6rem; text-align: center; margin-bottom: 1rem; font-family: 'Tiro Bangla', serif; font-size: 0.95rem; color: #1a7a4a; font-weight: 700; }
+.hidden { display: none !important; }
+.toast-sms { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #1c2e24; color: white; padding: 14px 22px; border-radius: 12px; font-family: 'Tiro Bangla', serif; font-size: 1rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); max-width: 90%; text-align: center; border-left: 5px solid #f9a825; white-space: pre-line; }
+.toast-sms.show { transform: translateX(-50%) translateY(0); }
+.toast-sms .sms-title { font-size: 0.8rem; opacity: 0.7; margin-bottom: 4px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<div class="toast-sms" id="smsToast">
+    <div class="sms-title">📩 TEST BAZAR</div>
+    <div id="smsText">আপনার বার্তা এখানে</div>
+</div>
+
+<div class="top-bar">
+<div class="top-logo" onclick="goToHub()">Test<span>Bazar</span></div>
+<div class="timer-box hidden" id="timerBox">⏱ <span id="timerDisplay">15:00</span></div>
+</div>
+
+<div class="main">
+
+<div class="login-overlay" id="loginOverlay">
+<div class="login-modal">
+<h2>🔐 লগইন করুন</h2>
+<p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+<div class="set-name-display">🏛️ History Set 12</div>
+<div class="input-group">
+<label>ইউজারনেম</label>
+<input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+</div>
+<div class="input-group">
+<label>পাসওয়ার্ড</label>
+<input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLogin()">
+</div>
+<button class="login-btn" onclick="doLogin()">✅ লগইন করে Test শুরু করো</button>
+<button class="cancel-btn" onclick="goToHub()">বাতিল</button>
+<div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড।</div>
+</div>
+</div>
+
+<div id="testArea" class="hidden">
+<div class="quiz-info">
+<div class="info-item">🎓 <strong>ইতিহাস</strong> — Set 12</div>
+<div class="info-item">📝 <span>প্রাচীন ও মধ্যযুগীয় ভারতের সাহিত্য, বিজ্ঞান ও সংস্কৃতি</span></div>
+</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="q-card" id="qCard">
+<div class="q-num" id="qNum">প্রশ্ন ১ / ২০</div>
+<div class="q-text" id="qText"></div>
+<div class="opts" id="qOpts"></div>
+<div class="explanation" id="explanation"><p id="explanationText"></p></div>
+<div class="nav-row">
+<div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+<button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+</div>
+</div>
+</div>
+
+<div class="result-wrap" id="resultWrap">
+    <div class="result-emoji" id="resultEmoji">💪</div>
+    <div class="result-heading">আপনার ফলাফল</div>
+    <div class="result-percent" id="resultPercent">0%</div>
+    <div class="result-tagline" id="resultTagline">চেষ্টা চালিয়ে যাও!</div>
+
+    <div class="result-stats">
+        <div class="result-stat-box">
+            <div class="result-stat-num correct" id="resultCorrect">0</div>
+            <div class="result-stat-label">সঠিক</div>
+        </div>
+        <div class="result-stat-box">
+            <div class="result-stat-num wrong" id="resultWrong">0</div>
+            <div class="result-stat-label">ভুল / স্কিপ</div>
+        </div>
+    </div>
+
+    <div class="result-attempt-info" id="resultAttemptInfo">
+        বাকি আছে <span class="num" id="attemptsLeft">5</span> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ৫ বার)
+    </div>
+
+    <div class="result-buttons">
+        <button class="result-btn green" onclick="showReview()">উত্তর ও ব্যাখ্যা দেখুন</button>
+        <button class="result-btn blue" onclick="restartQuiz()">আবার চেষ্টা করো</button>
+        <button class="result-btn gray" onclick="goToHub()">Chapter Hub-এ ফিরুন</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+const MAX_ATTEMPTS = 5;
+const TIME_LIMIT = 15 * 60;
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+
+const GLOBAL_USERS = {
+"demo1": "1234", "demo2": "1234", "demo3": "1234", "demo4": "1234", "mali": "1234", "sagun": "1234", "dhiren": "1234",
+"ajay": "7251", "anita": "1234", "jaba": "1234", "student100": "pass001", "rohit2027": "abc456"
+};
+
+let currentUser = sessionStorage.getItem("currentStudent") || "";
+let cur = 0, score = 0, wrong = 0, answered = false;
+let timerInterval, timeLeft = TIME_LIMIT;
+let userAnswers = [];
+let isReviewMode = false;
+
+// ★ সঠিক উত্তর A/B/C/D-তে ছড়িয়ে দেওয়া হয়েছে
+const questions = [
+{
+q: "সম্রাট হর্ষবর্ধনের রাজত্বকাল, তাঁর পূর্বপুরুষদের কাহিনী এবং সমসাময়িক ভারতের সমাজ ব্যবস্থার অন্যতম আকর গ্রন্থ 'হর্ষচরিত' ও 'কাদম্বরী' কে রচনা করেছিলেন?",
+opts: ["সুবন্ধু", "বাণভট্ট", "হর্ষবর্ধন", "ভর্তৃহরি"],
+ans: 1,
+exp: "হর্ষবর্ধনের সভাকবি বাণভট্ট 'কাদম্বরী' এবং সম্রাট হর্ষবর্ধনের জীবনকাহিনী নিয়ে 'হর্ষচরিত' রচনা করেন। অতিরিক্ত তথ্য: কাদম্বরী হলো সংস্কৃত সাহিত্যের অন্যতম শ্রেষ্ঠ ও কালজয়ী রোমান্টিক উপন্যাস।"
+},
+{
+q: "পুষ্পভূতি বংশের শ্রেষ্ঠ রাজা হর্ষবর্ধন স্বয়ং একজন অসামান্য সাহিত্যিক ছিলেন। নিচের কোন তিনটি সংস্কৃত নাটক হর্ষবর্ধন কর্তৃক রচিত হয়েছিল?",
+opts: ["কাদম্বরী, হর্ষচরিত ও চণ্ডীশতক", "কিরাতার্জনীয়ম, মেঘদূত ও মালবিকাগ্নিমিত্রম", "রত্নাবলি, প্রিয়দর্শিকা ও নাগানন্দ", "মৃচ্ছকটিকম, মুদ্রারাক্ষস ও দেবীচন্দ্রগুপ্তম"],
+ans: 2,
+exp: "সম্রাট হর্ষবর্ধন (উপাধি শিলাদিত্য) নিজেই রত্নাবলি, প্রিয়দর্শিকা এবং নাগানন্দ নামক তিনটি বিখ্যাত সংস্কৃত নাটকের রচয়িতা ছিলেন। অতিরিক্ত তথ্য: হর্ষবর্ধনের আমলে বিখ্যাত চীনা পর্যটক হিউয়েন সাঙ ভারতে এসেছিলেন এবং তাঁর রচিত ভ্রমণকাহিনীটি 'সি-ইউ-কি' নামে পরিচিত।"
+},
+{
+q: "অর্জুন ও মহাদেবের দ্বন্দ্বের পৌরাণিক কাহিনী নিয়ে রচিত বিখ্যাত বীররসাত্মক মহাকাব্য 'কিরাতার্জনীয়ম' কার রচনা?",
+opts: ["দণ্ডিণ", "বাণভট্ট", "গুণাঢ্য", "ভারবি"],
+ans: 3,
+exp: "কিরাতার্জনীয়ম মহাকাব্যের রচয়িতা হলেন সংস্কৃত কবি ভারবি, যিনি পল্লবরাজ সিংহবিষ্ণুর রাজসভার অলংকার ছিলেন। অতিরিক্ত তথ্য: এই কাব্যের ওপর ভিত্তি করে পরবর্তীতে মহাবলীপুরমে বিখ্যাত 'অর্জুনের প্রায়শ্চিত্ত' নামক প্রস্তর খোদাই ভাস্কর্য নির্মিত হয়েছিল।"
+},
+{
+q: "প্রাচীন ভারতের অসামান্য গণিতজ্ঞ ও জ্যোতির্বিজ্ঞানী আর্যভট্টের রচিত প্রধান গ্রন্থটির নাম কী, যা বিজ্ঞান ইতিহাসে এক অনন্য পরিবর্তন এনেছিল?",
+opts: ["আর্যসিদ্ধান্ত", "সূর্যসিদ্ধান্ত", "পঞ্চসিদ্ধান্তিকা", "বৃহৎসংহিতা"],
+ans: 0,
+exp: "গণিতশাস্ত্রবিদ ও জ্যোতির্বিজ্ঞানী আর্যভট্ট তাঁর তত্ত্ব ও আবিষ্কার সংবলিত বিখ্যাত গ্রন্থ 'আর্যসিদ্ধান্ত' রচনা করেন। অতিরিক্ত তথ্য: আর্যভট্টই প্রথম প্রমাণ করেছিলেন যে পৃথিবী নিজের অক্ষের ওপর ঘোরে এবং তিনি শূন্য (০)-র ব্যবহারিক গুরুত্ব ব্যাখ্যা করেছিলেন।"
+},
+{
+q: "গুপ্ত যুগের বিখ্যাত নবরত্নের অন্যতম সদস্য এবং 'বৃহৎসংহিতা', 'পঞ্চসিদ্ধান্তিকা' ও 'সূর্যসিদ্ধান্ত' নামক জ্যোতির্বিজ্ঞান গ্রন্থের রচয়িতা কে?",
+opts: ["আর্যভট্ট", "ব্রহ্মগুপ্ত", "বরাহমিহির", "ধন্বন্তরী"],
+ans: 2,
+exp: "বরাহমিহির ছিলেন গুপ্ত সম্রাট দ্বিতীয় চন্দ্রগুপ্তের নবরত্ন সভার অন্যতম জ্যোতির্বিজ্ঞানী, যিনি বৃহৎসংহিতা ও পঞ্চসিদ্ধান্তিকা রচনা করেন। অতিরিক্ত তথ্য: বৃহৎসংহিতা গ্রন্থটি জ্যোতির্বিজ্ঞানের পাশাপাশি সমকালীন ভূগোল, উদ্যানবিদ্যা ও স্থাপত্যকলার এক জীবন্ত বিশ্বকোষ।"
+},
+{
+q: "সংস্কৃত সাহিত্যের সর্বশ্রেষ্ঠ কবি মহাকবি কালিদাসের বিখ্যাত রোমান্টিক নাটক 'অভিজ্ঞান শকুন্তলম' এবং মহাকাব্য 'মেঘদূত' ও 'কুমারসম্ভব' কোন সম্রাটের রাজত্বকালের সমসাময়িক?",
+opts: ["সমুদ্রগুপ্ত", "প্রথম কুমারগুপ্ত", "হর্ষবর্ধন", "দ্বিতীয় চন্দ্রগুপ্ত (বিক্রমাদিত্য)"],
+ans: 3,
+exp: "কালিদাস ছিলেন দ্বিতীয় চন্দ্রগুপ্তের রাজসভার নবরত্নের প্রধান কবি, যিনি মেঘদূত, কুমারসম্ভব, মালবিকাগ্নিমিত্রম এবং অভিজ্ঞান শকুন্তলম রচনা করেছিলেন। অতিরিক্ত তথ্য: কালিদাসের কাব্যিক সুষমা ও বর্ণনাবৈচিত্র্যের কারণে তাঁকে প্রায়শই 'ভারতের শেকসপিয়র' বলা হয়ে থাকে।"
+},
+{
+q: "ব্যাকট্রিয় গ্রিক রাজা মিনান্দার এবং বৌদ্ধ পণ্ডিত নাগসেনের আধ্যাত্মিক কথোপকথনের ঐতিহাসিক সংকলন 'মিলিন্দপঞহ' মূলত কোন ভাষায় রচিত একটি বিখ্যাত বৌদ্ধ সাহিত্য?",
+opts: ["সংস্কৃত ভাষা", "পালি ভাষা", "প্রাকৃত ভাষা", "খরোষ্ঠী লিপি"],
+ans: 1,
+exp: "মিলিন্দপঞহ বা মিলিন্দপন্থ হলো পালি ভাষায় রচিত একটি বিখ্যাত বৌদ্ধ গ্রন্থ, যার রচয়িতা বৌদ্ধ পণ্ডিত নাগসেন। অতিরিক্ত তথ্য: এই কথোপকথনের পর গ্রিক রাজা মিনান্দার বৌদ্ধ ধর্মে দীক্ষিত হন এবং বৌদ্ধ ধর্মের চরম পৃষ্ঠপোষকতা শুরু করেন।"
+},
+{
+q: "প্রাচীন ভারতের দরিদ্র ব্রাহ্মণ চারুদত্ত এবং রূপসী বসন্তসেনার প্রেমের পটভূমিতে রচিত বিখ্যাত নাটক 'মৃচ্ছকটিকম' (মাটির খেলনা গাড়ি)-এর রচয়িতা কে?",
+opts: ["বিশাখদত্ত", "ভারবি", "বাৎসায়ন", "শূদ্রক"],
+ans: 3,
+exp: "গুপ্ত যুগের সমসাময়িক মহান নাট্যকার শূদ্রক 'মৃচ্ছকটিকম' নাটকটি রচনা করেছিলেন, যা তখনকার সামাজিক বাস্তবতার ছবি তুলে ধরে। অতিরিক্ত তথ্য: এটি রাজকীয় চরিত্র বাদ দিয়ে সমাজের সাধারণ খেটে খাওয়া ও অপরাধ জগতের বাস্তব চরিত্র নিয়ে লেখা প্রথম প্রধান সংস্কৃত সামাজিক নাটক।"
+},
+{
+q: "পাল রাজবংশের শেষ পর্বের রাজা রামপালের জীবনবৃত্তান্ত ও কৈবর্ত বিদ্রোহের কাহিনী দ্ব্যর্থবোধক ভাষায় খোদাইকারী বিখ্যাত গ্রন্থ 'রামচরিত'-এর রচয়িতা কে?",
+opts: ["তুলসীদাস", "জয়দেব", "সন্ধ্যাকর নন্দী", "বাণভট্ট"],
+ans: 2,
+exp: "সন্ধ্যাকর নন্দী রামপালের 'রামচরিত' কাব্য রচনা করেছিলেন। অতিরিক্ত তথ্য: অন্যদিকে, তুলসীদাস আকবরের রাজত্বকালে অত্যন্ত জনপ্রিয় রামায়ণ অনুবাদগ্রন্থ 'রামচরিতমানস' রচনা করেন।"
+},
+{
+q: "বাংলার সেন রাজবংশের অত্যন্ত পণ্ডিত রাজা বল্লাল সেন হিন্দু আচার ও জ্যোতির্বিজ্ঞানের ওপর কোন দুটি বিখ্যাত আকর গ্রন্থ রচনা করেছিলেন?",
+opts: ["গীতগোবিন্দ ও পবনদূত", "হরিমঞ্জরী ও ন্যায়কন্দলী", "মত্তবিলাস ও বৃহৎকথা", "দানসাগর ও অদ্ভুতসাগর"],
+ans: 3,
+exp: "সেন রাজবংশের রাজা বল্লাল সেন নিজেই 'দানসাগর' এবং 'অদ্ভুতসাগর' (যা পরে তাঁর পুত্র লক্ষণ সেন সম্পূর্ণ করেন) গ্রন্থ দুটি রচনা করেছিলেন। অতিরিক্ত তথ্য: বল্লাল সেন বাংলায় কৌলিন্য প্রথা প্রবর্তনের জন্য ইতিহাসে অত্যন্ত আলোচিত ও সুপরিচিত শাসক ছিলেন।"
+},
+{
+q: "লক্ষণ সেনের রাজসভার অন্যতম প্রধান পঞ্চরত্ন কবি জয়দেব সংস্কৃত ভাষায় 'গীতগোবিন্দ' কাব্যগ্রন্থটি রচনা করেছিলেন, এটি মূলত কার প্রেমলীলার ওপর আধারিত?",
+opts: ["শিব ও পার্বতী", "রাম ও সীতা", "রাধা ও কৃষ্ণ", "লক্ষণ ও ঊর্মিলা"],
+ans: 2,
+exp: "রাধা-কৃষ্ণের প্রেমলীলা এবং বৈষ্ণব ভক্তির অমর কাব্য 'গীতগোবিন্দ' লক্ষণ সেনের সভাকবি জয়দেব রচনা করেছিলেন। অতিরিক্ত তথ্য: জয়দেবের গীতগোবিন্দ কাব্যের মধুর পদাবলী আজও ভারতীয় শাস্ত্রীয় সঙ্গীত ও নৃত্যকলার অন্যতম বড় একটি প্রধান স্তম্ভ।"
+},
+{
+q: "মহাকবি কালিদাসের 'মেঘদূত' কাব্যের অনুপ্রেরণায় লক্ষণ সেনের রাজসভার পঞ্চরত্ন কবি ধোয়ী কোন বিখ্যাত দূতকাব্যটি রচনা করেছিলেন?",
+opts: ["গীতগোবিন্দ", "পবনদূতম", "বৃহৎকথা", "কাদম্বরী"],
+ans: 1,
+exp: "লক্ষণ সেনের সভাকবি ধোয়ী 'পবনদূতম' নামক সুমধুর সংস্কৃত দূতকাব্যটি রচনা করেন। অতিরিক্ত তথ্য: এই কাব্যে দক্ষিণাত্যের এক গন্ধর্ব কন্যার সাথে লক্ষণ সেনের কাল্পনিক ও চমৎকার প্রেম কাহিনীর নিখুঁত চিত্র ফুটিয়ে তোলা হয়েছে।"
+},
+{
+q: "প্রাচীন কাঞ্চির পল্লব বংশের রাজা মহেন্দ্রবর্মন সমকালীন ভণ্ড সন্ন্যাসী ও কাপালিকদের ব্যঙ্গ করে কোন বিখ্যাত নাট্য প্রহসনটি রচনা করেছিলেন?",
+opts: ["কিরাতার্জনীয়ম", "দশকুমারচরিত", "মিলিন্দপঞহ", "মত্তবিলাস প্রহসন"],
+ans: 3,
+exp: "পল্লবরাজ মহেন্দ্রবর্মন 'মত্তবিলাস' (Mattevilas Prasana) নামক হাস্যরসাত্মক সামাজিক নাটকটি রচনা করেছিলেন। অতিরিক্ত তথ্য: এই প্রহসনটি থেকে প্রাচীন দক্ষিণ ভারতের শৈব কাপালিক, বৌদ্ধ ও জৈন ভিক্ষুদের তৎকালীন সামাজিক আচার ব্যবহারের ওপর বিশেষ আলোকপাত করা যায়।"
+},
+{
+q: "প্রাচীন কুষাণ যুগে বা কণিষ্কের রাজত্বকালে ভারতে চিকিৎসাশাস্ত্র এবং প্রথম সফল অস্ত্রোপচার (Surgery) সংক্রান্ত প্রধান দুটি আকর গ্রন্থ যথাক্রমে কোনগুলি?",
+opts: ["আয়ুর্বেদ দীপিকা ও চরকসংহিতা", "ন্যায়কন্দলী ও চরকসংহিতা", "চরকসংহিতা এবং শুশ্রুতসংহিতা", "রাজনীতি এবং চরকসংহিতা"],
+ans: 2,
+exp: "প্রাচীন ভারতে ভেষজ চিকিৎসার ক্ষেত্রে চরক 'চরকসংহিতা' এবং মানব ইতিহাসে প্রথম শল্যচিকিৎসা বা প্লাস্টিক সার্জারির ক্ষেত্রে শুশ্রুত 'শুশ্রুতসংহিতা' রচনা করেন। অতিরিক্ত তথ্য: এঁরা দুজনেই কুষাণ সম্রাট কণিষ্কের সমসাময়িক ও তাঁর দরবারে অত্যন্ত সম্মানিত ব্যক্তিত্ব ছিলেন।"
+},
+{
+q: "সংস্কৃত ব্যাকরণ চর্চার ইতিহাসে মাইলফলক এবং পৃথিবীর প্রাচীনতম ব্যাকরণ গ্রন্থ 'অষ্টাধ্যায়ী'-র রচয়িতা কে?",
+opts: ["পতঞ্জলি", "ভর্তৃহরি", "কাত্যায়ন", "পাণিনি"],
+ans: 3,
+exp: "প্রাচীন ভারতের বিখ্যাত ব্যাকরণবিদ পাণিনি 'অষ্টাধ্যায়ী' নামক আটটি অধ্যায়ের সমন্বয়ে গঠিত ব্যাকরণ বিধিগ্রন্থটি রচনা করেন। অতিরিক্ত তথ্য: পাণিনির এই ব্যাকরণের ওপর ভিত্তি করেই পরবর্তীতে পতঞ্জলি তাঁর সুপ্রসিদ্ধ 'মহাভাষ্য' টীকাগ্রন্থটি রচনা করেছিলেন।"
+},
+{
+q: "প্রাচীন ভারতে নাগরিক জীবনচর্যা, সামাজিক লৌকিকতা এবং কামশাস্ত্রের ওপর রচিত বিখ্যাত গ্রন্থ 'কামসূত্র'-এর রচয়িতা কে?",
+opts: ["বাৎসায়ন", "শূদ্রক", "মহেন্দ্রবর্মন", "বল্লাল সেন"],
+ans: 0,
+exp: "প্রাচীন ভারতীয় সাহিত্যের অন্যতম বিখ্যাত ও বৈচিত্র্যময় কামশাস্ত্র সংবলিত 'কামসূত্র' গ্রন্থটির রচয়িতা হলেন বাৎসায়ন। অতিরিক্ত তথ্য: বাৎসায়ন মূলত গুপ্ত যুগে এই গ্রন্থটি রচনা করেছিলেন, যা সেকালের নাগরিক জীবনের সংস্কৃতি বুঝতে গবেষকদের প্রভূত সাহায্য করে।"
+},
+{
+q: "দ্বাদশ শতাব্দীতে কবি কলহন সংস্কৃত ভাষায় রচিত 'রাজতরঙ্গিনী' গ্রন্থে মূলত কোন উপত্যকা অঞ্চলের ধারাবাহিক রাজবংশ ও ঐতিহাসিক ঘটনা বর্ণনা করেছেন?",
+opts: ["বাংলা", "কাশ্মীর", "মগধ", "দাক্ষিণাত্য"],
+ans: 1,
+exp: "দ্বাদশ শতাব্দীতে কবি কলহন তাঁর কালজয়ী গ্রন্থ 'রাজতরঙ্গিনী' (যার আক্ষরিক অর্থ রাজাদের নদী) রচনা করেন, যাতে কাশ্মীরের প্রাচীন ও মধ্যযুগীয় ইতিহাস পুঙ্খানুপুঙ্খ বর্ণিত আছে। অতিরিক্ত তথ্য: রাজতরঙ্গিনীকে ভারতের ইতিহাসের প্রথম আধুনিক, সুনির্দিষ্ট এবং বৈজ্ঞানিক দৃষ্টিভঙ্গিতে লিখিত প্রকৃত ঐতিহাসিক গ্রন্থ বলে গণ্য করা হয়।"
+},
+{
+q: "বিশ্বের সবচেয়ে জনপ্রিয় শিক্ষামূলক পশু-পাখির গল্প এবং নীতিশাস্ত্রের কালজয়ী গ্রন্থ 'পঞ্চতন্ত্র' কার অমর সৃষ্টি?",
+opts: ["কালিদাস", "গুণাঢ্য", "বিষ্ণু শর্মা", "বাণভট্ট"],
+ans: 2,
+exp: "গুপ্ত যুগে বিখ্যাত পণ্ডিত বিষ্ণু শর্মা রাজা অমরকীর্তির অবাধ্য পুত্রদের সুশিক্ষিত ও নীতিবান করার উদ্দেশ্যে 'পঞ্চতন্ত্র' নামক নীতিগর্ভ গল্পের সংকলনটি রচনা করেছিলেন। অতিরিক্ত তথ্য: এটি বাইবেলের পর পৃথিবীর ইতিহাসে দ্বিতীয় সর্বাধিক অনূদিত গ্রন্থ হিসেবে বিশ্বজুড়ে সমাদৃত।"
+},
+{
+q: "দশজন রাজপুত্রের চমৎকার অভিযান ও রোমাঞ্চকর কাহিনী সংবলিত সংস্কৃত গদ্যকাব্য 'দশকুমারচরিত'-এর রচয়িতা কে?",
+opts: ["দণ্ডিণ", "ভারবি", "সুবন্ধু", "বিলহন"],
+ans: 0,
+exp: "পল্লব বংশের রাজা দ্বিতীয় নরসিংহবর্মনের রাজসভার অন্যতম সংস্কৃত গদ্যকার দণ্ডিণ 'দশকুমারচরিত' রচনা করেন। অতিরিক্ত তথ্য: দণ্ডিণের রচনাশৈলী অত্যন্ত সাবলীল এবং এটি প্রাচীন ভারতের অলংকার শাস্ত্রের এক অনন্য নিদর্শন।"
+},
+{
+q: "কল্যাণের চালুক্য বংশের পরাক্রমশালী রাজা ষষ্ঠ বিক্রমাদিত্যের রাজ্যজয় ও গৌরবোজ্জ্বল কীর্তি সংবলিত 'বিক্রমাঙ্কদেবচরিত' মহাকাব্যটি কে রচনা করেছিলেন?",
+opts: ["কলহন", "নাগার্জুন", "বিলহন", "ধোয়ী"],
+ans: 2,
+exp: "কাশ্মীরের বিখ্যাত কবি বিলহন কল্যাণের চালুক্য রাজসভায় আশ্রয় পেয়ে রাজা ষষ্ঠ বিক্রমাদিত্যের জীবনী নিয়ে 'বিক্রমাঙ্কদেবচরিত' মহাকাব্যটি রচনা করেন। অতিরিক্ত তথ্য: বিলহনের আরেকটি বিখ্যাত গীতিকাব্য হলো 'চৌরপঞ্চাশিকা', যা সংস্কৃত সাহিত্যের রোমান্টিক ধারায় একটি চমৎকার সৃষ্টি।"
+}
+];
+
+const TOTAL_QS = questions.length;
+
+// ★ STORAGE KEY — username + history + set12 + month
+function getMonthKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function getAttemptStorageKey(username) {
+    return `attempts_${username}_history_set12_${getMonthKey()}`;
+}
+function getMonthlyAttempts(username) {
+    if (!username) return 0;
+    const raw = localStorage.getItem(getAttemptStorageKey(username));
+    return raw ? parseInt(raw) : 0;
+}
+function incrementMonthlyAttempts(username) {
+    if (!username) return;
+    const current = getMonthlyAttempts(username);
+    localStorage.setItem(getAttemptStorageKey(username), current + 1);
+}
+function getRemainingAttempts(username) {
+    return Math.max(0, MAX_ATTEMPTS - getMonthlyAttempts(username));
+}
+
+function showSMS(message) {
+    const toast = document.getElementById('smsToast');
+    document.getElementById('smsText').innerText = message;
+    toast.classList.add('show');
+    clearTimeout(window.smsTimeout);
+    window.smsTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function initPage() {
+    const isLoggedIn = sessionStorage.getItem("testBazarUserLoggedIn") === "true";
+    if (isLoggedIn && currentUser) {
+        checkAttemptAndStart();
+    } else {
+        document.getElementById('loginOverlay').classList.add('active');
+    }
+}
+
+function doLogin() {
+    const u = document.getElementById('loginUsername').value.trim();
+    const p = document.getElementById('loginPassword').value.trim();
+    const err = document.getElementById('loginError');
+    if (!u || !p) { err.innerText = "❌ ইউজারনেম এবং পাসওয়ার্ড দিন!"; err.style.display = 'block'; return; }
+    if (GLOBAL_USERS[u] && GLOBAL_USERS[u] === p) {
+        currentUser = u;
+        sessionStorage.setItem("testBazarUserLoggedIn", "true");
+        sessionStorage.setItem("currentStudent", u);
+        document.getElementById('loginOverlay').classList.remove('active');
+        checkAttemptAndStart();
+    } else {
+        err.innerText = "❌ ভুল ইউজারনেম বা পাসওয়ার্ড।";
+        err.style.display = 'block';
+    }
+}
+
+function checkAttemptAndStart() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        setTimeout(goToHub, 1800);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`✅ লগইন সফল! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    startQuiz();
+}
+
+function startQuiz() {
+    cur = 0; score = 0; wrong = 0; answered = false; userAnswers = [];
+    timeLeft = TIME_LIMIT;
+    isReviewMode = false;
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('hidden');
+    document.getElementById('timerBox').classList.remove('danger');
+    startTimer();
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+    if (timeLeft < 60) document.getElementById('timerBox').classList.add('danger');
+}
+
+function loadQuestion() {
+    answered = false;
+    const q = questions[cur];
+    document.getElementById('qNum').innerText = isReviewMode
+        ? `Review: প্রশ্ন ${cur + 1} / ${TOTAL_QS}`
+        : `প্রশ্ন ${cur + 1} / ${TOTAL_QS}`;
+    document.getElementById('qText').innerText = q.q;
+    document.getElementById('progressFill').style.width = `${((cur + 1) / TOTAL_QS) * 100}%`;
+    const optsContainer = document.getElementById('qOpts');
+    optsContainer.innerHTML = '';
+    q.opts.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = `<div class="opt-circle">${LABELS[idx]}</div> <div class="opt-text">${optText}</div>`;
+        if (isReviewMode) {
+            btn.classList.add('disabled');
+            if (idx === q.ans) btn.classList.add('correct');
+            else if (userAnswers[cur] === idx) btn.classList.add('wrong');
+        } else {
+            btn.onclick = () => selectAnswer(idx, btn);
+        }
+        optsContainer.appendChild(btn);
+    });
+    const nextBtn = document.getElementById('nextBtn');
+    document.getElementById('explanation').classList.remove('show');
+    document.getElementById('scoreShow').innerText = isReviewMode
+        ? "সবুজ = সঠিক উত্তর | লাল = আপনার ভুল উত্তর"
+        : `সঠিক: ${score} | ভুল: ${wrong}`;
+    if (isReviewMode) {
+        document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+        document.getElementById('explanation').classList.add('show');
+        nextBtn.disabled = false;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল পেজে ফিরুন' : 'পরবর্তী →';
+    } else {
+        nextBtn.disabled = true;
+        nextBtn.innerText = cur === TOTAL_QS - 1 ? 'ফলাফল দেখো 🏆' : 'পরবর্তী →';
+    }
+}
+
+function selectAnswer(selectedIdx, btnElement) {
+    if (answered) return;
+    answered = true;
+    const q = questions[cur];
+    userAnswers[cur] = selectedIdx;
+    const allBtns = document.getElementById('qOpts').children;
+    for (let i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.add('disabled');
+        if (i === q.ans) allBtns[i].classList.add('correct');
+    }
+    if (selectedIdx === q.ans) score++;
+    else { btnElement.classList.add('wrong'); wrong++; }
+    document.getElementById('scoreShow').innerText = `সঠিক: ${score} | ভুল: ${wrong}`;
+    document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+    document.getElementById('explanation').classList.add('show');
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+    if (cur < TOTAL_QS - 1) { cur++; loadQuestion(); }
+    else {
+        if (isReviewMode) {
+            document.getElementById('testArea').classList.add('hidden');
+            document.getElementById('resultWrap').classList.add('show');
+        } else { clearInterval(timerInterval); showResult(); }
+    }
+}
+
+function showResult() {
+    document.getElementById('testArea').classList.add('hidden');
+    document.getElementById('timerBox').classList.add('hidden');
+    document.getElementById('resultWrap').classList.add('show');
+    const pct = Math.round((score / TOTAL_QS) * 100);
+    const wrongOrSkipped = TOTAL_QS - score;
+    let emoji = '💪', tagline = 'চেষ্টা চালিয়ে যাও!';
+    if (pct >= 80) { emoji = '🏆'; tagline = 'অসাধারণ! চালিয়ে যাও!'; }
+    else if (pct >= 60) { emoji = '🎉'; tagline = 'ভালো করেছ! আরও উন্নতি করো!'; }
+    else if (pct >= 40) { emoji = '💪'; tagline = 'চেষ্টা চালিয়ে যাও!'; }
+    else { emoji = '📚'; tagline = 'আরও প্র্যাকটিস দরকার!'; }
+    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultTagline').innerText = tagline;
+    document.getElementById('resultPercent').innerText = pct + '%';
+    document.getElementById('resultCorrect').innerText = score;
+    document.getElementById('resultWrong').innerText = wrongOrSkipped;
+    const remaining = getRemainingAttempts(currentUser);
+    document.getElementById('attemptsLeft').innerText = remaining;
+    showSMS(`📊 ফলাফল: ${pct}% | বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+}
+
+function showReview() {
+    document.getElementById('resultWrap').classList.remove('show');
+    document.getElementById('testArea').classList.remove('hidden');
+    isReviewMode = true;
+    cur = 0;
+    loadQuestion();
+}
+
+function restartQuiz() {
+    const count = getMonthlyAttempts(currentUser);
+    if (count >= MAX_ATTEMPTS) {
+        showSMS(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর দেওয়া সম্ভব নয়।`);
+        return;
+    }
+    incrementMonthlyAttempts(currentUser);
+    const remaining = getRemainingAttempts(currentUser);
+    showSMS(`🔄 আবার শুরু! বাকি আছে ${remaining} বার Test দেওয়ার সুযোগ।`);
+    document.getElementById('resultWrap').classList.remove('show');
+    startQuiz();
+}
+
+function goToHub() {
+    window.location.href = "../index.html";
+}
+
+window.onload = initPage;
+</script>
+</body>
+</html>

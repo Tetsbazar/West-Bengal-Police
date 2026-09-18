@@ -17,6 +17,8 @@
 --border-color: #c5dccb;
 --success: #1a7a4a;
 --danger: #dc3545;
+--logo-blue: #073B78;
+--logo-gold: #FF9D00;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Syne', sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
@@ -34,10 +36,51 @@ a { text-decoration: none; }
 .bg-animation span:nth-child(6) { left: 90%; width: 70px; height: 70px; animation-duration: 26s; animation-delay: 5s; background: rgba(26, 122, 74, 0.05); }
 @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-1200px) rotate(720deg); opacity: 0; } }
 
-/* ================= NAVBAR ================= */
-.navbar { background: var(--primary); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
-.logo { font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
-.logo span { color: var(--accent); }
+/* ================= NAVBAR with LOGO ================= */
+.navbar { background: var(--primary); padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 20px rgba(26, 122, 74, 0.15); position: sticky; top: 0; z-index: 100; }
+
+/* === Logo container – matches the second file's style === */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    color: white;
+}
+.navbar-logo:hover { opacity: 0.9; }
+
+/* Small SVG icon inline */
+.logo-svg {
+    width: 44px;
+    height: 34px;
+    flex-shrink: 0;
+}
+.logo-svg svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Text part: Test + Bazar */
+.logo-text {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    font-size: 1.5rem;
+}
+.logo-text .test { color: #FFFFFF; }
+.logo-text .bazar { color: var(--logo-gold); }
+
+/* Tagline under logo (tiny) */
+.logo-tagline {
+    display: none; /* hidden on navbar, shown in hero instead */
+}
+
 .user-badge { font-family: 'Tiro Bangla', serif; font-size: 0.85rem; background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 50px; color: white; font-weight: 700; display: none; align-items: center; gap: 6px; }
 .user-badge.show { display: inline-flex; }
 .user-badge .logout-btn { background: rgba(255,255,255,0.2); border: none; color: white; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
@@ -47,10 +90,90 @@ a { text-decoration: none; }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
-/* ================= HERO ================= */
+/* ================= HERO (with logo & brand) ================= */
 .welcome-hero { text-align: center; margin-bottom: 2.5rem; animation: fadeInDown 0.8s ease-out; }
-.welcome-hero h1 { font-family: 'Tiro Bangla', serif; font-size: 2.2rem; color: var(--primary); margin-bottom: 0.8rem; font-weight: bold; }
-.welcome-hero p { font-family: 'Tiro Bangla', serif; font-size: 1.15rem; color: var(--text-meta); max-width: 700px; margin: 0 auto; line-height: 1.6; }
+
+/* === Big centered logo — similar to second file's .logo-box but compact === */
+.hero-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+.hero-logo .logo-svg-big {
+    width: min(280px, 60vw);
+    height: auto;
+    margin-bottom: 8px;
+}
+.hero-logo .logo-svg-big svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.hero-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    font-size: clamp(38px, 7vw, 62px);
+}
+.hero-brand .test { color: var(--logo-blue); }
+.hero-brand .bazar { color: var(--logo-gold); }
+
+.hero-tagline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: var(--logo-blue);
+    font-size: clamp(13px, 1.8vw, 18px);
+    font-weight: 500;
+    letter-spacing: .5px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+.hero-tagline .line {
+    width: 50px;
+    height: 2px;
+    background: var(--logo-blue);
+    border-radius: 5px;
+}
+.hero-category-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    background: var(--logo-blue);
+    border-radius: 50px;
+    padding: 10px 22px;
+    color: white;
+    font-weight: 700;
+    font-size: clamp(12px, 1.6vw, 16px);
+    max-width: 600px;
+    margin: 10px auto 0;
+    flex-wrap: wrap;
+}
+.hero-category-bar .cat-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+.hero-category-bar .cat-item span {
+    color: #FFB000;
+    font-size: 18px;
+}
+.hero-category-bar .cat-divider {
+    width: 2px;
+    height: 22px;
+    background: #FFB000;
+}
+
+.welcome-hero h1 { font-family: 'Tiro Bangla', serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: bold; margin-top: 1rem; }
+.welcome-hero p { font-family: 'Tiro Bangla', serif; font-size: 1.1rem; color: var(--text-meta); max-width: 700px; margin: 0 auto; line-height: 1.6; }
 @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ================= MAIN ACTION CARDS ================= */
@@ -171,15 +294,30 @@ a { text-decoration: none; }
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
-.navbar { padding: 1rem; }
+.navbar { padding: 0.8rem 1rem; }
 .container { padding: 1.5rem 1rem; }
-.welcome-hero h1 { font-size: 1.7rem; }
+.welcome-hero h1 { font-size: 1.4rem; }
+.hero-brand { font-size: clamp(32px, 10vw, 48px); letter-spacing: -1.5px; }
+.hero-tagline { font-size: 11px; gap: 8px; }
+.hero-tagline .line { width: 28px; height: 2px; }
+.hero-category-bar { gap: 8px; padding: 8px 12px; font-size: 11px; border-radius: 30px; }
+.hero-category-bar .cat-item span { font-size: 14px; }
+.hero-category-bar .cat-divider { height: 18px; }
 .sets-grid { grid-template-columns: repeat(3, 1fr); }
 .days-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
 .today-banner { padding: 1.2rem; }
 .today-banner-left h2 { font-size: 1.2rem; }
 .today-banner-btn { padding: 12px 20px; font-size: 1rem; }
 .user-badge { font-size: 0.75rem; padding: 4px 10px; }
+.logo-svg { width: 32px; height: 25px; }
+.logo-text { font-size: 1.1rem; }
+}
+@media (max-width: 480px) {
+.hero-brand { font-size: 28px; }
+.hero-logo .logo-svg-big { width: 160px; }
+.hero-category-bar { gap: 5px; padding: 6px 10px; font-size: 10px; }
+.hero-category-bar .cat-item span { font-size: 12px; }
+.hero-category-bar .cat-divider { height: 14px; width: 1.5px; }
 }
 </style>
 </head>
@@ -192,23 +330,130 @@ a { text-decoration: none; }
 
 <!-- NAVBAR -->
 <nav class="navbar">
-<div class="logo" onclick="window.location.reload()">Test<span>Bazar</span></div>
-<div style="display: flex; align-items: center; gap: 10px;">
-    <div class="user-badge" id="userBadge">
-        <span>👤 <b id="userBadgeName">User</b></span>
-        <button class="logout-btn" onclick="logoutUser()" title="লগআউট">×</button>
+    <!-- Logo merged from second file -->
+    <div class="navbar-logo" onclick="window.location.reload()">
+        <div class="logo-svg">
+            <svg viewBox="0 0 600 430" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="blueGradNav" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#062F67"/>
+                        <stop offset="100%" stop-color="#0756A5"/>
+                    </linearGradient>
+                    <linearGradient id="goldGradNav" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#FFC400"/>
+                        <stop offset="100%" stop-color="#FF8A00"/>
+                    </linearGradient>
+                </defs>
+                <!-- Gold TB background / B -->
+                <path d="M330 70 C430 45 535 80 540 175 C545 230 505 270 470 280 C525 295 535 340 505 370 C470 405 390 410 315 395 L350 330 C400 345 440 335 442 310 C444 285 410 278 365 280 L385 220 C430 225 455 210 450 180 C445 150 410 145 365 155 Z" fill="url(#goldGradNav)"/>
+                <!-- Big T -->
+                <path d="M55 55 L390 55 L350 125 L265 125 L215 350 L125 350 L175 125 L15 125 Z" fill="url(#blueGradNav)"/>
+                <!-- Test paper -->
+                <g transform="translate(245,125) rotate(-5)">
+                    <path d="M0 0 L170 0 L150 215 L-20 215 Z" fill="white" stroke="#073B78" stroke-width="9"/>
+                    <line x1="25" y1="35" x2="130" y2="35" stroke="#073B78" stroke-width="10" stroke-linecap="round"/>
+                    <circle cx="25" cy="75" r="13" fill="white" stroke="#073B78" stroke-width="7"/>
+                    <line x1="52" y1="75" x2="130" y2="75" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="25" cy="115" r="14" fill="#073B78"/>
+                    <path d="M18 115 L24 121 L36 106" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="52" y1="115" x2="130" y2="115" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="25" cy="155" r="13" fill="white" stroke="#073B78" stroke-width="7"/>
+                    <line x1="52" y1="155" x2="130" y2="155" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="25" cy="195" r="13" fill="white" stroke="#073B78" stroke-width="7"/>
+                    <line x1="52" y1="195" x2="115" y2="195" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                </g>
+                <!-- Gold swoosh -->
+                <path d="M55 315 C130 390 285 400 420 355" fill="none" stroke="url(#goldGradNav)" stroke-width="18" stroke-linecap="round"/>
+                <!-- Graduation cap -->
+                <g transform="translate(420,15)">
+                    <path d="M0 40 L90 5 L180 40 L90 75 Z" fill="url(#blueGradNav)"/>
+                    <path d="M35 55 L90 78 L145 55 L145 85 C115 105 65 105 35 85 Z" fill="#073B78"/>
+                    <line x1="145" y1="55" x2="170" y2="100" stroke="#073B78" stroke-width="7"/>
+                    <circle cx="170" cy="105" r="9" fill="#073B78"/>
+                </g>
+            </svg>
+        </div>
+        <div class="logo-text">
+            <span class="test">Test</span>
+            <span class="bazar">Bazar</span>
+        </div>
     </div>
-    <button class="admin-btn" onclick="alert('Admin Panel Access Restricted!')">⚙️ Admin</button>
-</div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="user-badge" id="userBadge">
+            <span>👤 <b id="userBadgeName">User</b></span>
+            <button class="logout-btn" onclick="logoutUser()" title="লগআউট">×</button>
+        </div>
+        <button class="admin-btn" onclick="alert('Admin Panel Access Restricted!')">⚙️ Admin</button>
+    </div>
 </nav>
 
 <!-- MAIN CONTAINER -->
 <div class="container">
 
-<!-- HERO -->
+<!-- HERO with full logo from second file -->
 <div class="welcome-hero">
-<h1>West Bengal Police Practice Zone</h1>
-<p>আপনার পছন্দের সেকশন নির্বাচন করে অনলাইন টেস্ট দিন এবং আপনার প্রস্তুতি যাচাই করুন</p>
+    <!-- Full logo displayed prominently -->
+    <div class="hero-logo">
+        <div class="logo-svg-big">
+            <svg viewBox="0 0 600 430" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="blueGradHero" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#062F67"/>
+                        <stop offset="100%" stop-color="#0756A5"/>
+                    </linearGradient>
+                    <linearGradient id="goldGradHero" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#FFC400"/>
+                        <stop offset="100%" stop-color="#FF8A00"/>
+                    </linearGradient>
+                </defs>
+                <path d="M330 70 C430 45 535 80 540 175 C545 230 505 270 470 280 C525 295 535 340 505 370 C470 405 390 410 315 395 L350 330 C400 345 440 335 442 310 C444 285 410 278 365 280 L385 220 C430 225 455 210 450 180 C445 150 410 145 365 155 Z" fill="url(#goldGradHero)"/>
+                <path d="M55 55 L390 55 L350 125 L265 125 L215 350 L125 350 L175 125 L15 125 Z" fill="url(#blueGradHero)"/>
+                <g transform="translate(245,125) rotate(-5)">
+                    <path d="M0 0 L170 0 L150 215 L-20 215 Z" fill="white" stroke="#073B78" stroke-width="9"/>
+                    <line x1="25" y1="35" x2="130" y2="35" stroke="#073B78" stroke-width="10" stroke-linecap="round"/>
+                    <circle cx="25" cy="75" r="13" fill="white" stroke="#073B78" stroke-width="7"/>
+                    <line x1="52" y1="75" x2="130" y2="75" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="25" cy="115" r="14" fill="#073B78"/>
+                    <path d="M18 115 L24 121 L36 106" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="52" y1="115" x2="130" y2="115" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="25" cy="155" r="13" fill="white" stroke="#073B78" stroke-width="7"/>
+                    <line x1="52" y1="155" x2="130" y2="155" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="25" cy="195" r="13" fill="white" stroke="#073B78" stroke-width="7"/>
+                    <line x1="52" y1="195" x2="115" y2="195" stroke="#073B78" stroke-width="8" stroke-linecap="round"/>
+                </g>
+                <path d="M55 315 C130 390 285 400 420 355" fill="none" stroke="url(#goldGradHero)" stroke-width="18" stroke-linecap="round"/>
+                <g transform="translate(420,15)">
+                    <path d="M0 40 L90 5 L180 40 L90 75 Z" fill="url(#blueGradHero)"/>
+                    <path d="M35 55 L90 78 L145 55 L145 85 C115 105 65 105 35 85 Z" fill="#073B78"/>
+                    <line x1="145" y1="55" x2="170" y2="100" stroke="#073B78" stroke-width="7"/>
+                    <circle cx="170" cy="105" r="9" fill="#073B78"/>
+                </g>
+            </svg>
+        </div>
+        <div class="hero-brand">
+            <span class="test">Test</span>
+            <span class="bazar">Bazar</span>
+        </div>
+    </div>
+
+    <!-- Tagline -->
+    <div class="hero-tagline">
+        <div class="line"></div>
+        <div>One Stop for All Your Exam Preparation</div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Category bar -->
+    <div class="hero-category-bar">
+        <div class="cat-item"><span>📖</span> School</div>
+        <div class="cat-divider"></div>
+        <div class="cat-item"><span>🎓</span> HS</div>
+        <div class="cat-divider"></div>
+        <div class="cat-item"><span>🎯</span> Competitive</div>
+    </div>
+
+    <h1>West Bengal Police Practice Zone</h1>
+    <p>আপনার পছন্দের সেকশন নির্বাচন করে অনলাইন টেস্ট দিন এবং আপনার প্রস্তুতি যাচাই করুন</p>
 </div>
 
 <!-- 4 MAIN BUTTONS -->
@@ -421,19 +666,13 @@ let calendarMode = "";
 const LABELS = ['A', 'B', 'C', 'D'];
 const PER_SET_LIMIT = 5;
 
-// ★★★ FIXED: ইউজার সবসময় localStorage থেকে নেওয়া হবে ★★★
-// এভাবে ট্যাব বন্ধ করলেও ইউজারনেম মুছবে না
 const SAVED_CRED_KEY = "testBazarSavedCredentials";
 
 function getActiveUser() {
-    // ১. sessionStorage-এ লগইন করা আছে কিনা
     const sessionUser = sessionStorage.getItem("currentStudent");
     if (sessionUser) return sessionUser;
-
-    // ২. না থাকলে localStorage-এর saved credentials দেখো
     const saved = getSavedCredentials();
     if (saved && saved.username) return saved.username;
-
     return "";
 }
 
@@ -459,7 +698,6 @@ function logoutUser() {
     location.reload();
 }
 
-// ★ নাম দেখানোর জন্য navbar badge
 function updateUserBadge() {
     const user = getActiveUser();
     const badge = document.getElementById('userBadge');
@@ -473,7 +711,7 @@ function updateUserBadge() {
 }
 
 // ============================================================
-// ATTEMPT TRACKING (প্রতি সেটে আলাদা, প্রতি মাসে রিসেট)
+// ATTEMPT TRACKING
 // ============================================================
 function getMonthKey() {
     const d = new Date();
@@ -536,7 +774,6 @@ function openSets(subjectCode, subjectName) {
     targetSubjectCode = subjectCode;
     document.getElementById('modalSubjectTitle').innerHTML = `📖 ${subjectName} - সেটসমূহ`;
 
-    // ★★★ FIXED: getActiveUser() দিয়ে ইউজার নাও ★★★
     const loggedInUser = getActiveUser();
 
     document.getElementById('modalSetSub').innerHTML =
@@ -562,7 +799,6 @@ function openSets(subjectCode, subjectName) {
             let attemptsLeft = PER_SET_LIMIT;
             let attemptsUsed = 0;
 
-            // ★★★ FIXED: loggedInUser এখন localStorage থেকেও আসবে ★★★
             if (loggedInUser) {
                 attemptsUsed = getSetAttempts(loggedInUser, subjectCode, i);
                 attemptsLeft = Math.max(0, PER_SET_LIMIT - attemptsUsed);
@@ -579,7 +815,6 @@ function openSets(subjectCode, subjectName) {
                     showSMS(`⚠️ এই মাসে Set ${toBnNum(i)} এ আপনার ${toBnNum(PER_SET_LIMIT)} বার টেস্ট দেওয়ার সীমা শেষ!\n📅 পরের মাসে আবার ${toBnNum(PER_SET_LIMIT)} বার পাবেন।`);
                 };
             } else if (loggedInUser && attemptsUsed > 0) {
-                // ব্যবহার হয়েছে কিন্তু বাকি আছে
                 setBtn.classList.add('in-progress');
                 setBtn.innerHTML = `
                     <span class="bn-font" style="font-size: 1.1rem; color: var(--primary);">সেট - ${toBnNum(i)}</span>
@@ -608,7 +843,7 @@ function handleSetClick(subjectCode, setNum) {
 }
 
 // ============================================================
-// LOGIN MODAL (Saved credentials সহ)
+// LOGIN MODAL
 // ============================================================
 function openLoginModal(subjectCode, setNum) {
     document.getElementById('loginTitle').innerText = `🔒 Set ${toBnNum(setNum)} আনলক করুন`;
@@ -685,14 +920,10 @@ function attemptLogin() {
         return;
     }
 
-    // ★ Save credentials
     saveCredentials(uName, pWord);
-    // ★ Increment attempt
     incrementSetAttempts(uName, targetSubjectCode, targetSetNum);
-    // ★ Session set
     sessionStorage.setItem("testBazarUserLoggedIn", "true");
     sessionStorage.setItem("currentStudent", uName);
-    // ★ Badge আপডেট
     updateUserBadge();
 
     const newRemaining = getSetRemaining(uName, targetSubjectCode, targetSetNum);
@@ -975,7 +1206,7 @@ window.onclick = function(event) {
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
     renderSubjects();
-    updateUserBadge();  // ★ ইউজার badge দেখাও
+    updateUserBadge();
 });
 </script>
 </body>
